@@ -1,10 +1,10 @@
-package com.local.QuanLyNHHS;
+package com.QuanLyNHHS;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class QuanLyNHHSApplicationTests {
+class QuanLyNhhsApplicationTests {
 
 	@Test
 	void contextLoads() {

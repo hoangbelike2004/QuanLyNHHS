@@ -1,13 +1,13 @@
-package com.local.QuanLyNHHS;
+package com.QuanLyNHHS;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class QuanLyNHHSApplication {
+public class QuanLyNhhsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(QuanLyNHHSApplication.class, args);
+		SpringApplication.run(QuanLyNhhsApplication.class, args);
 	}
 
 }
