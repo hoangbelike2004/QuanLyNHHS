@@ -1,4 +1,4 @@
-package com.local.QuanLyNHHS.controller;
+package com.QuanLyNHHS.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
