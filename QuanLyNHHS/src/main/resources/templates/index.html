@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Lý Nhà Hàng Hải Sản - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(13, 29, 52, 0.95), rgba(0, 78, 146, 0.45)), 
+                        url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80') center/cover;
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 36px 40px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), var(--shadow-glow);
+        }
+
+        .hero-banner h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-banner p {
+            color: #cbd5e1;
+            font-size: 14.5px;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .feature-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyan-primary);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), var(--shadow-glow);
+        }
+
+        .feature-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .feature-icon-badge {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 19px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 24px;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Fragment -->
+        <div th:replace="~{layout/sidebar :: sidebar}"></div>
+
+        <!-- Main Wrapper -->
+        <main class="main-wrapper">
+            <!-- Navbar Fragment -->
+            <div th:replace="~{layout/navbar :: navbar('Bảng Điều Khiển Tổng Quan', 'fa-solid fa-chart-pie')}"></div>
+
+            <div class="content-body">
+                <!-- Hero Welcome Banner -->
+                <div class="hero-banner">
+                    <div style="display: inline-block; padding: 4px 12px; background: rgba(0, 194, 255, 0.2); border: 1px solid var(--cyan-primary); border-radius: 20px; font-size: 12px; font-weight: 700; color: var(--cyan-primary); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">
+                        Hệ Thống Quản Lý Nhà Hàng Hải Sản
+                    </div>
+                    <h1>Xin chào, Nguyễn Cao Hoàng! 👋</h1>
+                    <p>Chào mừng bạn trở lại với trang quản trị. Dưới đây là các phân hệ cốt lõi bạn phụ trách: <strong>Thực đơn món ăn</strong>, <strong>Danh mục loại món</strong> và <strong>Quản lý nhân sự</strong>.</p>
+                    <div style="display: flex; gap: 14px;">
+                        <a th:href="@{/mon-an}" class="btn-primary">
+                            <i class="fa-solid fa-utensils"></i>
+                            <span>Xem Thực Đơn</span>
+                        </a>
+                        <a th:href="@{/nhan-vien}" class="btn-secondary">
+                            <i class="fa-solid fa-user-group"></i>
+                            <span>Quản Lý Nhân Viên</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Metrics Overview -->
+                <div class="metrics-grid">
+                    <div class="metric-card cyan">
+                        <div class="metric-icon cyan">
+                            <i class="fa-solid fa-bowl-food"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>28 Món</h3>
+                            <p>Món ăn hải sản trong menu</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card emerald">
+                        <div class="metric-icon emerald">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>8 Nhân Viên</h3>
+                            <p>Nhân sự đang phụ trách</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card gold">
+                        <div class="metric-icon gold">
+                            <i class="fa-solid fa-money-bill-trend-up"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 th:text="${todayRevenue}">48.650.000 đ</h3>
+                            <p>Doanh thu ước tính hôm nay</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card purple">
+                        <div class="metric-icon purple">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>6 Loại Món</h3>
+                            <p>Danh mục hải sản đa dạng</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Modules Assigned to Hoang -->
+                <h2 style="font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-star" style="color: var(--gold-accent);"></i>
+                    <span>Chức Năng Phân Công Phụ Trách</span>
+                </h2>
+
+                <div class="feature-cards-grid">
+                    <!-- Card 1: Thực đơn món ăn -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-badge" style="background: var(--cyan-glow); color: var(--cyan-primary);">
+                                <i class="fa-solid fa-utensils"></i>
+                            </div>
+                            <span class="badge-role service">Chức năng chính</span>
+                        </div>
+                        <h3>Quản Lý Thực Đơn (Món Ăn)</h3>
+                        <p>Kiểm soát toàn bộ món ăn hải sản, giá thành, đơn vị tính, tình trạng phục vụ, hình ảnh và công thức mô tả món.</p>
+                        <a th:href="@{/mon-an}" class="btn-primary" style="justify-content: center;">
+                            <span>Mở Quản Lý Thực Đơn</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Card 2: Danh mục loại món -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-badge" style="background: rgba(139, 92, 246, 0.15); color: var(--purple-role);">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <span class="badge-role manager">Danh mục</span>
+                        </div>
+                        <h3>Danh Mục Loại Món</h3>
+                        <p>Phân loại các dòng hải sản: Tôm hùm, cua ghẹ, cá biển, ốc sò biển, lẩu & nướng, đồ uống giải khát.</p>
+                        <a th:href="@{/loai-mon}" class="btn-secondary" style="justify-content: center; display: flex; align-items: center; gap: 8px;">
+                            <span>Mở Danh Mục Loại Món</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Card 3: Quản lý nhân viên -->
+                    <div class="feature-card">
+                        <div class="feature-card-header">
+                            <div class="feature-icon-badge" style="background: var(--emerald-glow); color: var(--emerald-success);">
+                                <i class="fa-solid fa-user-group"></i>
+                            </div>
+                            <span class="badge-role cashier">Nhân sự</span>
+                        </div>
+                        <h3>Quản Lý Nhân Viên</h3>
+                        <p>Quản lý hồ sơ nhân sự, chức vụ (bếp, phục vụ, thu ngân, quản lý), ca làm việc, mức lương và trạng thái làm việc.</p>
+                        <a th:href="@{/nhan-vien}" class="btn-primary" style="justify-content: center; background: linear-gradient(135deg, #10b981, #059669);">
+                            <span>Mở Quản Lý Nhân Viên</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

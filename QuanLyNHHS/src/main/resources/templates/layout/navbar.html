@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <header class="top-navbar" th:fragment="navbar(pageTitle, pageIcon)">
+        <div class="navbar-left">
+            <div class="page-title">
+                <i th:class="${pageIcon}"></i>
+                <span th:text="${pageTitle}">Trang Quản Trị</span>
+            </div>
+        </div>
+
+        <div class="navbar-right">
+            <div class="nav-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Tìm kiếm nhanh hệ thống...">
+            </div>
+
+            <button class="btn-icon" title="Thông báo hệ thống">
+                <i class="fa-regular fa-bell"></i>
+                <span class="status-dot"></span>
+            </button>
+
+            <button class="btn-icon" title="Cài đặt">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+
+            <div class="user-avatar" style="width: 36px; height: 36px; font-size: 13px;" title="Nguyễn Cao Hoàng">
+                H
+            </div>
+        </div>
+    </header>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Mục Loại Món - Hải Sản Hoàng Gia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Fragment -->
+        <div th:replace="~{layout/sidebar :: sidebar}"></div>
+
+        <!-- Main Wrapper -->
+        <main class="main-wrapper">
+            <!-- Navbar Fragment -->
+            <div th:replace="~{layout/navbar :: navbar('Quản Lý Danh Mục Loại Món', 'fa-solid fa-layer-group')}"></div>
+
+            <div class="content-body">
+                <!-- Metrics Row -->
+                <div class="metrics-grid">
+                    <div class="metric-card cyan">
+                        <div class="metric-icon cyan">
+                            <i class="fa-solid fa-tags"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 th:text="${totalCategories}">6</h3>
+                            <p>Tổng số danh mục loại món</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card emerald">
+                        <div class="metric-icon emerald">
+                            <i class="fa-solid fa-shrimp"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 th:text="${totalDishesInCategories}">32</h3>
+                            <p>Tổng số món thuộc các loại</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card gold">
+                        <div class="metric-icon gold">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>100% Hoạt Động</h3>
+                            <p>Tất cả danh mục đang mở</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toolbar & Actions -->
+                <div class="toolbar-section">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchCategoryInput" placeholder="Tìm tên loại món, mã loại...">
+                        </div>
+                    </div>
+
+                    <div class="toolbar-right">
+                        <button class="btn-primary" onclick="openModal('modalAddCategory')">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Thêm Loại Món</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table Categories List -->
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Loại</th>
+                                <th>Tên Loại Món</th>
+                                <th>Mô Tả Danh Mục</th>
+                                <th>Số Món Đang Có</th>
+                                <th>Trạng Thái</th>
+                                <th style="text-align: right;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTableBody">
+                            <tr th:each="cat : ${categories}">
+                                <td style="font-weight: 700; color: var(--cyan-primary);" th:text="${cat.maLoai}">LM01</td>
+                                <td>
+                                    <div style="font-weight: 600; color: #fff; font-size: 14.5px;" th:text="${cat.tenLoai}">Tôm & Cua ghẹ</div>
+                                </td>
+                                <td style="color: var(--text-muted); max-width: 320px;" th:text="${cat.moTa}">Các loại tôm hùm, cua ghẹ tươi sống...</td>
+                                <td>
+                                    <span class="badge-role service" th:text="${cat.soLuongMon} + ' món'">6 món</span>
+                                </td>
+                                <td>
+                                    <span class="dish-badge-status badge-serving" style="position: static;" th:text="${cat.trangThai}">Hoạt động</span>
+                                </td>
+                                <td style="text-align: right;">
+                                    <div style="display: inline-flex; gap: 8px;">
+                                        <button class="btn-action edit" title="Sửa loại món" onclick="openModal('modalEditCategory')">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <button class="btn-action delete" title="Xóa loại món" 
+                                                th:data-name="${cat.tenLoai}"
+                                                onclick="confirmDelete(this.getAttribute('data-name'))">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Thêm Loại Món -->
+    <div class="modal-overlay" id="modalAddCategory">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Thêm Loại Món Ăn Mới</h3>
+                <button class="modal-close" onclick="closeModal('modalAddCategory')">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="formAddCategory">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Mã Loại Món</label>
+                        <input type="text" placeholder="VD: LM07" required value="LM07">
+                    </div>
+                    <div class="form-group">
+                        <label>Tên Loại Món</label>
+                        <input type="text" placeholder="VD: Món Sashimi Sống Cao Cấp" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng Thái</label>
+                        <select required>
+                            <option value="Hoạt động">Hoạt động</option>
+                            <option value="Tạm dừng">Tạm dừng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mô Tả Danh Mục</label>
+                        <textarea rows="3" placeholder="Mô tả tóm tắt về nhóm các món ăn trong loại này..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalAddCategory')">Hủy</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Lưu Danh Mục</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Sửa Loại Món -->
+    <div class="modal-overlay" id="modalEditCategory">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Chỉnh Sửa Loại Món Ăn</h3>
+                <button class="modal-close" onclick="closeModal('modalEditCategory')">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="event.preventDefault(); closeModal('modalEditCategory'); showToast('Đã cập nhật loại món thành công!');">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Mã Loại Món</label>
+                        <input type="text" value="LM01" readonly style="opacity: 0.7;">
+                    </div>
+                    <div class="form-group">
+                        <label>Tên Loại Món</label>
+                        <input type="text" value="Tôm & Cua ghẹ">
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng Thái</label>
+                        <select>
+                            <option selected>Hoạt động</option>
+                            <option>Tạm dừng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mô Tả Danh Mục</label>
+                        <textarea rows="3">Các loại tôm hùm, cua huỳnh đế, ghẹ xanh tươi sống</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalEditCategory')">Hủy</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Cập Nhật</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Thực Đơn Hải Sản - Hải Sản Hoàng Gia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Fragment -->
+        <div th:replace="~{layout/sidebar :: sidebar}"></div>
+
+        <!-- Main Wrapper -->
+        <main class="main-wrapper">
+            <!-- Navbar Fragment -->
+            <div th:replace="~{layout/navbar :: navbar('Quản Lý Thực Đơn Món Ăn', 'fa-solid fa-utensils')}"></div>
+
+            <div class="content-body">
+                <!-- Metrics Row -->
+                <div class="metrics-grid">
+                    <div class="metric-card cyan">
+                        <div class="metric-icon cyan">
+                            <i class="fa-solid fa-bowl-food"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 th:text="${totalDishes}">8</h3>
+                            <p>Tổng số món trong menu</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card emerald">
+                        <div class="metric-icon emerald">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 th:text="${servingDishes}">7</h3>
+                            <p>Món đang phục vụ</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card rose">
+                        <div class="metric-icon rose">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 th:text="${outOfStockDishes}">1</h3>
+                            <p>Món tạm hết hàng</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card gold">
+                        <div class="metric-icon gold">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3>Hàu Sữa & Cá Mú</h3>
+                            <p>Top bán chạy tuần này</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toolbar & Filters -->
+                <div class="toolbar-section">
+                    <div class="toolbar-left">
+                        <!-- Search Box -->
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchDishInput" placeholder="Tìm tên món hoặc mã món ăn...">
+                        </div>
+
+                        <!-- Category Filter Pills -->
+                        <div class="filter-pills">
+                            <button class="pill-btn active" data-category="all">Tất Cả Món</button>
+                            <button class="pill-btn" th:each="cat : ${categories}" 
+                                    th:data-category="${cat.maLoai}" 
+                                    th:text="${cat.tenLoai}">Tôm & Cua</button>
+                        </div>
+                    </div>
+
+                    <div class="toolbar-right">
+                        <!-- View Toggle -->
+                        <div class="view-toggle">
+                            <button class="toggle-btn active" id="btnGridView" title="Dạng lưới thẻ">
+                                <i class="fa-solid fa-table-cells-large"></i>
+                            </button>
+                            <button class="toggle-btn" id="btnTableView" title="Dạng danh sách bảng">
+                                <i class="fa-solid fa-list-ul"></i>
+                            </button>
+                        </div>
+
+                        <!-- Add Dish Button -->
+                        <button class="btn-primary" onclick="openModal('modalAddDish')">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Thêm Món Ăn</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. Grid Cards View -->
+                <div class="dishes-grid" id="dishGridContainer">
+                    <div class="dish-card" th:each="dish : ${dishes}" th:data-category="${dish.maLoai}">
+                        <div class="dish-image-wrapper">
+                            <img th:src="${dish.hinhAnh}" th:alt="${dish.tenMon}" class="dish-image">
+                            <span class="dish-category-tag" th:text="${dish.tenLoai}">Tôm & Cua</span>
+                            <span class="dish-badge-status" 
+                                  th:classappend="${dish.trangThai == 'Đang phục vụ'} ? 'badge-serving' : 'badge-out'"
+                                  th:text="${dish.trangThai}">Đang phục vụ</span>
+                        </div>
+                        <div class="dish-content">
+                            <div class="dish-header">
+                                <div class="dish-code" th:text="${dish.maMon}">MA01</div>
+                                <h3 class="dish-title" th:text="${dish.tenMon}">Tên món ăn</h3>
+                            </div>
+                            <p class="dish-desc" th:text="${dish.moTa}">Mô tả món ăn hải sản tươi sống...</p>
+                            <div class="dish-footer">
+                                <div>
+                                    <span class="dish-price" th:text="${#numbers.formatDecimal(dish.donGia, 0, 'COMMA', 0, 'POINT')} + ' đ'">1.450.000 đ</span>
+                                    <span class="dish-unit" th:text="'/ ' + ${dish.donViTinh}">/ Con</span>
+                                </div>
+                                <div class="dish-actions">
+                                    <button class="btn-action edit" title="Chỉnh sửa món" onclick="openModal('modalEditDish')">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button class="btn-action delete" title="Xóa món" 
+                                            th:data-name="${dish.tenMon}"
+                                            onclick="confirmDelete(this.getAttribute('data-name'))">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Table List View (Hidden by default) -->
+                <div class="table-responsive" id="dishTableContainer" style="display: none;">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Món</th>
+                                <th>Ảnh Món</th>
+                                <th>Tên Món Ăn</th>
+                                <th>Loại Món</th>
+                                <th>Đơn Vị</th>
+                                <th>Đơn Giá</th>
+                                <th>Trạng Thái</th>
+                                <th>Đã Bán</th>
+                                <th style="text-align: right;">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dishTableBody">
+                            <tr th:each="dish : ${dishes}" th:data-category="${dish.maLoai}">
+                                <td style="font-weight: 600; color: var(--text-dim);" th:text="${dish.maMon}">MA01</td>
+                                <td>
+                                    <img th:src="${dish.hinhAnh}" th:alt="${dish.tenMon}" class="table-avatar">
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: #fff;" th:text="${dish.tenMon}">Tôm Hùm Alaska</div>
+                                    <div style="font-size: 11.5px; color: var(--text-dim);" th:text="${dish.moTa}">Mô tả ngắn...</div>
+                                </td>
+                                <td>
+                                    <span class="badge-role service" th:text="${dish.tenLoai}">Tôm & Cua</span>
+                                </td>
+                                <td th:text="${dish.donViTinh}">Con</td>
+                                <td style="font-weight: 700; color: var(--gold-accent);" 
+                                    th:text="${#numbers.formatDecimal(dish.donGia, 0, 'COMMA', 0, 'POINT')} + ' đ'">1.450.000 đ</td>
+                                <td>
+                                    <span class="dish-badge-status" 
+                                          th:classappend="${dish.trangThai == 'Đang phục vụ'} ? 'badge-serving' : 'badge-out'"
+                                          th:text="${dish.trangThai}" style="position: static;">Đang phục vụ</span>
+                                </td>
+                                <td th:text="${dish.soLuongDaBan} + ' suất'">142 suất</td>
+                                <td style="text-align: right;">
+                                    <div style="display: inline-flex; gap: 6px;">
+                                        <button class="btn-action edit" title="Sửa" onclick="openModal('modalEditDish')">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <button class="btn-action delete" title="Xóa" 
+                                                th:data-name="${dish.tenMon}"
+                                                onclick="confirmDelete(this.getAttribute('data-name'))">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Thêm Món Ăn Mới -->
+    <div class="modal-overlay" id="modalAddDish">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Thêm Món Ăn Mới Vào Thực Đơn</h3>
+                <button class="modal-close" onclick="closeModal('modalAddDish')">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="formAddDish">
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Mã Món Ăn</label>
+                            <input type="text" placeholder="VD: MA09" required value="MA09">
+                        </div>
+                        <div class="form-group">
+                            <label>Loại Món</label>
+                            <select required>
+                                <option value="" disabled selected>Chọn danh mục...</option>
+                                <option th:each="cat : ${categories}" th:value="${cat.maLoai}" th:text="${cat.tenLoai}">Tôm & Cua</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tên Món Ăn</label>
+                        <input type="text" placeholder="VD: Cua Huỳnh Đế Hấp Nước Dừa" required>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Đơn Vị Tính</label>
+                            <input type="text" placeholder="VD: Đĩa, Con, Kg, Nồi" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Đơn Giá (VNĐ)</label>
+                            <input type="number" placeholder="VD: 850000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Trạng Thái</label>
+                            <select required>
+                                <option value="Đang phục vụ">Đang phục vụ</option>
+                                <option value="Tạm hết">Tạm hết</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Link Ảnh Món Ăn (URL)</label>
+                            <input type="url" placeholder="https://..." value="https://images.unsplash.com/photo-1553240799-36bbf332a5c3?auto=format&fit=crop&w=600&q=80">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mô Tả Chi Tiết Món Ăn</label>
+                        <textarea rows="3" placeholder="Nguyên liệu chính, cách chế biến và hương vị đặc trưng..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalAddDish')">Hủy Bỏ</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Lưu Món Ăn</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Chỉnh Sửa Món Ăn -->
+    <div class="modal-overlay" id="modalEditDish">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Chỉnh Sửa Thông Tin Món Ăn</h3>
+                <button class="modal-close" onclick="closeModal('modalEditDish')">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="event.preventDefault(); closeModal('modalEditDish'); showToast('Đã cập nhật món ăn thành công!');">
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Mã Món Ăn</label>
+                            <input type="text" value="MA01" readonly style="opacity: 0.7;">
+                        </div>
+                        <div class="form-group">
+                            <label>Loại Món</label>
+                            <select>
+                                <option selected>Tôm & Cua ghẹ</option>
+                                <option>Cá hải sản</option>
+                                <option>Ốc & Sò biển</option>
+                                <option>Lẩu & Nướng</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tên Món Ăn</label>
+                        <input type="text" value="Tôm Hùm Alaska Hấp Rượu Vang">
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Đơn Vị Tính</label>
+                            <input type="text" value="Con (~1.2kg)">
+                        </div>
+                        <div class="form-group">
+                            <label>Đơn Giá (VNĐ)</label>
+                            <input type="number" value="1450000">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Trạng Thái</label>
+                            <select>
+                                <option selected>Đang phục vụ</option>
+                                <option>Tạm hết</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Link Ảnh Món Ăn</label>
+                            <input type="url" value="https://images.unsplash.com/photo-1553240799-36bbf332a5c3?auto=format&fit=crop&w=600&q=80">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mô Tả Chi Tiết</label>
+                        <textarea rows="3">Tôm hùm Alaska nhập khẩu sống tươi nguyên con, hấp bia hoặc rượu vang trắng giữ trọn vị ngọt tự nhiên</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal('modalEditDish')">Hủy</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Cập Nhật Món</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
