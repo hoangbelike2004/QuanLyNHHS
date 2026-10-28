@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tạo hóa đơn</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #f4f6f9; color: #263445; }
+        header { background: #17365d; color: white; padding: 22px 5%; }
+        header a { color: white; text-decoration: none; margin-right: 18px; }
+        main { max-width: 700px; margin: 30px auto; padding: 0 18px; }
+        .panel { background: white; padding: 25px; border-radius: 10px; }
+        h2 { margin-top: 0; }
+        label { display: block; font-weight: bold; margin: 15px 0 7px; }
+        input { width: 100%; padding: 11px; border: 1px solid #d5dce5; border-radius: 6px; box-sizing: border-box; }
+        button, .btn { display: inline-block; margin-top: 22px; padding: 11px 16px; background: #1769aa; color: white; border: 0; border-radius: 6px; text-decoration: none; cursor: pointer; }
+        .btn { background: #667085; }
+        .notice { padding: 12px; background: #fde8e8; color: #a52222; border-radius: 6px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Quản lý nhà hàng</h1>
+    <a th:href="@{/hoa-don}">Danh sách hóa đơn</a>
+    <a th:href="@{/bao-cao}">Báo cáo</a>
+</header>
+
+<main>
+    <section class="panel">
+        <h2>Tạo hóa đơn mới</h2>
+
+        <div th:if="${loi}" class="notice" th:text="${loi}"></div>
+
+        <form th:action="@{/hoa-don/them}" th:object="${hoaDon}" method="post">
+            <label for="maBan">Mã bàn</label>
+            <input id="maBan" type="number" th:field="*{maBan}" min="1" required>
+
+            <label for="maNv">Mã nhân viên</label>
+            <input id="maNv" type="number" th:field="*{maNv}" min="1" required>
+
+            <label for="maKh">Mã khách hàng (không bắt buộc)</label>
+            <input id="maKh" type="number" th:field="*{maKh}" min="1">
+
+            <label for="giamGia">Giảm giá (VNĐ)</label>
+            <input id="giamGia" type="number" th:field="*{giamGia}" min="0" step="0.01" value="0" required>
+
+            <button type="submit">Tạo hóa đơn</button>
+            <a class="btn" th:href="@{/hoa-don}">Quay lại</a>
+        </form>
+    </section>
+</main>
+</body>
+</html>

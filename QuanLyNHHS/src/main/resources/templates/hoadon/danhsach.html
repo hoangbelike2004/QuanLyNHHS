@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý hóa đơn</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #263445;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 22px 5%;
+        }
+
+        header h1 {
+            margin: 0 0 14px;
+            font-size: 25px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0000000c;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        form.filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        input, select, button, .btn {
+            padding: 10px 12px;
+            border: 1px solid #d5dce5;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button, .btn {
+            background: #1769aa;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .btn.green {
+            background: #198754;
+        }
+
+        .btn.orange {
+            background: #e69520;
+        }
+
+        .btn.gray {
+            background: #667085;
+        }
+
+        .notice {
+            padding: 12px;
+            background: #e2f7e9;
+            color: #176b39;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .error {
+            padding: 12px;
+            background: #fde8e8;
+            color: #a52222;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 13px 10px;
+            border-bottom: 1px solid #e7ebf0;
+        }
+
+        th {
+            background: #f0f4f8;
+        }
+
+        .status {
+            padding: 5px 8px;
+            border-radius: 12px;
+            background: #fff0cf;
+            color: #8a5a00;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .paid {
+            background: #d8f5e3;
+            color: #176b39;
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .actions form {
+            margin: 0;
+        }
+
+        .actions button {
+            background: #1769aa;
+            padding: 10px 12px;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 0 10px;
+            }
+
+            .panel {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Hệ thống quản lý nhà hàng</h1>
+
+    <nav>
+        <a th:href="@{/hoa-don}">Hóa đơn</a>
+        <a th:href="@{/bao-cao}">Báo cáo</a>
+    </nav>
+</header>
+
+<main>
+    <section class="panel">
+
+        <div class="top">
+            <h2>Danh sách hóa đơn</h2>
+
+            <a class="btn green" th:href="@{/hoa-don/them}">
+                + Tạo hóa đơn
+            </a>
+        </div>
+
+        <!-- Thông báo -->
+        <div th:if="${thongBao}"
+             class="notice"
+             th:text="${thongBao}">
+        </div>
+
+        <div th:if="${loi}"
+             class="error"
+             th:text="${loi}">
+        </div>
+
+        <!-- Lọc trạng thái -->
+        <form class="filter"
+              method="get"
+              th:action="@{/hoa-don}">
+
+            <select name="trangThai">
+                <option value="">Tất cả trạng thái</option>
+
+                <option value="Chua thanh toan"
+                        th:selected="${trangThai == 'Chua thanh toan'}">
+                    Chưa thanh toán
+                </option>
+
+                <option value="Da thanh toan"
+                        th:selected="${trangThai == 'Da thanh toan'}">
+                    Đã thanh toán
+                </option>
+            </select>
+
+            <button type="submit">Lọc hóa đơn</button>
+
+            <a class="btn gray" th:href="@{/hoa-don}">
+                Đặt lại
+            </a>
+        </form>
+
+        <!-- Bảng hóa đơn -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Mã HĐ</th>
+                    <th>Mã bàn</th>
+                    <th>Mã khách</th>
+                    <th>Mã nhân viên</th>
+                    <th>Ngày lập</th>
+                    <th>Trạng thái</th>
+                    <th>Giảm giá</th>
+                    <th>Tổng tiền</th>
+                    <th>Thao tác</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="hd : ${danhSachHoaDon}">
+
+                    <td th:text="${hd.maHd}"></td>
+
+                    <td th:text="${hd.maBan}"></td>
+
+                    <td th:text="${hd.maKh != null ? hd.maKh : '-'}"></td>
+
+                    <td th:text="${hd.maNv}"></td>
+
+                    <td th:text="${hd.ngayLap}"></td>
+
+                    <td>
+                        <span class="status"
+                              th:classappend="${hd.trangThai == 'Da thanh toan'} ? ' paid' : ''"
+                              th:text="${hd.trangThai == 'Da thanh toan'
+                                  ? 'Đã thanh toán'
+                                  : 'Chưa thanh toán'}">
+                        </span>
+                    </td>
+
+                    <td th:text="${#numbers.formatDecimal(
+                        hd.giamGia != null ? hd.giamGia : 0,
+                        0, 'COMMA', 0, 'POINT')} + ' đ'">
+                    </td>
+
+                    <td th:text="${#numbers.formatDecimal(
+                        hd.tongTien != null ? hd.tongTien : 0,
+                        0, 'COMMA', 0, 'POINT')} + ' đ'">
+                    </td>
+
+                    <!-- Các nút thao tác -->
+                    <td>
+                        <div class="actions">
+
+                            <!-- Xem chi tiết -->
+                            <a class="btn"
+                               th:href="@{/hoa-don/chi-tiet/{id}(id=${hd.maHd})}">
+                                Xem
+                            </a>
+
+                            <!-- Chỉ sửa hóa đơn chưa thanh toán -->
+                            <a class="btn orange"
+                               th:if="${hd.trangThai == 'Chua thanh toan'}"
+                               th:href="@{/hoa-don/sua/{id}(id=${hd.maHd})}">
+                                Sửa
+                            </a>
+
+                            <!-- Chỉ thanh toán hóa đơn chưa thanh toán -->
+                            <form th:if="${hd.trangThai == 'Chua thanh toan'}"
+                                  th:action="@{/hoa-don/thanh-toan/{id}(id=${hd.maHd})}"
+                                  method="post">
+
+                                <button type="submit">
+                                    Thanh toán
+                                </button>
+                            </form>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+                <!-- Không có hóa đơn -->
+                <tr th:if="${#lists.isEmpty(danhSachHoaDon)}">
+                    <td colspan="9"
+                        style="text-align:center; padding:30px">
+                        Chưa có hóa đơn nào.
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+</main>
+
+</body>
+</html>
