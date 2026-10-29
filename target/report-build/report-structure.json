@@ -1,0 +1,130 @@
+{
+  "plannedPages": 22,
+  "figures": 2,
+  "pages": [
+    {
+      "page": 1,
+      "title": "TRANG BÌA",
+      "characters": 1096
+    },
+    {
+      "page": 2,
+      "title": "MỤC LỤC",
+      "characters": 16
+    },
+    {
+      "page": 3,
+      "title": "CHƯƠNG 1. KHẢO SÁT BÀI TOÁN VÀ PHÂN TÍCH YÊU CẦU",
+      "characters": 1986
+    },
+    {
+      "page": 4,
+      "title": "1.3. Đối tượng quản lý và người sử dụng",
+      "characters": 1597
+    },
+    {
+      "page": 5,
+      "title": "1.4. Yêu cầu chức năng",
+      "characters": 1636
+    },
+    {
+      "page": 6,
+      "title": "1.5. Dữ liệu vào, dữ liệu ra và yêu cầu xử lý",
+      "characters": 1951
+    },
+    {
+      "page": 7,
+      "title": "CHƯƠNG 2. THIẾT KẾ CƠ SỞ DỮ LIỆU VÀ XÂY DỰNG CHƯƠNG TRÌNH",
+      "characters": 651
+    },
+    {
+      "page": 8,
+      "title": "2.2. Khóa chính, khóa ngoại và các quan hệ",
+      "characters": 1759
+    },
+    {
+      "page": 9,
+      "title": "2.3. Mô tả các bảng dữ liệu",
+      "characters": 1756
+    },
+    {
+      "page": 10,
+      "title": "2.3.2. Bàn ăn và hóa đơn",
+      "characters": 1537
+    },
+    {
+      "page": 11,
+      "title": "2.3.3. Loại món và món ăn",
+      "characters": 1481
+    },
+    {
+      "page": 12,
+      "title": "2.3.4. Chi tiết hóa đơn và nhân viên",
+      "characters": 1617
+    },
+    {
+      "page": 13,
+      "title": "2.3.5. Nhà cung cấp và phiếu nhập",
+      "characters": 1375
+    },
+    {
+      "page": 14,
+      "title": "2.3.6. Chi tiết phiếu nhập và nguyên liệu",
+      "characters": 1470
+    },
+    {
+      "page": 15,
+      "title": "2.4. Ràng buộc dữ liệu và quy tắc tính toán",
+      "characters": 1838
+    },
+    {
+      "page": 16,
+      "title": "2.5. Cấu trúc project và công nghệ sử dụng",
+      "characters": 1397
+    },
+    {
+      "page": 17,
+      "title": "2.6. Kết nối cơ sở dữ liệu và luồng xử lý",
+      "characters": 1442
+    },
+    {
+      "page": 18,
+      "title": "2.7. Giao diện chương trình",
+      "characters": 1820
+    },
+    {
+      "page": 19,
+      "title": "2.8. Các chức năng chính và mức độ thực hiện",
+      "characters": 1659
+    },
+    {
+      "page": 20,
+      "title": "2.9. Một số đoạn mã tiêu biểu",
+      "characters": 1404
+    },
+    {
+      "page": 21,
+      "title": "2.9.3. Repository, Controller và template",
+      "characters": 1659
+    },
+    {
+      "page": 22,
+      "title": "KẾT LUẬN",
+      "characters": 2098
+    }
+  ],
+  "packageParts": [
+    "[Content_Types].xml",
+    "_rels/.rels",
+    "word/document.xml",
+    "word/styles.xml",
+    "word/settings.xml",
+    "word/_rels/document.xml.rels",
+    "word/header1.xml",
+    "word/footer1.xml",
+    "docProps/core.xml",
+    "docProps/app.xml",
+    "word/media/image1.png",
+    "word/media/image2.png"
+  ]
+}

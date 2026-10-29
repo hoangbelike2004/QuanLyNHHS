@@ -1,0 +1,97 @@
+﻿{
+    "toc":  1,
+    "pages":  22,
+    "tables":  22,
+    "words":  5566,
+    "figures":  2,
+    "pageStarts":  [
+                       {
+                           "page":  1,
+                           "firstParagraph":  "TRƯỜNG: ........................................................................"
+                       },
+                       {
+                           "page":  2,
+                           "firstParagraph":  "MỤC LỤC"
+                       },
+                       {
+                           "page":  3,
+                           "firstParagraph":  "CHƯƠNG 1. KHẢO SÁT BÀI TOÁN VÀ PHÂN TÍCH YÊU CẦU"
+                       },
+                       {
+                           "page":  4,
+                           "firstParagraph":  "1.3. Đối tượng quản lý và người sử dụng"
+                       },
+                       {
+                           "page":  5,
+                           "firstParagraph":  "1.4. Yêu cầu chức năng"
+                       },
+                       {
+                           "page":  6,
+                           "firstParagraph":  "1.5. Dữ liệu vào, dữ liệu ra và yêu cầu xử lý"
+                       },
+                       {
+                           "page":  7,
+                           "firstParagraph":  "CHƯƠNG 2. THIẾT KẾ CƠ SỞ DỮ LIỆU VÀ XÂY DỰNG CHƯƠNG TRÌNH"
+                       },
+                       {
+                           "page":  8,
+                           "firstParagraph":  "2.2. Khóa chính, khóa ngoại và các quan hệ"
+                       },
+                       {
+                           "page":  9,
+                           "firstParagraph":  "2.3. Mô tả các bảng dữ liệu"
+                       },
+                       {
+                           "page":  10,
+                           "firstParagraph":  "2.3.2. Bàn ăn và hóa đơn"
+                       },
+                       {
+                           "page":  11,
+                           "firstParagraph":  "2.3.3. Loại món và món ăn"
+                       },
+                       {
+                           "page":  12,
+                           "firstParagraph":  "2.3.4. Chi tiết hóa đơn và nhân viên"
+                       },
+                       {
+                           "page":  13,
+                           "firstParagraph":  "2.3.5. Nhà cung cấp và phiếu nhập"
+                       },
+                       {
+                           "page":  14,
+                           "firstParagraph":  "2.3.6. Chi tiết phiếu nhập và nguyên liệu"
+                       },
+                       {
+                           "page":  15,
+                           "firstParagraph":  "2.4. Ràng buộc dữ liệu và quy tắc tính toán"
+                       },
+                       {
+                           "page":  16,
+                           "firstParagraph":  "2.5. Cấu trúc project và công nghệ sử dụng"
+                       },
+                       {
+                           "page":  17,
+                           "firstParagraph":  "2.6. Kết nối cơ sở dữ liệu và luồng xử lý"
+                       },
+                       {
+                           "page":  18,
+                           "firstParagraph":  "2.7. Giao diện chương trình"
+                       },
+                       {
+                           "page":  19,
+                           "firstParagraph":  "2.8. Các chức năng chính và mức độ thực hiện"
+                       },
+                       {
+                           "page":  20,
+                           "firstParagraph":  "2.9. Một số đoạn mã tiêu biểu"
+                       },
+                       {
+                           "page":  21,
+                           "firstParagraph":  "2.9.3. Repository, Controller và template"
+                       },
+                       {
+                           "page":  22,
+                           "firstParagraph":  "KẾT LUẬN"
+                       }
+                   ]
+}
