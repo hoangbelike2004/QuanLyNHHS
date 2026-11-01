@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà hàng Hải Sản — Trang chủ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f0f4f8; }
+        .navbar-brand { font-weight: 700; color: #0d6efd !important; }
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+            color: white;
+            padding: 60px 0 50px;
+            margin-bottom: 40px;
+        }
+        .hero-section h1 { font-size: 2.5rem; font-weight: 700; }
+        .hero-section p { font-size: 1.15rem; opacity: 0.9; }
+        .card-module {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: transform .2s, box-shadow .2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .card-module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+            color: inherit;
+        }
+        .card-module .icon-wrap {
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 16px;
+        }
+        .section-title { font-weight: 700; font-size: 1.3rem; color: #343a40; border-left: 4px solid #0d6efd; padding-left: 12px; }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="bi bi-fish"></i> Nhà hàng Hải Sản</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active fw-semibold" href="/"><i class="bi bi-house"></i> Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="/khach-hang"><i class="bi bi-people"></i> Khách hàng</a></li>
+                <li class="nav-item"><a class="nav-link" href="/ban-an"><i class="bi bi-grid"></i> Bàn ăn</a></li>
+                <li class="nav-item"><a class="nav-link" href="/dat-ban"><i class="bi bi-calendar-check"></i> Đặt bàn</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero-section">
+    <div class="container text-center">
+        <i class="bi bi-fish" style="font-size: 3.5rem;"></i>
+        <h1 class="mt-3">Nhà hàng Hải Sản</h1>
+        <p class="mt-2 mb-4">Hệ thống quản lý nhà hàng toàn diện — Chất lượng phục vụ tốt nhất</p>
+        <a href="/dat-ban/them" class="btn btn-light btn-lg px-4 me-2">
+            <i class="bi bi-plus-circle me-1"></i> Đặt bàn mới
+        </a>
+        <a href="/khach-hang" class="btn btn-outline-light btn-lg px-4">
+            <i class="bi bi-people me-1"></i> Khách hàng
+        </a>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Modules chính -->
+    <p class="section-title mb-4">Quản lý nhà hàng</p>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <a href="/khach-hang" class="card-module card p-4 text-center">
+                <div class="icon-wrap bg-primary bg-opacity-10 text-primary"><i class="bi bi-people-fill"></i></div>
+                <h5 class="fw-bold">Khách hàng</h5>
+                <p class="text-muted small mb-0">Quản lý thông tin khách hàng, tìm kiếm và xem lịch sử đặt bàn</p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/ban-an" class="card-module card p-4 text-center">
+                <div class="icon-wrap bg-success bg-opacity-10 text-success"><i class="bi bi-grid-fill"></i></div>
+                <h5 class="fw-bold">Bàn ăn</h5>
+                <p class="text-muted small mb-0">Quản lý bàn ăn theo khu vực, cập nhật trạng thái bàn</p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/dat-ban" class="card-module card p-4 text-center">
+                <div class="icon-wrap bg-warning bg-opacity-10 text-warning"><i class="bi bi-calendar-check-fill"></i></div>
+                <h5 class="fw-bold">Đặt bàn</h5>
+                <p class="text-muted small mb-0">Quản lý đặt bàn, xác nhận, hủy và theo dõi trạng thái</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Thao tác nhanh -->
+    <p class="section-title mb-4">Thao tác nhanh</p>
+    <div class="row g-3">
+        <div class="col-6 col-md-3">
+            <a href="/dat-ban/them" class="btn btn-primary w-100 py-3">
+                <i class="bi bi-plus-circle-fill d-block fs-4 mb-1"></i>
+                <span class="small">Đặt bàn mới</span>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="/khach-hang/them" class="btn btn-outline-primary w-100 py-3">
+                <i class="bi bi-person-plus-fill d-block fs-4 mb-1"></i>
+                <span class="small">Thêm khách hàng</span>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="/ban-an/them" class="btn btn-outline-success w-100 py-3">
+                <i class="bi bi-plus-square-fill d-block fs-4 mb-1"></i>
+                <span class="small">Thêm bàn ăn</span>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="/dat-ban?trangThai=CHO_XAC_NHAN" class="btn btn-outline-warning w-100 py-3">
+                <i class="bi bi-bell-fill d-block fs-4 mb-1"></i>
+                <span class="small">Chờ xác nhận</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-white border-top py-3 mt-auto">
+    <div class="container text-center text-muted small">
+        &copy; 2026 Nhà hàng Hải Sản — Hệ thống Quản lý
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

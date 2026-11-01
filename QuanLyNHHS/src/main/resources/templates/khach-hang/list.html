@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - Nhà hàng Hải Sản'">Khách hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar-brand { font-weight: 700; color: #0d6efd !important; }
+        .table-hover tbody tr:hover { background-color: #e8f4fd; }
+        .badge-trong { background-color: #198754; }
+        .badge-daDat { background-color: #ffc107; color: #000; }
+        .badge-dangDung { background-color: #dc3545; }
+        .page-header { border-bottom: 2px solid #0d6efd; padding-bottom: 10px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<!-- Thanh điều hướng -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="bi bi-fish"></i> Nhà hàng Hải Sản</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="bi bi-house"></i> Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active fw-semibold" href="/khach-hang"><i class="bi bi-people"></i> Khách hàng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ban-an"><i class="bi bi-grid"></i> Bàn ăn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/dat-ban"><i class="bi bi-calendar-check"></i> Đặt bàn</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <!-- Tiêu đề trang -->
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h3 class="text-primary mb-0"><i class="bi bi-people-fill me-2"></i>Danh sách Khách hàng</h3>
+        <a href="/khach-hang/them" class="btn btn-primary">
+            <i class="bi bi-person-plus-fill me-1"></i> Thêm khách hàng
+        </a>
+    </div>
+
+    <!-- Thông báo -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-1"></i>
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Tìm kiếm -->
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body py-2">
+            <form method="get" action="/khach-hang" class="d-flex gap-2">
+                <input type="text" name="keyword" class="form-control" placeholder="Tìm theo tên khách hàng..."
+                       th:value="${keyword}">
+                <button type="submit" class="btn btn-outline-primary px-4">
+                    <i class="bi bi-search"></i> Tìm
+                </button>
+                <a href="/khach-hang" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-counterclockwise"></i> Xóa lọc
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bảng danh sách -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Mã KH</th>
+                        <th>Họ tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th class="text-center">Điểm tích lũy</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(danhSachKH)}">
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox fs-4 d-block mb-2"></i> Chưa có khách hàng nào.
+                        </td>
+                    </tr>
+                    <tr th:each="kh, stat : ${danhSachKH}">
+                        <td th:text="${stat.index + 1}"></td>
+                        <td><span class="badge bg-secondary" th:text="${kh.maKh}"></span></td>
+                        <td class="fw-semibold" th:text="${kh.hoTen}"></td>
+                        <td th:text="${kh.sdt}"></td>
+                        <td th:text="${kh.email}"></td>
+                        <td class="text-center">
+                            <span class="badge bg-info text-dark" th:text="${kh.diemTichLuy}"></span>
+                        </td>
+                        <td class="text-center">
+                            <a th:href="@{/khach-hang/{maKh}/lich-su-dat-ban(maKh=${kh.maKh})}"
+                               class="btn btn-sm btn-outline-info me-1" title="Lịch sử đặt bàn">
+                                <i class="bi bi-clock-history"></i>
+                            </a>
+                            <a th:href="@{/khach-hang/sua/{maKh}(maKh=${kh.maKh})}"
+                               class="btn btn-sm btn-outline-warning me-1" title="Sửa">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form th:action="@{/khach-hang/xoa/{maKh}(maKh=${kh.maKh})}" method="post"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted small">
+            Tổng: <strong th:text="${#lists.size(danhSachKH)}">0</strong> khách hàng
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
