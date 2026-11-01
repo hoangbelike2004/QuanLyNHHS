@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{kho/fragments :: head('Thông tin nguyên liệu')}"></head>
+  <body>
+    <div class="app-container" th:with="activeMenu='kho'">
+      <div th:replace="~{layout/sidebar :: sidebar}"></div>
+      <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Kho &amp; Nhập Hàng', 'fa-solid fa-boxes-stacked')}"></div>
+        <div class="content-body inventory-module">
+          <nav th:replace="~{kho/fragments :: nav}"></nav>
+        <div th:replace="~{kho/fragments :: messages}"></div>
+        <header>
+          <h1
+            th:text="${id == null ? 'Thêm nguyên liệu' : 'Sửa nguyên liệu'}"
+          ></h1>
+          <a th:href="@{/nguyen-lieu}">Quay lại danh sách</a>
+        </header>
+        <form
+          class="editor"
+          method="post"
+          th:object="${form}"
+          th:action="${id == null} ? @{/nguyen-lieu/them} : @{/nguyen-lieu/{id}/sua(id=${id})}"
+        >
+          <div class="error" role="alert" th:if="${#fields.hasAnyErrors()}">
+            <p th:each="e : ${#fields.allErrors()}" th:text="${e}"></p>
+          </div>
+          <div class="fields">
+            <label>
+              Tên nguyên liệu
+              <input type="text" th:field="*{tenNl}" maxlength="100" required />
+            </label>
+            <label>
+              Đơn vị tính (kg, con, lít…)
+              <input type="text" th:field="*{donVi}" maxlength="20" required />
+            </label>
+            <label>
+              Trạng thái
+              <select th:field="*{trangThai}">
+                <option value="HOAT_DONG">Hoạt động</option>
+                <option value="NGUNG_SU_DUNG">Ngừng sử dụng</option>
+              </select>
+            </label>
+          </div>
+          <button class="primary" type="submit">Lưu nguyên liệu</button>
+        </form>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

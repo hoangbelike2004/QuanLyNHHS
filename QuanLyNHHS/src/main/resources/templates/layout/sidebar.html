@@ -74,8 +74,8 @@
                         <span>Báo Cáo Doanh Thu</span>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" style="opacity: 0.6; cursor: not-allowed;" title="Chức năng nhóm đang phát triển">
+                <li class="menu-item" th:classappend="${activeMenu == 'kho'} ? 'active' : ''">
+                    <a th:href="@{/kho}">
                         <i class="fa-solid fa-boxes-stacked"></i>
                         <span>Kho & Nguyên Liệu</span>
                     </a>

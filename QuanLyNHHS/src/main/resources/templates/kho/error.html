@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{kho/fragments :: head('Không thể xử lý')}"></head>
+  <body>
+    <div class="app-container" th:with="activeMenu='kho'">
+      <div th:replace="~{layout/sidebar :: sidebar}"></div>
+      <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Kho &amp; Nhập Hàng', 'fa-solid fa-boxes-stacked')}"></div>
+        <div class="content-body inventory-module">
+          <nav th:replace="~{kho/fragments :: nav}"></nav>
+        <div th:replace="~{kho/fragments :: messages}"></div>
+        <h1>Không thể xử lý yêu cầu</h1>
+        <p role="alert" th:text="${message}"></p>
+        <a th:href="@{/phieu-nhap}">Về danh sách phiếu nhập</a>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
