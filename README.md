@@ -28,7 +28,7 @@ Profile mặc định `demo` dùng H2 trong bộ nhớ; **dữ liệu demo mất
 - Số lượng phải dương, đơn giá không âm; tối đa hai chữ số thập phân. Kiểm tra giới hạn `NUMBER(10,2)`, `NUMBER(12,2)`, `NUMBER(14,2)`, ngày tương lai, mã không tồn tại, nguyên liệu trùng và phiếu rỗng/tối đa 100 dòng.
 - Khóa dòng phiếu và nguyên liệu trong giao dịch; khóa nguyên liệu theo mã tăng dần để tránh tranh chấp. Làm mới số tồn sau khi lấy khóa để tránh dùng dữ liệu JPA đã tải trước đó.
 - Cột bổ sung `PHIEU_NHAP.PHIEN_BAN` dùng `@Version` để chặn sửa/xóa từ trang cũ, kể cả chỉ sửa chi tiết mà tổng tiền không đổi.
-- Nguyên liệu mới có tồn bằng 0. Form danh mục không sửa trực tiếp tồn kho. Nguyên liệu đã có phiếu không được đổi đơn vị hoặc xóa; có thể chuyển ngừng sử dụng. Dòng cũ của nguyên liệu ngừng sử dụng được giữ/giảm/xóa nhưng không nhập thêm.
+- Nguyên liệu mới có tồn bằng 0. Form danh mục không sửa trực tiếp tồn kho. Nguyên liệu còn tồn hoặc đã có phiếu không được đổi đơn vị hoặc xóa; có thể chuyển ngừng sử dụng. Dòng cũ của nguyên liệu ngừng sử dụng được giữ/giảm/xóa nhưng không nhập thêm.
 - Chặn xóa nhà cung cấp đang có phiếu. FK của DB là lớp bảo vệ cuối cùng khi có thao tác đồng thời.
 - `NhanVienNhapKhoRepository` chỉ đọc `MA_NV`, `HO_TEN` của bảng dùng chung `NHAN_VIEN`; không định nghĩa lại Entity/CRUD nhân viên của thành viên khác.
 
@@ -70,6 +70,8 @@ cd QuanLyNHHS
 ```
 
 Kiểm thử tích hợp dùng database H2 thật và HTTP/Thymeleaf thật, bao gồm tính tiền/làm tròn, CRUD phiếu, đổi nguyên liệu, rollback khi không đủ tồn, dữ liệu sai, tràn số, phiếu cũ, nhập đồng thời, ràng buộc danh mục và chống ghi đè tồn/tổng tiền qua form. Các kiểm thử không đòi hỏi Oracle đang chạy.
+
+Đã bổ sung kiểm thử chặn đổi đơn vị khi còn tồn dù không có chi tiết phiếu tham chiếu, và kiểm tra form phiếu rỗng vẫn có dòng nhập để người dùng sửa tiếp. Bộ kiểm thử gồm 22 ca. Code Java dùng constructor injection và tên biến thể hiện nghiệp vụ; các template, CSS và JavaScript được định dạng thành nhiều dòng để dễ bảo trì.
 
 Giao diện dùng HTML/CSS/JavaScript cục bộ, không cần CDN hay frontend build. Phong cách Framed sheet (seed `2124240024`), giữ font hệ thống, nền xám biển và sổ nhập hàng là phần chính. Mỗi trang tập trung vào danh sách danh mục, lượng tồn hoặc nội dung phiếu. Không sửa layout dùng chung của các module khác.
 

@@ -1,8 +1,8 @@
 package com.QuanLyNHHS.dto;
 
-import java.math.BigDecimal;
 import jakarta.validation.constraints.*;
 
+import java.math.BigDecimal;
 
 public class DongNhapForm {
     @NotNull(message = "Chọn nguyên liệu.")
@@ -19,12 +19,27 @@ public class DongNhapForm {
     @Digits(integer = 10, fraction = 2)
     private BigDecimal donGia;
 
-    public Long getMaNl() { return maNl; }
-    public void setMaNl(Long maNl) { this.maNl = maNl; }
+    public Long getMaNl() {
+        return maNl;
+    }
 
-    public BigDecimal getSoLuong() { return soLuong; }
-    public void setSoLuong(BigDecimal soLuong) { this.soLuong = soLuong; }
+    public void setMaNl(Long maNl) {
+        this.maNl = maNl;
+    }
 
-    public BigDecimal getDonGia() { return donGia; }
-    public void setDonGia(BigDecimal donGia) { this.donGia = donGia; }
+    public BigDecimal getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(BigDecimal soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public BigDecimal getDonGia() {
+        return donGia;
+    }
+
+    public void setDonGia(BigDecimal donGia) {
+        this.donGia = donGia;
+    }
 }

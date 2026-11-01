@@ -1,6 +1,7 @@
 package com.QuanLyNHHS.model;
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -24,18 +25,43 @@ public class NguyenLieu {
     @Column(name = "TRANG_THAI", nullable = false, length = 20)
     private String trangThai = "HOAT_DONG";
 
-    public Long getMaNl() { return maNl; }
-    public void setMaNl(Long maNl) { this.maNl = maNl; }
+    public Long getMaNl() {
+        return maNl;
+    }
 
-    public String getTenNl() { return tenNl; }
-    public void setTenNl(String tenNl) { this.tenNl = tenNl; }
+    public void setMaNl(Long maNl) {
+        this.maNl = maNl;
+    }
 
-    public String getDonVi() { return donVi; }
-    public void setDonVi(String donVi) { this.donVi = donVi; }
+    public String getTenNl() {
+        return tenNl;
+    }
 
-    public BigDecimal getSoLuongTon() { return soLuongTon; }
-    public void setSoLuongTon(BigDecimal soLuongTon) { this.soLuongTon = soLuongTon; }
+    public void setTenNl(String tenNl) {
+        this.tenNl = tenNl;
+    }
 
-    public String getTrangThai() { return trangThai; }
-    public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
+    public String getDonVi() {
+        return donVi;
+    }
+
+    public void setDonVi(String donVi) {
+        this.donVi = donVi;
+    }
+
+    public BigDecimal getSoLuongTon() {
+        return soLuongTon;
+    }
+
+    public void setSoLuongTon(BigDecimal soLuongTon) {
+        this.soLuongTon = soLuongTon;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
 }

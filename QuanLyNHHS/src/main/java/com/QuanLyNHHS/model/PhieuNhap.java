@@ -1,6 +1,7 @@
 package com.QuanLyNHHS.model;
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,24 +37,59 @@ public class PhieuNhap {
     @OrderBy("id.maNl ASC")
     private List<CTPhieuNhap> chiTiet = new ArrayList<>();
 
-    public Long getMaPn() { return maPn; }
-    public void setMaPn(Long maPn) { this.maPn = maPn; }
+    public Long getMaPn() {
+        return maPn;
+    }
 
-    public NhaCungCap getNhaCungCap() { return nhaCungCap; }
-    public void setNhaCungCap(NhaCungCap nhaCungCap) { this.nhaCungCap = nhaCungCap; }
+    public void setMaPn(Long maPn) {
+        this.maPn = maPn;
+    }
 
-    public Long getMaNv() { return maNv; }
-    public void setMaNv(Long maNv) { this.maNv = maNv; }
+    public NhaCungCap getNhaCungCap() {
+        return nhaCungCap;
+    }
 
-    public LocalDate getNgayNhap() { return ngayNhap; }
-    public void setNgayNhap(LocalDate ngayNhap) { this.ngayNhap = ngayNhap; }
+    public void setNhaCungCap(NhaCungCap nhaCungCap) {
+        this.nhaCungCap = nhaCungCap;
+    }
 
-    public BigDecimal getTongTien() { return tongTien; }
-    public void setTongTien(BigDecimal tongTien) { this.tongTien = tongTien; }
+    public Long getMaNv() {
+        return maNv;
+    }
 
-    public Long getPhienBan() { return phienBan; }
-    public void setPhienBan(Long phienBan) { this.phienBan = phienBan; }
+    public void setMaNv(Long maNv) {
+        this.maNv = maNv;
+    }
 
-    public List<CTPhieuNhap> getChiTiet() { return chiTiet; }
-    public void setChiTiet(List<CTPhieuNhap> chiTiet) { this.chiTiet = chiTiet; }
+    public LocalDate getNgayNhap() {
+        return ngayNhap;
+    }
+
+    public void setNgayNhap(LocalDate ngayNhap) {
+        this.ngayNhap = ngayNhap;
+    }
+
+    public BigDecimal getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(BigDecimal tongTien) {
+        this.tongTien = tongTien;
+    }
+
+    public Long getPhienBan() {
+        return phienBan;
+    }
+
+    public void setPhienBan(Long phienBan) {
+        this.phienBan = phienBan;
+    }
+
+    public List<CTPhieuNhap> getChiTiet() {
+        return chiTiet;
+    }
+
+    public void setChiTiet(List<CTPhieuNhap> chiTiet) {
+        this.chiTiet = chiTiet;
+    }
 }

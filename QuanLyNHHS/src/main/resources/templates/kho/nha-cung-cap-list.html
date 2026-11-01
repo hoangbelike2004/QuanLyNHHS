@@ -1,2 +1,60 @@
-<!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{kho/fragments :: head('Nhà cung cấp')}"></head><body><div class="shell"><aside th:replace="~{kho/fragments :: nav}"></aside><main><div th:replace="~{kho/fragments :: messages}"></div><header><h1>Nhà cung cấp</h1><a class="button primary" th:href="@{/nha-cung-cap/them}">Thêm nhà cung cấp</a></header><p class="muted" th:text="${#lists.size(rows)} + ' nhà cung cấp'"></p><div class="table-wrap"><table><thead><tr><th>Tên nhà cung cấp</th><th>Điện thoại</th><th>Địa chỉ</th><th>Email</th><th>Thao tác</th></tr></thead><tbody><tr th:each="n : ${rows}"><td th:text="${n.tenNcc}"></td><td th:text="${n.sdt}"></td><td th:text="${n.diaChi}"></td><td th:text="${n.email}"></td><td><div class="actions"><a th:href="@{/nha-cung-cap/{id}/sua(id=${n.maNcc})}">Sửa</a><form method="post" th:action="@{/nha-cung-cap/{id}/xoa(id=${n.maNcc})}" data-confirm="Xóa nhà cung cấp này?"><button class="danger" type="submit">Xóa</button></form></div></td></tr><tr th:if="${#lists.isEmpty(rows)}"><td colspan="5" class="empty">Chưa có nhà cung cấp. Thêm nhà cung cấp để bắt đầu nhập hàng.</td></tr></tbody></table></div></main></div><script src="/js/kho.js" defer></script></body></html>
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{kho/fragments :: head('Nhà cung cấp')}"></head>
+  <body>
+    <div class="shell">
+      <aside th:replace="~{kho/fragments :: nav}"></aside>
+      <main>
+        <div th:replace="~{kho/fragments :: messages}"></div>
+        <header>
+          <h1>Nhà cung cấp</h1>
+          <a class="button primary" th:href="@{/nha-cung-cap/them}">
+            Thêm nhà cung cấp
+          </a>
+        </header>
+        <p class="muted" th:text="${#lists.size(rows)} + ' nhà cung cấp'"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tên nhà cung cấp</th>
+                <th>Điện thoại</th>
+                <th>Địa chỉ</th>
+                <th>Email</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="n : ${rows}">
+                <td th:text="${n.tenNcc}"></td>
+                <td th:text="${n.sdt}"></td>
+                <td th:text="${n.diaChi}"></td>
+                <td th:text="${n.email}"></td>
+                <td>
+                  <div class="actions">
+                    <a th:href="@{/nha-cung-cap/{id}/sua(id=${n.maNcc})}">
+                      Sửa
+                    </a>
+                    <form
+                      method="post"
+                      th:action="@{/nha-cung-cap/{id}/xoa(id=${n.maNcc})}"
+                      data-confirm="Xóa nhà cung cấp này?"
+                    >
+                      <button class="danger" type="submit">Xóa</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(rows)}">
+                <td colspan="5" class="empty">
+                  Chưa có nhà cung cấp. Thêm nhà cung cấp để bắt đầu nhập hàng.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+    <script src="/js/kho.js" defer></script>
+  </body>
+</html>

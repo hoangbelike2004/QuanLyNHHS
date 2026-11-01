@@ -23,18 +23,43 @@ public class NhaCungCap {
     @Column(name = "EMAIL", length = 100)
     private String email;
 
-    public Long getMaNcc() { return maNcc; }
-    public void setMaNcc(Long maNcc) { this.maNcc = maNcc; }
+    public Long getMaNcc() {
+        return maNcc;
+    }
 
-    public String getTenNcc() { return tenNcc; }
-    public void setTenNcc(String tenNcc) { this.tenNcc = tenNcc; }
+    public void setMaNcc(Long maNcc) {
+        this.maNcc = maNcc;
+    }
 
-    public String getSdt() { return sdt; }
-    public void setSdt(String sdt) { this.sdt = sdt; }
+    public String getTenNcc() {
+        return tenNcc;
+    }
 
-    public String getDiaChi() { return diaChi; }
-    public void setDiaChi(String diaChi) { this.diaChi = diaChi; }
+    public void setTenNcc(String tenNcc) {
+        this.tenNcc = tenNcc;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
+    public String getDiaChi() {
+        return diaChi;
+    }
+
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
