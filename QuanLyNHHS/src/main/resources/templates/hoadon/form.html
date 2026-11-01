@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tạo hóa đơn</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/css/finance.css}">
+</head>
+
+<body>
+<div class="app-container" th:with="activeMenu='hoadon'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Tạo Hóa Đơn', 'fa-solid fa-receipt')}"></div>
+        <div class="content-body finance-module">
+            <nav class="finance-nav" aria-label="Điều hướng hóa đơn và báo cáo">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/hoa-don}" th:classappend="${activeMenu == 'hoadon'} ? 'selected' : ''">Hóa đơn</a>
+                <a th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
+            </nav>
+
+
+
+<div class="finance-content">
+
+    <form th:action="@{/hoa-don/them}"
+          th:object="${hoaDon}"
+          method="post"
+          id="invoiceForm">
+
+        <section class="panel">
+            <h2>Thông tin hóa đơn</h2>
+
+            <div th:if="${loi}" class="error" th:text="${loi}"></div>
+
+            <label for="maBan">Mã bàn</label>
+            <input id="maBan" type="number"
+                   th:field="*{maBan}" min="1" required>
+
+            <label for="maNv">Mã nhân viên</label>
+            <input id="maNv" type="number"
+                   th:field="*{maNv}" min="1" required>
+
+            <label for="maKh">Mã khách hàng (không bắt buộc)</label>
+            <input id="maKh" type="number"
+                   th:field="*{maKh}" min="1">
+
+            <label for="giamGia">Giảm giá (VNĐ)</label>
+            <input id="giamGia" type="number"
+                   th:field="*{giamGia}"
+                   min="0" step="0.01" value="0" required>
+        </section>
+
+        <section class="panel">
+            <h2>Chọn món ăn</h2>
+
+            <label for="monAnSelect">Danh sách món ăn</label>
+
+            <select id="monAnSelect">
+                <option value="">-- Chọn món ăn --</option>
+
+                <option th:each="mon : ${danhSachMonAn}"
+                        th:value="${mon.maMon}"
+                        th:text="${mon.tenMon + ' - ' + #numbers.formatDecimal(mon.donGia, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"
+                        th:attr="data-price=${mon.donGia},
+                                 data-name=${mon.tenMon}">
+                </option>
+            </select>
+
+            <button type="button" class="add-btn" onclick="themMon()">
+                + Thêm món
+            </button>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Món ăn</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="danhSachMon">
+                    <tr id="emptyRow">
+                        <td colspan="5" class="empty">
+                            Chưa có món ăn nào được chọn
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total">
+                Tổng tiền món: <span id="tongTien">0</span> VNĐ
+                <br>
+                Giảm giá: <span id="hienThiGiamGia">0</span> VNĐ
+                <br>
+                <span style="color:#198754">
+                    Cần thanh toán: <span id="thanhToan">0</span> VNĐ
+                </span>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Tạo hóa đơn
+            </button>
+
+            <a class="btn" th:href="@{/hoa-don}">Quay lại</a>
+        </section>
+
+    </form>
+</div>
+
+<script>
+    const danhSachMon = document.getElementById("danhSachMon");
+    const monAnSelect = document.getElementById("monAnSelect");
+    const giamGiaInput = document.getElementById("giamGia");
+
+    const tienVietNam = value =>
+        Number(value).toLocaleString("vi-VN");
+
+    function capNhatTongTien() {
+        let tong = 0;
+
+        document.querySelectorAll(".mon-row").forEach(row => {
+            const gia = Number(row.dataset.price);
+            const soLuong = Number(row.querySelector(".quantity").value) || 0;
+            const thanhTien = gia * soLuong;
+
+            row.querySelector(".thanh-tien").textContent =
+                tienVietNam(thanhTien) + " VNĐ";
+
+            tong += thanhTien;
+        });
+
+        const giamGia = Math.max(0, Number(giamGiaInput.value) || 0);
+        const canThanhToan = Math.max(0, tong - giamGia);
+
+        document.getElementById("tongTien").textContent =
+            tienVietNam(tong);
+
+        document.getElementById("hienThiGiamGia").textContent =
+            tienVietNam(giamGia);
+
+        document.getElementById("thanhToan").textContent =
+            tienVietNam(canThanhToan);
+    }
+
+    function themMon() {
+        const option = monAnSelect.selectedOptions[0];
+
+        if (!option || !option.value) {
+            alert("Vui lòng chọn món ăn!");
+            return;
+        }
+
+        const maMon = option.value;
+
+        // Không cho thêm trùng món
+        if (document.querySelector(`.mon-row[data-id="${maMon}"]`)) {
+            alert("Món này đã có trong hóa đơn!");
+            return;
+        }
+
+        const tenMon = option.dataset.name;
+        const gia = Number(option.dataset.price);
+
+        if (!Number.isFinite(gia) || gia < 0) {
+            alert("Giá món ăn không hợp lệ!");
+            return;
+        }
+
+        document.getElementById("emptyRow")?.remove();
+
+        const row = document.createElement("tr");
+        row.className = "mon-row";
+        row.dataset.id = maMon;
+        row.dataset.price = gia;
+
+        const tenCell = document.createElement("td");
+        tenCell.textContent = tenMon;
+
+        const giaCell = document.createElement("td");
+        giaCell.textContent = tienVietNam(gia) + " VNĐ";
+
+        const soLuongCell = document.createElement("td");
+        const soLuongInput = document.createElement("input");
+
+        soLuongInput.type = "number";
+        soLuongInput.name = "soLuong";
+        soLuongInput.className = "quantity";
+        soLuongInput.min = "1";
+        soLuongInput.step = "1";
+        soLuongInput.value = "1";
+        soLuongInput.required = true;
+        soLuongInput.addEventListener("input", capNhatTongTien);
+
+        soLuongCell.appendChild(soLuongInput);
+
+        const thanhTienCell = document.createElement("td");
+        thanhTienCell.className = "thanh-tien";
+
+        const thaoTacCell = document.createElement("td");
+
+        const maMonInput = document.createElement("input");
+        maMonInput.type = "hidden";
+        maMonInput.name = "maMon";
+        maMonInput.value = maMon;
+
+        const xoaButton = document.createElement("button");
+        xoaButton.type = "button";
+        xoaButton.className = "remove-btn";
+        xoaButton.textContent = "Xóa";
+
+        xoaButton.addEventListener("click", function() {
+            row.remove();
+
+            if (document.querySelectorAll(".mon-row").length === 0) {
+                const emptyRow = document.createElement("tr");
+                emptyRow.id = "emptyRow";
+
+                const cell = document.createElement("td");
+                cell.colSpan = 5;
+                cell.className = "empty";
+                cell.textContent = "Chưa có món ăn nào được chọn";
+
+                emptyRow.appendChild(cell);
+                danhSachMon.appendChild(emptyRow);
+            }
+
+            capNhatTongTien();
+        });
+
+        thaoTacCell.append(maMonInput, xoaButton);
+
+        row.append(
+            tenCell,
+            giaCell,
+            soLuongCell,
+            thanhTienCell,
+            thaoTacCell
+        );
+
+        danhSachMon.appendChild(row);
+
+        monAnSelect.value = "";
+        capNhatTongTien();
+    }
+
+    giamGiaInput.addEventListener("input", capNhatTongTien);
+
+    document.getElementById("invoiceForm").addEventListener("submit", function(e) {
+        const rows = document.querySelectorAll(".mon-row");
+
+        if (rows.length === 0) {
+            e.preventDefault();
+            alert("Vui lòng chọn ít nhất một món ăn!");
+            return;
+        }
+
+        for (const row of rows) {
+            const quantity = Number(row.querySelector(".quantity").value);
+
+            if (!Number.isInteger(quantity) || quantity <= 0) {
+                e.preventDefault();
+                alert("Số lượng món phải là số nguyên lớn hơn 0!");
+                return;
+            }
+        }
+    });
+</script>
+
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

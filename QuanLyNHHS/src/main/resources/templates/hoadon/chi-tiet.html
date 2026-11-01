@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chi tiết hóa đơn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/css/finance.css}">
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='hoadon'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Chi Tiết Hóa Đơn', 'fa-solid fa-receipt')}"></div>
+        <div class="content-body finance-module">
+            <nav class="finance-nav" aria-label="Điều hướng hóa đơn và báo cáo">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/hoa-don}" th:classappend="${activeMenu == 'hoadon'} ? 'selected' : ''">Hóa đơn</a>
+                <a th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
+            </nav>
+
+
+<div class="finance-content">
+    <section class="panel">
+        <h2>Chi tiết hóa đơn #<span th:text="${hoaDon.maHd}"></span></h2>
+
+        <div th:if="${thongBao}" class="notice" th:text="${thongBao}"></div>
+        <div th:if="${loi}" class="error" th:text="${loi}"></div>
+
+        <div class="grid">
+            <div class="item">
+                <strong>Mã bàn</strong>
+                <span th:text="${hoaDon.maBan}"></span>
+            </div>
+            <div class="item">
+                <strong>Mã nhân viên</strong>
+                <span th:text="${hoaDon.maNv}"></span>
+            </div>
+            <div class="item">
+                <strong>Mã khách hàng</strong>
+                <span th:text="${hoaDon.maKh != null ? hoaDon.maKh : '-'}"></span>
+            </div>
+            <div class="item">
+                <strong>Ngày lập</strong>
+                <span th:text="${hoaDon.ngayLap}"></span>
+            </div>
+            <div class="item">
+                <strong>Trạng thái</strong>
+                <span th:text="${hoaDon.trangThai}"></span>
+            </div>
+            <div class="item">
+                <strong>Giảm giá</strong>
+                <span th:text="${hoaDon.giamGia} + ' đ'"></span>
+            </div>
+            <div class="item">
+                <strong>Tổng tiền</strong>
+                <span th:text="${hoaDon.tongTien} + ' đ'"></span>
+            </div>
+        </div>
+
+        <h3>Chi tiết món ăn</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Mã món</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ct : ${danhSachChiTiet}">
+                <td th:text="${ct.maMon}"></td>
+                <td th:text="${ct.soLuong}"></td>
+                <td th:text="${ct.donGia} + ' đ'"></td>
+                <td th:text="${ct.thanhTien} + ' đ'"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(danhSachChiTiet)}">
+                <td colspan="4" style="text-align:center;padding:25px">
+                    Hóa đơn chưa có chi tiết món ăn.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <form th:if="${hoaDon.trangThai != 'Da thanh toan'}"
+                  th:action="@{/hoa-don/thanh-toan/{id}(id=${hoaDon.maHd})}"
+                  method="post">
+                <button class="green" type="submit">Thanh toán hóa đơn</button>
+            </form>
+            <a class="btn" th:href="@{/hoa-don}">Quay lại danh sách</a>
+        </div>
+    </section>
+</div>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

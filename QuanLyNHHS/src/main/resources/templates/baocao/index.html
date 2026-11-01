@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Báo cáo doanh thu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/css/finance.css}">
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='baocao'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Báo Cáo Doanh Thu', 'fa-solid fa-chart-line')}"></div>
+        <div class="content-body finance-module">
+            <nav class="finance-nav" aria-label="Điều hướng hóa đơn và báo cáo">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/hoa-don}" th:classappend="${activeMenu == 'hoadon'} ? 'selected' : ''">Hóa đơn</a>
+                <a th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
+            </nav>
+
+
+<div class="finance-content">
+    <section class="panel">
+        <h2>Báo cáo doanh thu</h2>
+
+        <form th:action="@{/bao-cao}" method="get">
+            <div>
+                <label for="tuNgay">Từ ngày</label>
+                <input id="tuNgay" type="date" name="tuNgay"
+                       th:value="${tuNgay}" required>
+            </div>
+            <div>
+                <label for="denNgay">Đến ngày</label>
+                <input id="denNgay" type="date" name="denNgay"
+                       th:value="${denNgay}" required>
+            </div>
+            <button type="submit">Xem báo cáo</button>
+        </form>
+    </section>
+
+    <div th:if="${loi}" class="error" th:text="${loi}"></div>
+
+    <section class="cards">
+        <div class="card">
+            <span>Doanh thu trong khoảng đã chọn</span>
+            <strong th:text="${doanhThu != null ? #numbers.formatDecimal(doanhThu, 0, 'COMMA', 0, 'POINT') + ' đ' : 'Chưa có dữ liệu'}"></strong>
+        </div>
+        <div class="card">
+            <span>Doanh thu hôm nay</span>
+            <strong th:text="${doanhThuHomNay != null ? #numbers.formatDecimal(doanhThuHomNay, 0, 'COMMA', 0, 'POINT') + ' đ' : 'Chưa có dữ liệu'}"></strong>
+        </div>
+        <div class="card">
+            <span>Doanh thu tháng này</span>
+            <strong th:text="${doanhThuThangNay != null ? #numbers.formatDecimal(doanhThuThangNay, 0, 'COMMA', 0, 'POINT') + ' đ' : 'Chưa có dữ liệu'}"></strong>
+        </div>
+        <div class="card">
+            <span>Số hóa đơn đã thanh toán</span>
+            <strong th:text="${soHoaDonDaThanhToan != null ? soHoaDonDaThanhToan : 0}"></strong>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Món bán chạy</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Thứ hạng</th>
+                    <th>Mon an </th>
+                    <th>Tổng số lượng bán</th>
+                    <th>Doanh thu món</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="mon, stt : ${monBanChay}">
+                    <td th:text="${stt.count}"></td>
+                    <td th:text="${mon[0]}"></td>
+                    <td th:text="${mon[1]}"></td>
+                    <td th:text="${#numbers.formatDecimal(mon[2], 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                </tr>
+                <tr th:if="${monBanChay == null or #lists.isEmpty(monBanChay)}">
+                    <td colspan="4" class="empty">Chưa có dữ liệu món bán.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Doanh thu theo hóa đơn</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>Mã hóa đơn</th>
+                    <th>Tổng tiền chi tiết</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="hd : ${tongTienTheoHoaDon}">
+                    <td th:text="${hd[0]}"></td>
+                    <td th:text="${#numbers.formatDecimal(hd[1], 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                </tr>
+                <tr th:if="${tongTienTheoHoaDon == null or #lists.isEmpty(tongTienTheoHoaDon)}">
+                    <td colspan="2" class="empty">Chưa có dữ liệu.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

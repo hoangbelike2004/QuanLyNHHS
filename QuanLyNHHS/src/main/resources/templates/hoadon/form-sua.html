@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sửa hóa đơn</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/css/finance.css}">
+</head>
+
+<body>
+<div class="app-container" th:with="activeMenu='hoadon'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Sửa Hóa Đơn', 'fa-solid fa-receipt')}"></div>
+        <div class="content-body finance-module">
+            <nav class="finance-nav" aria-label="Điều hướng hóa đơn và báo cáo">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/hoa-don}" th:classappend="${activeMenu == 'hoadon'} ? 'selected' : ''">Hóa đơn</a>
+                <a th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
+            </nav>
+
+
+
+<div class="finance-content">
+    <section class="panel">
+
+        <h2>Sửa hóa đơn</h2>
+
+        <p class="description">
+            Có thể thay đổi thông tin hóa đơn và danh sách món ăn
+            khi hóa đơn chưa thanh toán.
+        </p>
+
+        <div th:if="${thongBao}" class="notice" th:text="${thongBao}"></div>
+        <div th:if="${loi}" class="error" th:text="${loi}"></div>
+
+        <form th:action="@{/hoa-don/sua/{id}(id=${hoaDon.maHd})}"
+              th:object="${hoaDon}"
+              method="post"
+              id="invoiceForm">
+
+            <div class="form-group">
+                <label>Mã hóa đơn</label>
+                <input type="text" th:value="${hoaDon.maHd}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Trạng thái</label>
+                <span class="status" th:text="${hoaDon.trangThai}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="maBan">Mã bàn</label>
+                <input type="number" id="maBan"
+                       th:field="*{maBan}" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="maNv">Mã nhân viên</label>
+                <input type="number" id="maNv"
+                       th:field="*{maNv}" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="maKh">Mã khách hàng</label>
+                <input type="number" id="maKh"
+                       th:field="*{maKh}" min="1">
+            </div>
+
+            <div class="form-group">
+                <label for="giamGia">Giảm giá (VNĐ)</label>
+                <input type="number" id="giamGia"
+                       th:field="*{giamGia}"
+                       min="0" step="1" required>
+            </div>
+
+            <hr>
+
+            <h3>Danh sách món ăn</h3>
+
+            <div id="dishList">
+
+                <!-- Hiển thị các món đã có trong hóa đơn -->
+                <div class="dish-row"
+                     th:each="ct : ${danhSachChiTiet}">
+
+                    <div class="form-group dish-select">
+                        <label>Món ăn</label>
+                        <select name="maMon" class="mon-select"
+                                required>
+                            <option value="">-- Chọn món --</option>
+
+                            <option th:each="mon : ${danhSachMonAn}"
+                                    th:value="${mon.maMon}"
+                                    th:text="${mon.tenMon}"
+                                    th:attr="data-price=${mon.donGia}"
+                                    th:selected="${mon.maMon == ct.id.maMon}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Số lượng</label>
+                        <input type="number" name="soLuong"
+                               class="quantity"
+                               min="0.01" step="0.01"
+                               th:value="${ct.soLuong}" required>
+                    </div>
+
+                    <div>
+                        <label>Thành tiền</label>
+                        <div class="line-total">0 VNĐ</div>
+                    </div>
+
+                    <div>
+                        <button type="button"
+                                class="btn-delete"
+                                onclick="xoaMon(this)">
+                            Xóa
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <button type="button" class="btn-add"
+                    onclick="themMon()">
+                + Thêm món
+            </button>
+
+            <div class="summary">
+                <p>
+                    <span>Tổng tiền món ăn:</span>
+                    <strong id="tongMon">0 VNĐ</strong>
+                </p>
+
+                <p>
+                    <span>Giảm giá:</span>
+                    <strong id="hienThiGiamGia">0 VNĐ</strong>
+                </p>
+
+                <p class="final-total">
+                    <span>Tổng thanh toán:</span>
+                    <span id="tongThanhToan">0 VNĐ</span>
+                </p>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn-save">
+                    Lưu thay đổi
+                </button>
+
+                <a class="btn-cancel"
+                   th:href="@{/hoa-don/chi-tiet/{id}(id=${hoaDon.maHd})}">
+                    Hủy
+                </a>
+
+                <a class="btn-cancel" th:href="@{/hoa-don}">
+                    Danh sách hóa đơn
+                </a>
+            </div>
+
+        </form>
+    </section>
+</div>
+
+<!-- Dữ liệu món ăn lấy từ database -->
+<script th:inline="javascript">
+    const danhSachMonAn = /*[[${danhSachMonAn}]]*/ [];
+
+    const dishList = document.getElementById("dishList");
+
+    function dinhDangTien(tien) {
+        return new Intl.NumberFormat("vi-VN").format(tien) + " VNĐ";
+    }
+
+    function taoOptions() {
+        const options = document.createDocumentFragment();
+        options.appendChild(new Option('-- Chọn món --', ''));
+
+        danhSachMonAn.forEach(mon => {
+            const option = new Option(mon.tenMon, mon.maMon);
+            option.dataset.price = mon.donGia;
+            options.appendChild(option);
+        });
+
+        return options;
+    }
+
+    function themMon() {
+        const row = document.createElement("div");
+        row.className = "dish-row";
+
+        row.innerHTML = `
+            <div class="form-group dish-select">
+                <label>Món ăn</label>
+                <select name="maMon" class="mon-select" required>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Số lượng</label>
+                <input type="number" name="soLuong"
+                       class="quantity"
+                       min="0.01" step="0.01"
+                       value="1" required>
+            </div>
+
+            <div>
+                <label>Thành tiền</label>
+                <div class="line-total">0 VNĐ</div>
+            </div>
+
+            <div>
+                <button type="button" class="btn-delete"
+                        onclick="xoaMon(this)">
+                    Xóa
+                </button>
+            </div>
+        `;
+
+        row.querySelector('.mon-select').appendChild(taoOptions());
+        dishList.appendChild(row);
+        tinhTongTien();
+    }
+
+    function xoaMon(button) {
+        button.closest(".dish-row").remove();
+        tinhTongTien();
+    }
+
+    function tinhTongTien() {
+        let tongMon = 0;
+
+        document.querySelectorAll(".dish-row").forEach(row => {
+            const select = row.querySelector(".mon-select");
+            const quantity = row.querySelector(".quantity");
+
+            const option = select.options[select.selectedIndex];
+            const donGia = Number(option?.dataset.price || 0);
+            const soLuong = Number(quantity.value || 0);
+
+            const thanhTien = donGia * soLuong;
+
+            row.querySelector(".line-total").textContent =
+                dinhDangTien(thanhTien);
+
+            tongMon += thanhTien;
+        });
+
+        const giamGia = Math.max(
+            0,
+            Number(document.getElementById("giamGia").value || 0)
+        );
+
+        const tongThanhToan = Math.max(0, tongMon - giamGia);
+
+        document.getElementById("tongMon").textContent =
+            dinhDangTien(tongMon);
+
+        document.getElementById("hienThiGiamGia").textContent =
+            dinhDangTien(giamGia);
+
+        document.getElementById("tongThanhToan").textContent =
+            dinhDangTien(tongThanhToan);
+    }
+
+    document.addEventListener("input", function(event) {
+        if (event.target.matches(".quantity, #giamGia")) {
+            tinhTongTien();
+        }
+    });
+
+    document.addEventListener("change", function(event) {
+        if (event.target.matches(".mon-select")) {
+            tinhTongTien();
+        }
+    });
+
+    document.getElementById("invoiceForm").addEventListener("submit", function(event) {
+        const rows = document.querySelectorAll(".dish-row");
+
+        if (rows.length === 0) {
+            event.preventDefault();
+            alert("Hóa đơn phải có ít nhất một món ăn!");
+            return;
+        }
+
+        const seen = new Set();
+
+        for (const row of rows) {
+            const maMon = row.querySelector(".mon-select").value;
+            const soLuong = Number(row.querySelector(".quantity").value);
+
+            if (!maMon || !Number.isFinite(soLuong) || soLuong <= 0) {
+                event.preventDefault();
+                alert("Vui lòng chọn món và nhập số lượng hợp lệ!");
+                return;
+            }
+
+            if (seen.has(maMon)) {
+                event.preventDefault();
+                alert("Một món ăn chỉ được xuất hiện một lần. Hãy sửa số lượng ở dòng món đã có!");
+                return;
+            }
+
+            seen.add(maMon);
+        }
+    });
+
+    tinhTongTien();
+</script>
+
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

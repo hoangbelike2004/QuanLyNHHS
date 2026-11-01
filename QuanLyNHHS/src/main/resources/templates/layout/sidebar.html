@@ -62,10 +62,16 @@
                         <span>Bàn Ăn & Đặt Bàn</span>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" style="opacity: 0.6; cursor: not-allowed;" title="Chức năng nhóm đang phát triển">
+                <li class="menu-item" th:classappend="${activeMenu == 'hoadon'} ? 'active' : ''">
+                    <a th:href="@{/hoa-don}">
                         <i class="fa-solid fa-receipt"></i>
-                        <span>Hóa Đơn & Doanh Thu</span>
+                        <span>Quản Lý Hóa Đơn</span>
+                    </a>
+                </li>
+                <li class="menu-item" th:classappend="${activeMenu == 'baocao'} ? 'active' : ''">
+                    <a th:href="@{/bao-cao}">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Báo Cáo Doanh Thu</span>
                     </a>
                 </li>
                 <li class="menu-item">
