@@ -1,3 +1,4 @@
+
 package com.QuanLyNHHS.repository;
 
 import java.math.BigDecimal;
@@ -29,17 +30,17 @@ public interface CTHoaDonRepository
             @Param("maHd") Long maHd);
 
     // Thống kê món bán chạy - chỉ hóa đơn đã thanh toán
-    @Query("""
-        SELECT c.id.maMon, SUM(c.soLuong), SUM(c.thanhTien)
-        FROM CTHoaDon c, HoaDon h
-        WHERE c.id.maHd = h.maHd
-          AND h.trangThai = :trangThai
-        GROUP BY c.id.maMon
-        ORDER BY SUM(c.soLuong) DESC
-        """)
-    List<Object[]> thongKeMonBanChay(
-            @Param("trangThai") String trangThai);
-
+@Query("""
+    SELECT m.tenMon, SUM(c.soLuong), SUM(c.thanhTien)
+    FROM CTHoaDon c, HoaDon h, MonAn m
+    WHERE c.id.maHd = h.maHd
+      AND c.id.maMon = m.maMon
+      AND h.trangThai = :trangThai
+    GROUP BY m.maMon, m.tenMon
+    ORDER BY SUM(c.soLuong) DESC
+    """)
+List<Object[]> thongKeMonBanChay(
+        @Param("trangThai") String trangThai);
     // Thống kê tổng tiền theo hóa đơn - chỉ hóa đơn đã thanh toán
     @Query("""
         SELECT c.id.maHd, SUM(c.thanhTien)

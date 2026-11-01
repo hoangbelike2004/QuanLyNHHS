@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,14 +72,18 @@
             margin: 20px 0;
         }
 
-        input, select, button, .btn {
+        input,
+        select,
+        button,
+        .btn {
             padding: 10px 12px;
             border: 1px solid #d5dce5;
             border-radius: 6px;
             font-size: 14px;
         }
 
-        button, .btn {
+        button,
+        .btn {
             background: #1769aa;
             color: white;
             border: none;
@@ -128,7 +132,8 @@
             min-width: 1000px;
         }
 
-        th, td {
+        th,
+        td {
             text-align: left;
             padding: 13px 10px;
             border-bottom: 1px solid #e7ebf0;
@@ -182,159 +187,143 @@
 
 <body>
 
-<header>
-    <h1>Hệ thống quản lý nhà hàng</h1>
+    <header>
+        <h1>Hệ thống quản lý nhà hàng</h1>
 
-    <nav>
-        <a th:href="@{/hoa-don}">Hóa đơn</a>
-        <a th:href="@{/bao-cao}">Báo cáo</a>
-    </nav>
-</header>
+        <nav>
+            <a th:href="@{/hoa-don}">Hóa đơn</a>
+            <a th:href="@{/bao-cao}">Báo cáo</a>
+        </nav>
+    </header>
 
-<main>
-    <section class="panel">
+    <main>
+        <section class="panel">
 
-        <div class="top">
-            <h2>Danh sách hóa đơn</h2>
+            <div class="top">
+                <h2>Danh sách hóa đơn</h2>
 
-            <a class="btn green" th:href="@{/hoa-don/them}">
-                + Tạo hóa đơn
-            </a>
-        </div>
+                <a class="btn green" th:href="@{/hoa-don/them}">
+                    + Tạo hóa đơn
+                </a>
+            </div>
 
-        <!-- Thông báo -->
-        <div th:if="${thongBao}"
-             class="notice"
-             th:text="${thongBao}">
-        </div>
+            <!-- Thông báo -->
+            <div th:if="${thongBao}" class="notice" th:text="${thongBao}">
+            </div>
 
-        <div th:if="${loi}"
-             class="error"
-             th:text="${loi}">
-        </div>
+            <div th:if="${loi}" class="error" th:text="${loi}">
+            </div>
 
-        <!-- Lọc trạng thái -->
-        <form class="filter"
-              method="get"
-              th:action="@{/hoa-don}">
+            <!-- Lọc trạng thái -->
+            <form class="filter" method="get" th:action="@{/hoa-don}">
 
-            <select name="trangThai">
-                <option value="">Tất cả trạng thái</option>
+                <select name="trangThai">
+                    <option value="">Tất cả trạng thái</option>
 
-                <option value="Chua thanh toan"
-                        th:selected="${trangThai == 'Chua thanh toan'}">
-                    Chưa thanh toán
-                </option>
+                    <option value="Chua thanh toan" th:selected="${trangThai == 'Chua thanh toan'}">
+                        Chưa thanh toán
+                    </option>
 
-                <option value="Da thanh toan"
-                        th:selected="${trangThai == 'Da thanh toan'}">
-                    Đã thanh toán
-                </option>
-            </select>
+                    <option value="Da thanh toan" th:selected="${trangThai == 'Da thanh toan'}">
+                        Đã thanh toán
+                    </option>
+                </select>
 
-            <button type="submit">Lọc hóa đơn</button>
+                <button type="submit">Lọc hóa đơn</button>
 
-            <a class="btn gray" th:href="@{/hoa-don}">
-                Đặt lại
-            </a>
-        </form>
+                <a class="btn gray" th:href="@{/hoa-don}">
+                    Đặt lại
+                </a>
+            </form>
 
-        <!-- Bảng hóa đơn -->
-        <div class="table-wrap">
-            <table>
-                <thead>
-                <tr>
-                    <th>Mã HĐ</th>
-                    <th>Mã bàn</th>
-                    <th>Mã khách</th>
-                    <th>Mã nhân viên</th>
-                    <th>Ngày lập</th>
-                    <th>Trạng thái</th>
-                    <th>Giảm giá</th>
-                    <th>Tổng tiền</th>
-                    <th>Thao tác</th>
-                </tr>
-                </thead>
+            <!-- Bảng hóa đơn -->
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã HĐ</th>
+                            <th>Mã bàn</th>
+                            <th>Mã khách</th>
+                            <th>Mã nhân viên</th>
+                            <th>Ngày lập</th>
+                            <th>Trạng thái</th>
+                            <th>Giảm giá</th>
+                            <th>Tổng tiền</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
+                    <tbody>
 
-                <tr th:each="hd : ${danhSachHoaDon}">
+                        <tr th:each="hd : ${danhSachHoaDon}">
 
-                    <td th:text="${hd.maHd}"></td>
+                            <td th:text="${hd.maHd}"></td>
 
-                    <td th:text="${hd.maBan}"></td>
+                            <td th:text="${hd.maBan}"></td>
 
-                    <td th:text="${hd.maKh != null ? hd.maKh : '-'}"></td>
+                            <td th:text="${hd.maKh != null ? hd.maKh : '-'}"></td>
 
-                    <td th:text="${hd.maNv}"></td>
+                            <td th:text="${hd.maNv}"></td>
 
-                    <td th:text="${hd.ngayLap}"></td>
+                            <td th:text="${hd.ngayLap}"></td>
 
-                    <td>
-                        <span class="status"
-                              th:classappend="${hd.trangThai == 'Da thanh toan'} ? ' paid' : ''"
-                              th:text="${hd.trangThai == 'Da thanh toan'
+                            <td>
+                                <span class="status" th:classappend="${hd.trangThai == 'Da thanh toan'} ? ' paid' : ''"
+                                    th:text="${hd.trangThai == 'Da thanh toan'
                                   ? 'Đã thanh toán'
                                   : 'Chưa thanh toán'}">
-                        </span>
-                    </td>
+                                </span>
+                            </td>
 
-                    <td th:text="${#numbers.formatDecimal(
+                            <td th:text="${#numbers.formatDecimal(
                         hd.giamGia != null ? hd.giamGia : 0,
                         0, 'COMMA', 0, 'POINT')} + ' đ'">
-                    </td>
+                            </td>
 
-                    <td th:text="${#numbers.formatDecimal(
+                            <td th:text="${#numbers.formatDecimal(
                         hd.tongTien != null ? hd.tongTien : 0,
                         0, 'COMMA', 0, 'POINT')} + ' đ'">
-                    </td>
+                            </td>
 
-                    <!-- Các nút thao tác -->
-                    <td>
-                        <div class="actions">
+                            <!-- Các nút thao tác -->
+                            <td>
+                                <div class="actions">
 
-                            <!-- Xem chi tiết -->
-                            <a class="btn"
-                               th:href="@{/hoa-don/chi-tiet/{id}(id=${hd.maHd})}">
-                                Xem
-                            </a>
+                                    <!-- Xem chi tiết -->
+                                    <a class="btn" th:href="@{/hoa-don/chi-tiet/{id}(id=${hd.maHd})}">
+                                        Xem
+                                    </a>
 
-                            <!-- Chỉ sửa hóa đơn chưa thanh toán -->
-                            <a class="btn orange"
-                               th:if="${hd.trangThai == 'Chua thanh toan'}"
-                               th:href="@{/hoa-don/sua/{id}(id=${hd.maHd})}">
-                                Sửa
-                            </a>
+                                    <!-- Chỉ sửa hóa đơn chưa thanh toán -->
+                                    <a class="btn orange" th:if="${hd.trangThai == 'Chua thanh toan'}"
+                                        th:href="@{/hoa-don/sua/{id}(id=${hd.maHd})}">
+                                        Sửa
+                                    </a>
 
-                            <!-- Chỉ thanh toán hóa đơn chưa thanh toán -->
-                            <form th:if="${hd.trangThai == 'Chua thanh toan'}"
-                                  th:action="@{/hoa-don/thanh-toan/{id}(id=${hd.maHd})}"
-                                  method="post">
+                                    <!-- Chuyển đến chi tiết hóa đơn để kiểm tra trước khi thanh toán -->
+                                    <a class="btn green" th:if="${hd.trangThai == 'Chua thanh toan'}"
+                                        th:href="@{/hoa-don/chi-tiet/{id}(id=${hd.maHd})}">
+                                        Thanh toán
+                                    </a>
+                                </div>
+                            </td>
 
-                                <button type="submit">
-                                    Thanh toán
-                                </button>
-                            </form>
+                        </tr>
 
-                        </div>
-                    </td>
+                        <!-- Không có hóa đơn -->
+                        <tr th:if="${#lists.isEmpty(danhSachHoaDon)}">
+                            <td colspan="9" style="text-align:center; padding:30px">
+                                Chưa có hóa đơn nào.
+                            </td>
+                        </tr>
 
-                </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <!-- Không có hóa đơn -->
-                <tr th:if="${#lists.isEmpty(danhSachHoaDon)}">
-                    <td colspan="9"
-                        style="text-align:center; padding:30px">
-                        Chưa có hóa đơn nào.
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-    </section>
-</main>
+        </section>
+    </main>
 
 </body>
+
 </html>

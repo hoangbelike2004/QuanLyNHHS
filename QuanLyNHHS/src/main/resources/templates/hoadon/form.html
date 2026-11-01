@@ -5,21 +5,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tạo hóa đơn</title>
+
     <style>
-        body { margin: 0; font-family: Arial, sans-serif; background: #f4f6f9; color: #263445; }
-        header { background: #17365d; color: white; padding: 22px 5%; }
-        header a { color: white; text-decoration: none; margin-right: 18px; }
-        main { max-width: 700px; margin: 30px auto; padding: 0 18px; }
-        .panel { background: white; padding: 25px; border-radius: 10px; }
-        h2 { margin-top: 0; }
-        label { display: block; font-weight: bold; margin: 15px 0 7px; }
-        input { width: 100%; padding: 11px; border: 1px solid #d5dce5; border-radius: 6px; box-sizing: border-box; }
-        button, .btn { display: inline-block; margin-top: 22px; padding: 11px 16px; background: #1769aa; color: white; border: 0; border-radius: 6px; text-decoration: none; cursor: pointer; }
-        .btn { background: #667085; }
-        .notice { padding: 12px; background: #fde8e8; color: #a52222; border-radius: 6px; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #263445;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 22px 5%;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            margin-right: 18px;
+        }
+
+        main {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 15px 0 7px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d5dce5;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button, .btn {
+            display: inline-block;
+            padding: 11px 16px;
+            background: #1769aa;
+            color: white;
+            border: 0;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn {
+            background: #667085;
+        }
+
+        .add-btn {
+            margin-top: 12px;
+        }
+
+        .notice {
+            padding: 12px;
+            background: #fde8e8;
+            color: #a52222;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+        }
+
+        .quantity {
+            width: 80px;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            padding: 7px 10px;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            background: #198754;
+        }
+
+        .empty {
+            color: #777;
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 </head>
+
 <body>
+
 <header>
     <h1>Quản lý nhà hàng</h1>
     <a th:href="@{/hoa-don}">Danh sách hóa đơn</a>
@@ -27,28 +142,255 @@
 </header>
 
 <main>
-    <section class="panel">
-        <h2>Tạo hóa đơn mới</h2>
 
-        <div th:if="${loi}" class="notice" th:text="${loi}"></div>
+    <form th:action="@{/hoa-don/them}"
+          th:object="${hoaDon}"
+          method="post"
+          id="invoiceForm">
 
-        <form th:action="@{/hoa-don/them}" th:object="${hoaDon}" method="post">
+        <section class="panel">
+            <h2>Thông tin hóa đơn</h2>
+
+            <div th:if="${loi}" class="notice" th:text="${loi}"></div>
+
             <label for="maBan">Mã bàn</label>
-            <input id="maBan" type="number" th:field="*{maBan}" min="1" required>
+            <input id="maBan" type="number"
+                   th:field="*{maBan}" min="1" required>
 
             <label for="maNv">Mã nhân viên</label>
-            <input id="maNv" type="number" th:field="*{maNv}" min="1" required>
+            <input id="maNv" type="number"
+                   th:field="*{maNv}" min="1" required>
 
             <label for="maKh">Mã khách hàng (không bắt buộc)</label>
-            <input id="maKh" type="number" th:field="*{maKh}" min="1">
+            <input id="maKh" type="number"
+                   th:field="*{maKh}" min="1">
 
             <label for="giamGia">Giảm giá (VNĐ)</label>
-            <input id="giamGia" type="number" th:field="*{giamGia}" min="0" step="0.01" value="0" required>
+            <input id="giamGia" type="number"
+                   th:field="*{giamGia}"
+                   min="0" step="0.01" value="0" required>
+        </section>
 
-            <button type="submit">Tạo hóa đơn</button>
+        <section class="panel">
+            <h2>Chọn món ăn</h2>
+
+            <label for="monAnSelect">Danh sách món ăn</label>
+
+            <select id="monAnSelect">
+                <option value="">-- Chọn món ăn --</option>
+
+                <option th:each="mon : ${danhSachMonAn}"
+                        th:value="${mon.maMon}"
+                        th:text="${mon.tenMon + ' - ' + #numbers.formatDecimal(mon.donGia, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}"
+                        th:attr="data-price=${mon.donGia},
+                                 data-name=${mon.tenMon}">
+                </option>
+            </select>
+
+            <button type="button" class="add-btn" onclick="themMon()">
+                + Thêm món
+            </button>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Món ăn</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="danhSachMon">
+                    <tr id="emptyRow">
+                        <td colspan="5" class="empty">
+                            Chưa có món ăn nào được chọn
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total">
+                Tổng tiền món: <span id="tongTien">0</span> VNĐ
+                <br>
+                Giảm giá: <span id="hienThiGiamGia">0</span> VNĐ
+                <br>
+                <span style="color:#198754">
+                    Cần thanh toán: <span id="thanhToan">0</span> VNĐ
+                </span>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Tạo hóa đơn
+            </button>
+
             <a class="btn" th:href="@{/hoa-don}">Quay lại</a>
-        </form>
-    </section>
+        </section>
+
+    </form>
 </main>
+
+<script>
+    const danhSachMon = document.getElementById("danhSachMon");
+    const monAnSelect = document.getElementById("monAnSelect");
+    const giamGiaInput = document.getElementById("giamGia");
+
+    const tienVietNam = value =>
+        Number(value).toLocaleString("vi-VN");
+
+    function capNhatTongTien() {
+        let tong = 0;
+
+        document.querySelectorAll(".mon-row").forEach(row => {
+            const gia = Number(row.dataset.price);
+            const soLuong = Number(row.querySelector(".quantity").value) || 0;
+            const thanhTien = gia * soLuong;
+
+            row.querySelector(".thanh-tien").textContent =
+                tienVietNam(thanhTien) + " VNĐ";
+
+            tong += thanhTien;
+        });
+
+        const giamGia = Math.max(0, Number(giamGiaInput.value) || 0);
+        const canThanhToan = Math.max(0, tong - giamGia);
+
+        document.getElementById("tongTien").textContent =
+            tienVietNam(tong);
+
+        document.getElementById("hienThiGiamGia").textContent =
+            tienVietNam(giamGia);
+
+        document.getElementById("thanhToan").textContent =
+            tienVietNam(canThanhToan);
+    }
+
+    function themMon() {
+        const option = monAnSelect.selectedOptions[0];
+
+        if (!option || !option.value) {
+            alert("Vui lòng chọn món ăn!");
+            return;
+        }
+
+        const maMon = option.value;
+
+        // Không cho thêm trùng món
+        if (document.querySelector(`.mon-row[data-id="${maMon}"]`)) {
+            alert("Món này đã có trong hóa đơn!");
+            return;
+        }
+
+        const tenMon = option.dataset.name;
+        const gia = Number(option.dataset.price);
+
+        if (!Number.isFinite(gia) || gia < 0) {
+            alert("Giá món ăn không hợp lệ!");
+            return;
+        }
+
+        document.getElementById("emptyRow")?.remove();
+
+        const row = document.createElement("tr");
+        row.className = "mon-row";
+        row.dataset.id = maMon;
+        row.dataset.price = gia;
+
+        const tenCell = document.createElement("td");
+        tenCell.textContent = tenMon;
+
+        const giaCell = document.createElement("td");
+        giaCell.textContent = tienVietNam(gia) + " VNĐ";
+
+        const soLuongCell = document.createElement("td");
+        const soLuongInput = document.createElement("input");
+
+        soLuongInput.type = "number";
+        soLuongInput.name = "soLuong";
+        soLuongInput.className = "quantity";
+        soLuongInput.min = "1";
+        soLuongInput.step = "1";
+        soLuongInput.value = "1";
+        soLuongInput.required = true;
+        soLuongInput.addEventListener("input", capNhatTongTien);
+
+        soLuongCell.appendChild(soLuongInput);
+
+        const thanhTienCell = document.createElement("td");
+        thanhTienCell.className = "thanh-tien";
+
+        const thaoTacCell = document.createElement("td");
+
+        const maMonInput = document.createElement("input");
+        maMonInput.type = "hidden";
+        maMonInput.name = "maMon";
+        maMonInput.value = maMon;
+
+        const xoaButton = document.createElement("button");
+        xoaButton.type = "button";
+        xoaButton.className = "remove-btn";
+        xoaButton.textContent = "Xóa";
+
+        xoaButton.addEventListener("click", function() {
+            row.remove();
+
+            if (document.querySelectorAll(".mon-row").length === 0) {
+                const emptyRow = document.createElement("tr");
+                emptyRow.id = "emptyRow";
+
+                const cell = document.createElement("td");
+                cell.colSpan = 5;
+                cell.className = "empty";
+                cell.textContent = "Chưa có món ăn nào được chọn";
+
+                emptyRow.appendChild(cell);
+                danhSachMon.appendChild(emptyRow);
+            }
+
+            capNhatTongTien();
+        });
+
+        thaoTacCell.append(maMonInput, xoaButton);
+
+        row.append(
+            tenCell,
+            giaCell,
+            soLuongCell,
+            thanhTienCell,
+            thaoTacCell
+        );
+
+        danhSachMon.appendChild(row);
+
+        monAnSelect.value = "";
+        capNhatTongTien();
+    }
+
+    giamGiaInput.addEventListener("input", capNhatTongTien);
+
+    document.getElementById("invoiceForm").addEventListener("submit", function(e) {
+        const rows = document.querySelectorAll(".mon-row");
+
+        if (rows.length === 0) {
+            e.preventDefault();
+            alert("Vui lòng chọn ít nhất một món ăn!");
+            return;
+        }
+
+        for (const row of rows) {
+            const quantity = Number(row.querySelector(".quantity").value);
+
+            if (!Number.isInteger(quantity) || quantity <= 0) {
+                e.preventDefault();
+                alert("Số lượng món phải là số nguyên lớn hơn 0!");
+                return;
+            }
+        }
+    });
+</script>
+
 </body>
 </html>
