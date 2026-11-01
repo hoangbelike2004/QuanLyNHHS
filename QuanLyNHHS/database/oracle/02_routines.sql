@@ -1,0 +1,67 @@
+WHENEVER SQLERROR EXIT SQL.SQLCODE
+SET DEFINE OFF
+
+-- The Java service owns inventory updates for web requests.
+-- This procedure is for explicit SQL administration, not an automatic receipt trigger.
+-- It does not COMMIT; caller must include it in the receipt transaction.
+CREATE OR REPLACE PROCEDURE SP_CAP_NHAT_TON_KHO (
+    P_MA_NL IN NGUYEN_LIEU.MA_NL%TYPE,
+    P_CHENH_LECH IN NUMBER
+) AS
+BEGIN
+    IF P_CHENH_LECH IS NULL OR P_CHENH_LECH <> ROUND(P_CHENH_LECH, 2) THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Chenh lech ton kho phai co toi da 2 chu so thap phan');
+    END IF;
+    UPDATE NGUYEN_LIEU
+       SET SO_LUONG_TON = SO_LUONG_TON + P_CHENH_LECH
+     WHERE MA_NL = P_MA_NL
+       AND SO_LUONG_TON + P_CHENH_LECH BETWEEN 0 AND 99999999.99;
+    IF SQL%ROWCOUNT = 0 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Nguyen lieu khong ton tai, khong du ton hoac vuot gioi han ton kho');
+    END IF;
+END;
+/
+SHOW ERRORS
+
+CREATE OR REPLACE PROCEDURE SP_TINH_TONG_PHIEU_NHAP (
+    P_MA_PN IN PHIEU_NHAP.MA_PN%TYPE
+) AS
+    V_MA_PN PHIEU_NHAP.MA_PN%TYPE;
+    V_TONG NUMBER;
+BEGIN
+    SELECT MA_PN INTO V_MA_PN FROM PHIEU_NHAP WHERE MA_PN = P_MA_PN FOR UPDATE;
+    SELECT NVL(SUM(THANH_TIEN), 0) INTO V_TONG FROM CT_PHIEU_NHAP WHERE MA_PN = P_MA_PN;
+    IF V_TONG > 999999999999.99 THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Tong tien phieu nhap vuot NUMBER(14,2)');
+    END IF;
+    UPDATE PHIEU_NHAP SET TONG_TIEN = V_TONG, PHIEN_BAN = PHIEN_BAN + 1 WHERE MA_PN = P_MA_PN;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20004, 'Phieu nhap khong ton tai');
+END;
+/
+SHOW ERRORS
+
+-- Recalculate money only: never increment stock here, otherwise Java would count it twice.
+CREATE OR REPLACE TRIGGER TRG_CTPN_THANH_TIEN
+BEFORE INSERT OR UPDATE ON CT_PHIEU_NHAP
+FOR EACH ROW
+BEGIN
+    IF :NEW.SO_LUONG IS NULL OR :NEW.SO_LUONG <= 0 OR :NEW.DON_GIA IS NULL OR :NEW.DON_GIA < 0 THEN
+        RAISE_APPLICATION_ERROR(-20005, 'So luong phai duong va don gia khong duoc am');
+    END IF;
+    :NEW.THANH_TIEN := ROUND(:NEW.SO_LUONG * :NEW.DON_GIA, 2);
+END;
+/
+SHOW ERRORS
+
+-- Treat invalid PL/SQL objects as a failed installation.
+DECLARE
+    V_ERRORS NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO V_ERRORS FROM USER_ERRORS
+     WHERE NAME IN ('SP_CAP_NHAT_TON_KHO','SP_TINH_TONG_PHIEU_NHAP','TRG_CTPN_THANH_TIEN')
+       AND ATTRIBUTE = 'ERROR';
+    IF V_ERRORS > 0 THEN RAISE_APPLICATION_ERROR(-20006, 'PL/SQL compilation failed; inspect USER_ERRORS'); END IF;
+END;
+/

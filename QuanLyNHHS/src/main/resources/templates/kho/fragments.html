@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title th:text="${title} + ' · Quản lý nhà hàng hải sản'">Kho</title><link rel="stylesheet" th:href="@{/css/kho.css}"></head>
+<body>
+<aside th:fragment="nav" class="sidebar"><a class="brand" th:href="@{/phieu-nhap}"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M2 12q5-7 11 0t11 0M2 18q5-7 11 0t11 0" fill="none" stroke="currentColor" stroke-width="2"/></svg> Nhà hàng hải sản</a><p>Kho &amp; Nhập hàng</p><nav aria-label="Quản lý kho"><a th:href="@{/phieu-nhap}">Phiếu nhập</a><a th:href="@{/nguyen-lieu}">Nguyên liệu &amp; Tồn kho</a><a th:href="@{/nha-cung-cap}">Nhà cung cấp</a></nav></aside>
+<div th:fragment="messages"><p class="success" role="status" th:if="${success}" th:text="${success}"></p><p class="error" role="alert" th:if="${error}" th:text="${error}"></p></div>
+</body></html>
