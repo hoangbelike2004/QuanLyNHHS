@@ -15,7 +15,7 @@
         <!-- Main Wrapper -->
         <main class="main-wrapper">
             <!-- Navbar Fragment -->
-            <div th:replace="~{layout/navbar :: navbar('Quản Lý Danh Mục Loại Món', 'fa-solid fa-layer-group')}"></div>
+            <div th:replace="~{layout/navbar :: navbar('Loại món', 'fa-solid fa-layer-group')}"></div>
 
             <div class="content-body">
                 <!-- Metrics Row -->
@@ -39,16 +39,6 @@
                             <p>Tổng số món thuộc các loại</p>
                         </div>
                     </div>
-
-                    <div class="metric-card gold">
-                        <div class="metric-icon gold">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-                        <div class="metric-info">
-                            <h3>100% Hoạt Động</h3>
-                            <p>Tất cả danh mục đang mở</p>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Toolbar & Actions -->
@@ -63,7 +53,7 @@
                     <div class="toolbar-right">
                         <button class="btn-primary" onclick="openModal('modalAddCategory')">
                             <i class="fa-solid fa-plus"></i>
-                            <span>Thêm Loại Món</span>
+                            <span>Thêm loại món</span>
                         </button>
                     </div>
                 </div>
@@ -85,7 +75,7 @@
                             <tr th:each="cat : ${categories}">
                                 <td style="font-weight: 700; color: var(--cyan-primary);" th:text="${cat.maLoai}">LM01</td>
                                 <td>
-                                    <div style="font-weight: 600; color: #fff; font-size: 14.5px;" th:text="${cat.tenLoai}">Tôm & Cua ghẹ</div>
+                                    <div style="font-weight: 600; color: var(--text-main); font-size: 14.5px;" th:text="${cat.tenLoai}">Tôm & Cua ghẹ</div>
                                 </td>
                                 <td style="color: var(--text-muted); max-width: 320px;" th:text="${cat.moTa}">Các loại tôm hùm, cua ghẹ tươi sống...</td>
                                 <td>
@@ -115,11 +105,11 @@
         </main>
     </div>
 
-    <!-- Modal Thêm Loại Món -->
+    <!-- Modal Thêm loại món -->
     <div class="modal-overlay" id="modalAddCategory">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>Thêm Loại Món Ăn Mới</h3>
+                <h3>Thêm loại món</h3>
                 <button class="modal-close" onclick="closeModal('modalAddCategory')">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -161,7 +151,7 @@
     <div class="modal-overlay" id="modalEditCategory">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>Chỉnh Sửa Loại Món Ăn</h3>
+                <h3>Sửa loại món</h3>
                 <button class="modal-close" onclick="closeModal('modalEditCategory')">
                     <i class="fa-solid fa-xmark"></i>
                 </button>

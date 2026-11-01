@@ -1,35 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-</head>
 <body>
     <header class="top-navbar" th:fragment="navbar(pageTitle, pageIcon)">
         <div class="navbar-left">
-            <div class="page-title">
-                <i th:class="${pageIcon}"></i>
-                <span th:text="${pageTitle}">Trang Quản Trị</span>
-            </div>
+            <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="app-sidebar" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+            <div class="page-title"><span th:text="${pageTitle}">Quản lý nhà hàng</span></div>
         </div>
-
-        <div class="navbar-right">
-            <div class="nav-search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Tìm kiếm nhanh hệ thống...">
-            </div>
-
-            <button class="btn-icon" title="Thông báo hệ thống">
-                <i class="fa-regular fa-bell"></i>
-                <span class="status-dot"></span>
-            </button>
-
-            <button class="btn-icon" title="Cài đặt">
-                <i class="fa-solid fa-gear"></i>
-            </button>
-
-            <div class="user-avatar" style="width: 36px; height: 36px; font-size: 13px;" title="Nguyễn Cao Hoàng">
-                H
-            </div>
-        </div>
+        <div class="navbar-right"><span class="navbar-caption">Hải sản Hoàng Gia</span></div>
+        <script th:src="@{/js/app-shell.js}" defer></script>
     </header>
 </body>
 </html>

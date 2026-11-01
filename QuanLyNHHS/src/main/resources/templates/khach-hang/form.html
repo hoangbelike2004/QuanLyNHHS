@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - Nhà hàng Hải Sản'">Form Khách hàng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/reservation.css}">
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='khachhang'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Khách hàng', 'fa-solid fa-users')}"></div>
+        <div class="content-body reservation-module">
+            <nav class="reservation-nav" aria-label="Khách hàng và đặt bàn">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/khach-hang}" th:classappend="${activeMenu == 'khachhang'} ? 'selected' : ''">Khách hàng</a>
+                <a th:href="@{/ban-an}" th:classappend="${activeMenu == 'banan'} ? 'selected' : ''">Bàn ăn</a>
+                <a th:href="@{/dat-ban}" th:classappend="${activeMenu == 'datban'} ? 'selected' : ''">Đặt bàn</a>
+            </nav>
+
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/khach-hang">Khách hàng</a></li>
+            <li class="breadcrumb-item active" th:text="${pageTitle}"></li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fa-solid fa-address-card me-2"></i><span th:text="${pageTitle}">Form KH</span></h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${errorMessage}" class="alert alert-danger">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i><span th:text="${errorMessage}"></span>
+                    </div>
+
+                    <form th:object="${khachHang}"
+                          th:action="${isEdit} ? @{/khach-hang/sua/{id}(id=${khachHang.maKh})} : @{/khach-hang/them}"
+                          method="post" novalidate class="needs-validation">
+
+                        <!-- Họ tên -->
+                        <div class="mb-3">
+                            <label class="form-label" for="hoTen">Họ và tên <span class="text-danger">*</span></label>
+                            <input type="text" id="hoTen" class="form-control"
+                                   th:field="*{hoTen}"
+                                   placeholder="Nhập họ và tên khách hàng"
+                                   required maxlength="100">
+                        </div>
+
+                        <!-- Số điện thoại -->
+                        <div class="mb-3">
+                            <label class="form-label" for="sdt">Số điện thoại</label>
+                            <input type="tel" id="sdt" class="form-control"
+                                   th:field="*{sdt}"
+                                   placeholder="Ví dụ: 0901234567"
+                                   maxlength="15" pattern="[0-9]{10,15}">
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email</label>
+                            <input type="email" id="email" class="form-control"
+                                   th:field="*{email}"
+                                   placeholder="Ví dụ: khachhang@email.com"
+                                   maxlength="100">
+                        </div>
+
+                        <!-- Điểm tích lũy -->
+                        <div class="mb-3">
+                            <label class="form-label" for="diemTichLuy">Điểm tích lũy</label>
+                            <input type="number" id="diemTichLuy" class="form-control"
+                                   th:field="*{diemTichLuy}" min="0" value="0">
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="/khach-hang" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-floppy-disk me-1"></i>
+                                <span th:text="${isEdit} ? 'Cập nhật' : 'Thêm mới'">Lưu</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/reservation.js}" defer></script>
+</body>
+</html>

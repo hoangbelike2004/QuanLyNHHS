@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - Nhà hàng Hải Sản'">Bàn ăn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/reservation.css}">
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='banan'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Bàn ăn', 'fa-solid fa-chair')}"></div>
+        <div class="content-body reservation-module">
+            <nav class="reservation-nav" aria-label="Khách hàng và đặt bàn">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/khach-hang}" th:classappend="${activeMenu == 'khachhang'} ? 'selected' : ''">Khách hàng</a>
+                <a th:href="@{/ban-an}" th:classappend="${activeMenu == 'banan'} ? 'selected' : ''">Bàn ăn</a>
+                <a th:href="@{/dat-ban}" th:classappend="${activeMenu == 'datban'} ? 'selected' : ''">Đặt bàn</a>
+            </nav>
+
+
+<div class="container mt-4">
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h3 class="text-primary mb-0"><i class="fa-solid fa-chair me-2"></i>Danh sách bàn ăn</h3>
+        <a href="/ban-an/them" class="btn btn-primary">
+            <i class="fa-solid fa-circle-plus me-1"></i> Thêm bàn ăn
+        </a>
+    </div>
+
+    <!-- Thông báo -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+        <i class="fa-solid fa-circle-check me-1"></i><span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+        <i class="fa-solid fa-triangle-exclamation me-1"></i><span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Lọc theo trạng thái -->
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body py-2">
+            <div class="d-flex gap-2 flex-wrap align-items-center">
+                <span class="fw-semibold me-1">Lọc theo trạng thái:</span>
+                <a th:href="@{/ban-an}" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == null} ? 'btn-primary' : 'btn-outline-secondary'">Tất cả</a>
+                <a th:href="@{/ban-an(trangThai='Trống')}" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == 'Trống'} ? 'btn-success' : 'btn-outline-success'">🟢 Trống</a>
+                <a th:href="@{/ban-an(trangThai='Đã đặt')}" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == 'Đã đặt'} ? 'btn-warning' : 'btn-outline-warning'">🟡 Đã đặt</a>
+                <a th:href="@{/ban-an(trangThai='Đang dùng')}" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == 'Đang dùng'} ? 'btn-danger' : 'btn-outline-danger'">🔴 Đang dùng</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng danh sách -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Mã bàn</th>
+                        <th>Tên bàn</th>
+                        <th class="text-center">Số chỗ</th>
+                        <th>Khu vực</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(danhSachBan)}">
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-inbox fs-4 d-block mb-2"></i> Chưa có bàn ăn nào.
+                        </td>
+                    </tr>
+                    <tr th:each="ban, stat : ${danhSachBan}">
+                        <td th:text="${stat.index + 1}"></td>
+                        <td><span class="badge bg-secondary" th:text="${ban.maBan}"></span></td>
+                        <td class="fw-semibold" th:text="${ban.tenBan}"></td>
+                        <td class="text-center">
+                            <i class="fa-solid fa-user"></i>
+                            <span th:text="${ban.soCho}"></span>
+                        </td>
+                        <td th:text="${ban.khuVuc}"></td>
+                        <td class="text-center">
+                            <span class="badge"
+                                  th:classappend="${ban.trangThai == 'Trống'} ? 'bg-success' :
+                                                  (${ban.trangThai == 'Đã đặt'} ? 'bg-warning text-dark' : 'bg-danger')"
+                                  th:text="${ban.trangThai}"></span>
+                        </td>
+                        <td class="text-center">
+                            <a th:href="@{/ban-an/sua/{maBan}(maBan=${ban.maBan})}"
+                               class="btn btn-sm btn-outline-warning me-1">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <form th:action="@{/ban-an/xoa/{maBan}(maBan=${ban.maBan})}" method="post"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Bạn có chắc muốn xóa bàn này?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted small">
+            Tổng: <strong th:text="${#lists.size(danhSachBan)}">0</strong> bàn
+        </div>
+    </div>
+</div>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/reservation.js}" defer></script>
+</body>
+</html>

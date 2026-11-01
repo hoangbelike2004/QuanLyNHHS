@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - Nhà hàng Hải Sản'">Đặt bàn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/reservation.css}">
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='datban'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Đặt bàn', 'fa-solid fa-calendar-check')}"></div>
+        <div class="content-body reservation-module">
+            <nav class="reservation-nav" aria-label="Khách hàng và đặt bàn">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/khach-hang}" th:classappend="${activeMenu == 'khachhang'} ? 'selected' : ''">Khách hàng</a>
+                <a th:href="@{/ban-an}" th:classappend="${activeMenu == 'banan'} ? 'selected' : ''">Bàn ăn</a>
+                <a th:href="@{/dat-ban}" th:classappend="${activeMenu == 'datban'} ? 'selected' : ''">Đặt bàn</a>
+            </nav>
+
+
+<div class="container-fluid mt-4 px-4">
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h3 class="text-primary mb-0"><i class="fa-solid fa-calendar-check me-2"></i>Danh sách đặt bàn</h3>
+        <a href="/dat-ban/them" class="btn btn-primary">
+            <i class="fa-solid fa-circle-plus me-1"></i> Đặt bàn mới
+        </a>
+    </div>
+
+    <!-- Thông báo -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+        <i class="fa-solid fa-circle-check me-1"></i><span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+        <i class="fa-solid fa-triangle-exclamation me-1"></i><span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Lọc trạng thái -->
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body py-2">
+            <div class="d-flex gap-2 flex-wrap align-items-center">
+                <span class="fw-semibold me-1">Lọc:</span>
+                <a href="/dat-ban" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == null} ? 'btn-primary' : 'btn-outline-secondary'">Tất cả</a>
+                <a href="/dat-ban?trangThai=CHO_XAC_NHAN" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == 'CHO_XAC_NHAN'} ? 'btn-warning' : 'btn-outline-warning'">⏳ Chờ xác nhận</a>
+                <a href="/dat-ban?trangThai=DA_XAC_NHAN" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == 'DA_XAC_NHAN'} ? 'btn-success' : 'btn-outline-success'">✔ Đã xác nhận</a>
+                <a href="/dat-ban?trangThai=DA_HUY" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == 'DA_HUY'} ? 'btn-danger' : 'btn-outline-danger'">✖ Đã hủy</a>
+                <a href="/dat-ban?trangThai=HOAN_THANH" class="btn btn-sm"
+                   th:classappend="${trangThaiFilter == 'HOAN_THANH'} ? 'btn-secondary' : 'btn-outline-secondary'">🏁 Hoàn thành</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng danh sách -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Mã đặt bàn</th>
+                        <th>Khách hàng</th>
+                        <th>Bàn</th>
+                        <th>Ngày đặt</th>
+                        <th class="text-center">Số người</th>
+                        <th class="text-end">Tiền cọc</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(danhSachDatBan)}">
+                        <td colspan="9" class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-inbox fs-4 d-block mb-2"></i> Chưa có đặt bàn nào.
+                        </td>
+                    </tr>
+                    <tr th:each="db, stat : ${danhSachDatBan}">
+                        <td th:text="${stat.index + 1}"></td>
+                        <td><code th:text="${db.maDat}"></code></td>
+                        <td>
+                            <span th:if="${db.khachHang != null}">
+                                <a th:href="@{/khach-hang/{id}/lich-su-dat-ban(id=${db.khachHang.maKh})}"
+                                   th:text="${db.khachHang.hoTen}" class="text-decoration-none fw-semibold"></a>
+                                <br><small class="text-muted" th:text="${db.khachHang.sdt}"></small>
+                            </span>
+                            <span th:unless="${db.khachHang != null}" class="text-muted">—</span>
+                        </td>
+                        <td>
+                            <span th:if="${db.banAn != null}">
+                                <strong th:text="${db.banAn.tenBan}"></strong>
+                                <br><small class="text-muted" th:text="${db.banAn.khuVuc}"></small>
+                            </span>
+                            <span th:unless="${db.banAn != null}" class="text-muted">—</span>
+                        </td>
+                        <td th:text="${db.ngayDat != null ? #temporals.format(db.ngayDat, 'dd/MM/yyyy') : '—'}"></td>
+                        <td class="text-center" th:text="${db.soNguoi}"></td>
+                        <td class="text-end">
+                            <span th:if="${db.tienCoc != null}" th:text="${#numbers.formatDecimal(db.tienCoc, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                            <span th:unless="${db.tienCoc != null}" class="text-muted">—</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge"
+                                  th:classappend="${db.trangThai == 'CHO_XAC_NHAN'} ? 'bg-warning text-dark' :
+                                                  (${db.trangThai == 'DA_XAC_NHAN'} ? 'bg-success' :
+                                                  (${db.trangThai == 'DA_HUY'} ? 'bg-danger' : 'bg-secondary'))"
+                                  th:text="${db.trangThai == 'CHO_XAC_NHAN'} ? 'Chờ xác nhận' :
+                                           (${db.trangThai == 'DA_XAC_NHAN'} ? 'Đã xác nhận' :
+                                           (${db.trangThai == 'DA_HUY'} ? 'Đã hủy' :
+                                           (${db.trangThai == 'HOAN_THANH'} ? 'Hoàn thành' : ${db.trangThai})))"></span>
+                        </td>
+                        <td class="text-center action-btns">
+                            <!-- Sửa -->
+                            <a th:href="@{/dat-ban/sua/{id}(id=${db.maDat})}"
+                               class="btn btn-sm btn-outline-secondary mb-1" title="Sửa">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <!-- Xác nhận - chỉ hiện khi CHO_XAC_NHAN -->
+                            <form th:if="${db.trangThai == 'CHO_XAC_NHAN'}"
+                                  th:action="@{/dat-ban/xac-nhan/{id}(id=${db.maDat})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-success mb-1" title="Xác nhận">
+                                    <i class="fa-solid fa-check"></i> Xác nhận
+                                </button>
+                            </form>
+                            <!-- Hủy - hiện khi CHO_XAC_NHAN hoặc DA_XAC_NHAN -->
+                            <form th:if="${db.trangThai == 'CHO_XAC_NHAN' or db.trangThai == 'DA_XAC_NHAN'}"
+                                  th:action="@{/dat-ban/huy/{id}(id=${db.maDat})}" method="post"
+                                  onsubmit="return confirm('Hủy đặt bàn này?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger mb-1" title="Hủy">
+                                    <i class="fa-solid fa-xmark"></i> Hủy
+                                </button>
+                            </form>
+                            <!-- Hoàn thành - chỉ hiện khi DA_XAC_NHAN -->
+                            <form th:if="${db.trangThai == 'DA_XAC_NHAN'}"
+                                  th:action="@{/dat-ban/hoan-thanh/{id}(id=${db.maDat})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-secondary mb-1" title="Hoàn thành">
+                                    <i class="fa-solid fa-flag"></i> Hoàn thành
+                                </button>
+                            </form>
+                            <!-- Xóa - chỉ hiện khi DA_HUY hoặc HOAN_THANH -->
+                            <form th:if="${db.trangThai == 'DA_HUY' or db.trangThai == 'HOAN_THANH'}"
+                                  th:action="@{/dat-ban/xoa/{id}(id=${db.maDat})}" method="post"
+                                  onsubmit="return confirm('Xóa vĩnh viễn đặt bàn này?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger mb-1" title="Xóa">
+                                    <i class="fa-solid fa-trash"></i> Xóa
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted small">
+            Tổng: <strong th:text="${#lists.size(danhSachDatBan)}">0</strong> đặt bàn
+        </div>
+    </div>
+</div>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/reservation.js}" defer></script>
+</body>
+</html>

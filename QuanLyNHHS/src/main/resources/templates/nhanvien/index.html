@@ -15,7 +15,7 @@
         <!-- Main Wrapper -->
         <main class="main-wrapper">
             <!-- Navbar Fragment -->
-            <div th:replace="~{layout/navbar :: navbar('Quản Lý Hồ Sơ Nhân Viên', 'fa-solid fa-user-group')}"></div>
+            <div th:replace="~{layout/navbar :: navbar('Nhân viên', 'fa-solid fa-user-group')}"></div>
 
             <div class="content-body">
                 <!-- Metrics Row -->
@@ -49,16 +49,6 @@
                             <p>Nhân viên nghỉ phép</p>
                         </div>
                     </div>
-
-                    <div class="metric-card purple">
-                        <div class="metric-icon purple">
-                            <i class="fa-solid fa-user-tie"></i>
-                        </div>
-                        <div class="metric-info">
-                            <h3>Bếp & Phục Vụ</h3>
-                            <p>Bộ phận nòng cốt nhà hàng</p>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Toolbar & Actions -->
@@ -71,7 +61,7 @@
 
                         <!-- Department Filter Pills -->
                         <div class="filter-pills">
-                            <button class="pill-btn active" data-role="all">Tất Cả Bộ Phận</button>
+                            <button class="pill-btn active" data-role="all">Tất cả</button>
                             <button class="pill-btn" data-role="Quản lý nhà hàng">Quản Lý</button>
                             <button class="pill-btn" data-role="Bếp">Bếp & Đầu Bếp</button>
                             <button class="pill-btn" data-role="Thu ngân">Thu Ngân</button>
@@ -83,7 +73,7 @@
                     <div class="toolbar-right">
                         <button class="btn-primary" onclick="openModal('modalAddStaff')">
                             <i class="fa-solid fa-user-plus"></i>
-                            <span>Thêm Nhân Viên</span>
+                            <span>Thêm nhân viên</span>
                         </button>
                     </div>
                 </div>
@@ -112,13 +102,13 @@
                                     <div style="display: flex; align-items: center; gap: 12px;">
                                         <div class="staff-avatar-circle" th:text="${#strings.substring(staff.hoTen, #strings.length(staff.hoTen)-1, #strings.length(staff.hoTen))}">H</div>
                                         <div>
-                                            <div style="font-weight: 600; color: #fff;" th:text="${staff.hoTen}">Nguyễn Cao Hoàng</div>
+                                            <div style="font-weight: 600; color: var(--text-main);" th:text="${staff.hoTen}">Nguyễn Cao Hoàng</div>
                                             <div style="font-size: 11.5px; color: var(--text-dim);" th:text="${staff.email}">hoang.nguyen@nhhs.vn</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div style="font-size: 13px; color: #fff;">
+                                    <div style="font-size: 13px; color: var(--text-main);">
                                         <i class="fa-solid fa-phone" style="font-size: 11px; color: var(--text-dim); margin-right: 4px;"></i>
                                         <span th:text="${staff.soDienThoai}">0912 345 678</span>
                                     </div>
@@ -161,11 +151,11 @@
         </main>
     </div>
 
-    <!-- Modal Thêm Nhân Viên Mới -->
+    <!-- Modal Thêm nhân viên Mới -->
     <div class="modal-overlay" id="modalAddStaff">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>Thêm Hồ Sơ Nhân Viên Mới</h3>
+                <h3>Thêm nhân viên</h3>
                 <button class="modal-close" onclick="closeModal('modalAddStaff')">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -251,7 +241,7 @@
     <div class="modal-overlay" id="modalEditStaff">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>Chỉnh Sửa Thông Tin Nhân Viên</h3>
+                <h3>Sửa nhân viên</h3>
                 <button class="modal-close" onclick="closeModal('modalEditStaff')">
                     <i class="fa-solid fa-xmark"></i>
                 </button>

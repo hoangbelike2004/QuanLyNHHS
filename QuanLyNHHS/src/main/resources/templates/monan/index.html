@@ -15,7 +15,7 @@
         <!-- Main Wrapper -->
         <main class="main-wrapper">
             <!-- Navbar Fragment -->
-            <div th:replace="~{layout/navbar :: navbar('Quản Lý Thực Đơn Món Ăn', 'fa-solid fa-utensils')}"></div>
+            <div th:replace="~{layout/navbar :: navbar('Món ăn', 'fa-solid fa-utensils')}"></div>
 
             <div class="content-body">
                 <!-- Metrics Row -->
@@ -49,16 +49,6 @@
                             <p>Món tạm hết hàng</p>
                         </div>
                     </div>
-
-                    <div class="metric-card gold">
-                        <div class="metric-icon gold">
-                            <i class="fa-solid fa-fire-flame-curved"></i>
-                        </div>
-                        <div class="metric-info">
-                            <h3>Hàu Sữa & Cá Mú</h3>
-                            <p>Top bán chạy tuần này</p>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Toolbar & Filters -->
@@ -72,7 +62,7 @@
 
                         <!-- Category Filter Pills -->
                         <div class="filter-pills">
-                            <button class="pill-btn active" data-category="all">Tất Cả Món</button>
+                            <button class="pill-btn active" data-category="all">Tất cả</button>
                             <button class="pill-btn" th:each="cat : ${categories}" 
                                     th:data-category="${cat.maLoai}" 
                                     th:text="${cat.tenLoai}">Tôm & Cua</button>
@@ -82,10 +72,10 @@
                     <div class="toolbar-right">
                         <!-- View Toggle -->
                         <div class="view-toggle">
-                            <button class="toggle-btn active" id="btnGridView" title="Dạng lưới thẻ">
+                            <button class="toggle-btn" id="btnGridView" title="Dạng lưới thẻ">
                                 <i class="fa-solid fa-table-cells-large"></i>
                             </button>
-                            <button class="toggle-btn" id="btnTableView" title="Dạng danh sách bảng">
+                            <button class="toggle-btn active" id="btnTableView" title="Dạng danh sách bảng">
                                 <i class="fa-solid fa-list-ul"></i>
                             </button>
                         </div>
@@ -93,13 +83,13 @@
                         <!-- Add Dish Button -->
                         <button class="btn-primary" onclick="openModal('modalAddDish')">
                             <i class="fa-solid fa-plus"></i>
-                            <span>Thêm Món Ăn</span>
+                            <span>Thêm món ăn</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- 1. Grid Cards View -->
-                <div class="dishes-grid" id="dishGridContainer">
+                <div class="dishes-grid" id="dishGridContainer" style="display: none;">
                     <div class="dish-card" th:each="dish : ${dishes}" th:data-category="${dish.maLoai}">
                         <div class="dish-image-wrapper">
                             <img th:src="${dish.hinhAnh}" th:alt="${dish.tenMon}" class="dish-image">
@@ -135,7 +125,7 @@
                 </div>
 
                 <!-- 2. Table List View (Hidden by default) -->
-                <div class="table-responsive" id="dishTableContainer" style="display: none;">
+                <div class="table-responsive" id="dishTableContainer">
                     <table class="custom-table">
                         <thead>
                             <tr>
@@ -157,7 +147,7 @@
                                     <img th:src="${dish.hinhAnh}" th:alt="${dish.tenMon}" class="table-avatar">
                                 </td>
                                 <td>
-                                    <div style="font-weight: 600; color: #fff;" th:text="${dish.tenMon}">Tôm Hùm Alaska</div>
+                                    <div style="font-weight: 600; color: var(--text-main);" th:text="${dish.tenMon}">Tôm Hùm Alaska</div>
                                     <div style="font-size: 11.5px; color: var(--text-dim);" th:text="${dish.moTa}">Mô tả ngắn...</div>
                                 </td>
                                 <td>
@@ -193,11 +183,11 @@
         </main>
     </div>
 
-    <!-- Modal Thêm Món Ăn Mới -->
+    <!-- Modal Thêm món ăn Mới -->
     <div class="modal-overlay" id="modalAddDish">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>Thêm Món Ăn Mới Vào Thực Đơn</h3>
+                <h3>Thêm món ăn</h3>
                 <button class="modal-close" onclick="closeModal('modalAddDish')">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -268,7 +258,7 @@
     <div class="modal-overlay" id="modalEditDish">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>Chỉnh Sửa Thông Tin Món Ăn</h3>
+                <h3>Sửa món ăn</h3>
                 <button class="modal-close" onclick="closeModal('modalEditDish')">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
