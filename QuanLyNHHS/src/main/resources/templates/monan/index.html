@@ -6,6 +6,7 @@
     <title>Quản Lý Thực Đơn Hải Sản - Hải Sản Hoàng Gia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/danh-muc.css}">
 </head>
 <body>
     <div class="app-container">
@@ -18,6 +19,8 @@
             <div th:replace="~{layout/navbar :: navbar('Món ăn', 'fa-solid fa-utensils')}"></div>
 
             <div class="content-body">
+                <p class="module-message success" role="status" th:if="${successMessage}" th:text="${successMessage}"></p>
+                <p class="module-message error" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></p>
                 <!-- Metrics Row -->
                 <div class="metrics-grid">
                     <div class="metric-card cyan">
@@ -25,7 +28,7 @@
                             <i class="fa-solid fa-bowl-food"></i>
                         </div>
                         <div class="metric-info">
-                            <h3 th:text="${totalDishes}">8</h3>
+                            <h3 th:text="${totalDishes}"></h3>
                             <p>Tổng số món trong menu</p>
                         </div>
                     </div>
@@ -35,7 +38,7 @@
                             <i class="fa-solid fa-circle-check"></i>
                         </div>
                         <div class="metric-info">
-                            <h3 th:text="${servingDishes}">7</h3>
+                            <h3 th:text="${servingDishes}"></h3>
                             <p>Món đang phục vụ</p>
                         </div>
                     </div>
@@ -45,7 +48,7 @@
                             <i class="fa-solid fa-box-open"></i>
                         </div>
                         <div class="metric-info">
-                            <h3 th:text="${outOfStockDishes}">1</h3>
+                            <h3 th:text="${outOfStockDishes}"></h3>
                             <p>Món tạm hết hàng</p>
                         </div>
                     </div>
@@ -63,9 +66,9 @@
                         <!-- Category Filter Pills -->
                         <div class="filter-pills">
                             <button class="pill-btn active" data-category="all">Tất cả</button>
-                            <button class="pill-btn" th:each="cat : ${categories}" 
-                                    th:data-category="${cat.maLoai}" 
-                                    th:text="${cat.tenLoai}">Tôm & Cua</button>
+                            <button class="pill-btn" th:each="cat : ${categories}"
+                                    th:data-category="${cat.maLoai}"
+                                    th:text="${cat.tenLoai}"></button>
                         </div>
                     </div>
 
@@ -81,43 +84,42 @@
                         </div>
 
                         <!-- Add Dish Button -->
-                        <button class="btn-primary" onclick="openModal('modalAddDish')">
+                        <a class="btn-primary" th:href="@{/mon-an/them}">
                             <i class="fa-solid fa-plus"></i>
                             <span>Thêm món ăn</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
 
                 <!-- 1. Grid Cards View -->
                 <div class="dishes-grid" id="dishGridContainer" style="display: none;">
+                    <p th:if="${#lists.isEmpty(dishes)}">Chưa có món ăn.</p>
                     <div class="dish-card" th:each="dish : ${dishes}" th:data-category="${dish.maLoai}">
                         <div class="dish-image-wrapper">
-                            <img th:src="${dish.hinhAnh}" th:alt="${dish.tenMon}" class="dish-image">
-                            <span class="dish-category-tag" th:text="${dish.tenLoai}">Tôm & Cua</span>
-                            <span class="dish-badge-status" 
+                            <img th:if="${not #strings.isEmpty(dish.hinhAnh)}" th:src="${dish.hinhAnh}" th:alt="${dish.tenMon}" class="dish-image">
+                            <span class="dish-category-tag" th:text="${dish.tenLoai}"></span>
+                            <span class="dish-badge-status"
                                   th:classappend="${dish.trangThai == 'Đang phục vụ'} ? 'badge-serving' : 'badge-out'"
-                                  th:text="${dish.trangThai}">Đang phục vụ</span>
+                                  th:text="${dish.trangThai ?: 'Chưa cập nhật'}"></span>
                         </div>
                         <div class="dish-content">
                             <div class="dish-header">
-                                <div class="dish-code" th:text="${dish.maMon}">MA01</div>
-                                <h3 class="dish-title" th:text="${dish.tenMon}">Tên món ăn</h3>
+                                <div class="dish-code" th:text="${dish.maMon}"></div>
+                                <h3 class="dish-title" th:text="${dish.tenMon}"></h3>
                             </div>
-                            <p class="dish-desc" th:text="${dish.moTa}">Mô tả món ăn hải sản tươi sống...</p>
+                            <p class="dish-desc" th:text="${dish.moTa}"></p>
                             <div class="dish-footer">
                                 <div>
-                                    <span class="dish-price" th:text="${#numbers.formatDecimal(dish.donGia, 0, 'COMMA', 0, 'POINT')} + ' đ'">1.450.000 đ</span>
-                                    <span class="dish-unit" th:text="'/ ' + ${dish.donViTinh}">/ Con</span>
+                                    <span class="dish-price" th:text="${dish.donGia != null ? #numbers.formatDecimal(dish.donGia, 0, 'COMMA', 0, 'POINT') + ' đ' : 'Chưa cập nhật'}"></span>
+                                    <span class="dish-unit" th:text="'/ ' + ${dish.donViTinh}"></span>
                                 </div>
                                 <div class="dish-actions">
-                                    <button class="btn-action edit" title="Chỉnh sửa món" onclick="openModal('modalEditDish')">
+                                    <a class="btn-action edit" title="Sửa" th:href="@{/mon-an/sua/{id}(id=${dish.maMon})}" aria-label="Sửa món ăn">
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn-action delete" title="Xóa món" 
-                                            th:data-name="${dish.tenMon}"
-                                            onclick="confirmDelete(this.getAttribute('data-name'))">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                    </button>
+                                    </a>
+                                    <form class="inline-delete" th:action="@{/mon-an/xoa/{id}(id=${dish.maMon})}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa bản ghi này?');">
+                                            <button class="btn-action delete" type="submit" title="Xóa" aria-label="Xóa món ăn"><i class="fa-solid fa-trash-can"></i></button>
+                                        </form>
                                 </div>
                             </div>
                         </div>
@@ -142,39 +144,38 @@
                         </thead>
                         <tbody id="dishTableBody">
                             <tr th:each="dish : ${dishes}" th:data-category="${dish.maLoai}">
-                                <td style="font-weight: 600; color: var(--text-dim);" th:text="${dish.maMon}">MA01</td>
+                                <td style="font-weight: 600; color: var(--text-dim);" th:text="${dish.maMon}"></td>
                                 <td>
-                                    <img th:src="${dish.hinhAnh}" th:alt="${dish.tenMon}" class="table-avatar">
+                                    <img th:if="${not #strings.isEmpty(dish.hinhAnh)}" th:src="${dish.hinhAnh}" th:alt="${dish.tenMon}" class="table-avatar">
                                 </td>
                                 <td>
-                                    <div style="font-weight: 600; color: var(--text-main);" th:text="${dish.tenMon}">Tôm Hùm Alaska</div>
-                                    <div style="font-size: 11.5px; color: var(--text-dim);" th:text="${dish.moTa}">Mô tả ngắn...</div>
+                                    <div style="font-weight: 600; color: var(--text-main);" th:text="${dish.tenMon}"></div>
+                                    <div style="font-size: 11.5px; color: var(--text-dim);" th:text="${dish.moTa}"></div>
                                 </td>
                                 <td>
-                                    <span class="badge-role service" th:text="${dish.tenLoai}">Tôm & Cua</span>
+                                    <span class="badge-role service" th:text="${dish.tenLoai}"></span>
                                 </td>
-                                <td th:text="${dish.donViTinh}">Con</td>
-                                <td style="font-weight: 700; color: var(--gold-accent);" 
-                                    th:text="${#numbers.formatDecimal(dish.donGia, 0, 'COMMA', 0, 'POINT')} + ' đ'">1.450.000 đ</td>
+                                <td th:text="${dish.donViTinh}"></td>
+                                <td style="font-weight: 700; color: var(--gold-accent);"
+                                    th:text="${dish.donGia != null ? #numbers.formatDecimal(dish.donGia, 0, 'COMMA', 0, 'POINT') + ' đ' : 'Chưa cập nhật'}"></td>
                                 <td>
-                                    <span class="dish-badge-status" 
+                                    <span class="dish-badge-status"
                                           th:classappend="${dish.trangThai == 'Đang phục vụ'} ? 'badge-serving' : 'badge-out'"
-                                          th:text="${dish.trangThai}" style="position: static;">Đang phục vụ</span>
+                                          th:text="${dish.trangThai ?: 'Chưa cập nhật'}" style="position: static;"></span>
                                 </td>
-                                <td th:text="${dish.soLuongDaBan} + ' suất'">142 suất</td>
+                                <td th:text="${soldQuantities[dish.maMon] ?: 0}"></td>
                                 <td style="text-align: right;">
                                     <div style="display: inline-flex; gap: 6px;">
-                                        <button class="btn-action edit" title="Sửa" onclick="openModal('modalEditDish')">
+                                        <a class="btn-action edit" title="Sửa" th:href="@{/mon-an/sua/{id}(id=${dish.maMon})}" aria-label="Sửa món ăn">
                                             <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-action delete" title="Xóa" 
-                                                th:data-name="${dish.tenMon}"
-                                                onclick="confirmDelete(this.getAttribute('data-name'))">
-                                            <i class="fa-solid fa-trash-can"></i>
-                                        </button>
+                                        </a>
+                                        <form class="inline-delete" th:action="@{/mon-an/xoa/{id}(id=${dish.maMon})}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa bản ghi này?');">
+                                            <button class="btn-action delete" type="submit" title="Xóa" aria-label="Xóa món ăn"><i class="fa-solid fa-trash-can"></i></button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
+                            <tr th:if="${#lists.isEmpty(dishes)}"><td colspan="9">Chưa có món ăn.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -183,148 +184,61 @@
         </main>
     </div>
 
-    <!-- Modal Thêm món ăn Mới -->
-    <div class="modal-overlay" id="modalAddDish">
-        <div class="modal-box">
+    <!-- Dùng chung biểu mẫu thêm/sửa; lỗi kiểm tra giữ lại dữ liệu vừa nhập. -->
+    <div class="modal-overlay active" th:if="${showForm == true}">
+        <section class="modal-box" role="dialog" aria-modal="true" aria-labelledby="edit-title">
             <div class="modal-header">
-                <h3>Thêm món ăn</h3>
-                <button class="modal-close" onclick="closeModal('modalAddDish')">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <h3 id="edit-title" th:text="${editingId == null ? 'Thêm món ăn' : 'Sửa món ăn'}"></h3>
+                <a class="modal-close" th:href="@{/mon-an}" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></a>
             </div>
-            <form id="formAddDish">
+            <form th:action="@{${formAction}}" th:object="${form}" method="post">
                 <div class="modal-body">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Mã Món Ăn</label>
-                            <input type="text" placeholder="VD: MA09" required value="MA09">
-                        </div>
-                        <div class="form-group">
-                            <label>Loại Món</label>
-                            <select required>
-                                <option value="" disabled selected>Chọn danh mục...</option>
-                                <option th:each="cat : ${categories}" th:value="${cat.maLoai}" th:text="${cat.tenLoai}">Tôm & Cua</option>
-                            </select>
-                        </div>
+                    <div class="module-message error" role="alert" th:if="${#fields.hasGlobalErrors()}">
+                        <p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p>
                     </div>
-
+                    <p th:if="${editingId != null}">Mã: <strong th:text="${editingId}"></strong></p>
                     <div class="form-group">
-                        <label>Tên Món Ăn</label>
-                        <input type="text" placeholder="VD: Cua Huỳnh Đế Hấp Nước Dừa" required>
+                        <label for="maLoai">Loại món</label>
+                        <select id="maLoai" th:field="*{maLoai}" required th:attr="aria-invalid=${#fields.hasErrors('maLoai')}"><option value="">Chọn loại món...</option><option th:each="cat : ${categories}" th:value="${cat.maLoai}" th:text="${cat.tenLoai}"></option></select>
+                        <small class="field-error" th:if="${#fields.hasErrors('maLoai')}" th:errors="*{maLoai}"></small>
                     </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Đơn Vị Tính</label>
-                            <input type="text" placeholder="VD: Đĩa, Con, Kg, Nồi" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Đơn Giá (VNĐ)</label>
-                            <input type="number" placeholder="VD: 850000" required>
-                        </div>
-                    </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Trạng Thái</label>
-                            <select required>
-                                <option value="Đang phục vụ">Đang phục vụ</option>
-                                <option value="Tạm hết">Tạm hết</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Link Ảnh Món Ăn (URL)</label>
-                            <input type="url" placeholder="https://..." value="https://images.unsplash.com/photo-1553240799-36bbf332a5c3?auto=format&fit=crop&w=600&q=80">
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label>Mô Tả Chi Tiết Món Ăn</label>
-                        <textarea rows="3" placeholder="Nguyên liệu chính, cách chế biến và hương vị đặc trưng..."></textarea>
+                        <label for="tenMon">Tên món</label>
+                        <input type="text" id="tenMon" th:field="*{tenMon}" required maxlength="150" th:attr="aria-invalid=${#fields.hasErrors('tenMon')}">
+                        <small class="field-error" th:if="${#fields.hasErrors('tenMon')}" th:errors="*{tenMon}"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="donVi">Đơn vị tính</label>
+                        <input type="text" id="donVi" th:field="*{donVi}" required maxlength="20" th:attr="aria-invalid=${#fields.hasErrors('donVi')}">
+                        <small class="field-error" th:if="${#fields.hasErrors('donVi')}" th:errors="*{donVi}"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="donGia">Đơn giá (VNĐ)</label>
+                        <input type="number" id="donGia" th:field="*{donGia}" required min="0" max="9999999999.99" step="0.01" th:attr="aria-invalid=${#fields.hasErrors('donGia')}">
+                        <small class="field-error" th:if="${#fields.hasErrors('donGia')}" th:errors="*{donGia}"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="trangThai">Trạng thái</label>
+                        <select id="trangThai" th:field="*{trangThai}" required th:attr="aria-invalid=${#fields.hasErrors('trangThai')}"><option value="Đang phục vụ">Đang phục vụ</option><option value="Tạm hết">Tạm hết</option></select>
+                        <small class="field-error" th:if="${#fields.hasErrors('trangThai')}" th:errors="*{trangThai}"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="hinhAnh">Đường dẫn ảnh</label>
+                        <input type="url" id="hinhAnh" th:field="*{hinhAnh}" maxlength="1000" placeholder="https://..." th:attr="aria-invalid=${#fields.hasErrors('hinhAnh')}">
+                        <small class="field-error" th:if="${#fields.hasErrors('hinhAnh')}" th:errors="*{hinhAnh}"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="moTa">Mô tả</label>
+                        <textarea id="moTa" th:field="*{moTa}" maxlength="1000" rows="3" th:attr="aria-invalid=${#fields.hasErrors('moTa')}"></textarea>
+                        <small class="field-error" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></small>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeModal('modalAddDish')">Hủy Bỏ</button>
-                    <button type="submit" class="btn-primary">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Lưu Món Ăn</span>
-                    </button>
+                    <a class="btn-secondary" th:href="@{/mon-an}">Hủy</a>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-check"></i><span>Lưu món ăn</span></button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- Modal Chỉnh Sửa Món Ăn -->
-    <div class="modal-overlay" id="modalEditDish">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>Sửa món ăn</h3>
-                <button class="modal-close" onclick="closeModal('modalEditDish')">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <form onsubmit="event.preventDefault(); closeModal('modalEditDish'); showToast('Đã cập nhật món ăn thành công!');">
-                <div class="modal-body">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Mã Món Ăn</label>
-                            <input type="text" value="MA01" readonly style="opacity: 0.7;">
-                        </div>
-                        <div class="form-group">
-                            <label>Loại Món</label>
-                            <select>
-                                <option selected>Tôm & Cua ghẹ</option>
-                                <option>Cá hải sản</option>
-                                <option>Ốc & Sò biển</option>
-                                <option>Lẩu & Nướng</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Tên Món Ăn</label>
-                        <input type="text" value="Tôm Hùm Alaska Hấp Rượu Vang">
-                    </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Đơn Vị Tính</label>
-                            <input type="text" value="Con (~1.2kg)">
-                        </div>
-                        <div class="form-group">
-                            <label>Đơn Giá (VNĐ)</label>
-                            <input type="number" value="1450000">
-                        </div>
-                    </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Trạng Thái</label>
-                            <select>
-                                <option selected>Đang phục vụ</option>
-                                <option>Tạm hết</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Link Ảnh Món Ăn</label>
-                            <input type="url" value="https://images.unsplash.com/photo-1553240799-36bbf332a5c3?auto=format&fit=crop&w=600&q=80">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Mô Tả Chi Tiết</label>
-                        <textarea rows="3">Tôm hùm Alaska nhập khẩu sống tươi nguyên con, hấp bia hoặc rượu vang trắng giữ trọn vị ngọt tự nhiên</textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeModal('modalEditDish')">Hủy</button>
-                    <button type="submit" class="btn-primary">
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        <span>Cập Nhật Món</span>
-                    </button>
-                </div>
-            </form>
-        </div>
+        </section>
     </div>
 
     <!-- Scripts -->

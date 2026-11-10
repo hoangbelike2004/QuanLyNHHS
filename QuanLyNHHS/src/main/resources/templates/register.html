@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký - Hải sản Hoàng Gia</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body class="auth-page">
+<main class="auth-shell">
+    <div class="auth-brand"><span class="brand-icon">HG</span><span>Hải sản Hoàng Gia</span></div>
+    <section class="auth-panel" aria-labelledby="auth-title">
+        <h1 id="auth-title">Đăng ký tài khoản</h1>
+        <p class="auth-description">Tạo tài khoản sử dụng hệ thống quản lý.</p>
+        <form th:action="@{/register}" th:object="${dangKyForm}" method="post" class="auth-form">
+            <div class="auth-field">
+                <label for="hoTen">Họ tên</label>
+                <input id="hoTen" type="text" th:field="*{hoTen}" autocomplete="name" maxlength="100" required th:attr="aria-invalid=${#fields.hasErrors('hoTen')}">
+                <p class="field-error" th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}" role="alert"></p>
+            </div>
+            <div class="auth-field">
+                <label for="tenDangNhap">Tên đăng nhập</label>
+                <input id="tenDangNhap" type="text" th:field="*{tenDangNhap}" autocomplete="username" minlength="4" maxlength="30" pattern="[A-Za-z0-9_]{4,30}" autocapitalize="none" spellcheck="false" aria-describedby="username-help" required th:attr="aria-invalid=${#fields.hasErrors('tenDangNhap')}">
+                <small id="username-help">4–30 ký tự: chữ cái không dấu, chữ số hoặc dấu gạch dưới.</small>
+                <p class="field-error" th:if="${#fields.hasErrors('tenDangNhap')}" th:errors="*{tenDangNhap}" role="alert"></p>
+            </div>
+            <div class="auth-field">
+                <label for="matKhau">Mật khẩu</label>
+                <input id="matKhau" name="matKhau" type="password" class="auth-password" autocomplete="new-password" minlength="8" maxlength="72" aria-describedby="password-help" required th:attr="aria-invalid=${#fields.hasErrors('matKhau')}">
+                <small id="password-help">Ít nhất 8 ký tự.</small>
+                <p class="field-error" th:if="${#fields.hasErrors('matKhau')}" th:errors="*{matKhau}" role="alert"></p>
+            </div>
+            <div class="auth-field">
+                <label for="xacNhanMatKhau">Nhập lại mật khẩu</label>
+                <input id="xacNhanMatKhau" name="xacNhanMatKhau" type="password" class="auth-password" autocomplete="new-password" minlength="8" maxlength="72" required th:attr="aria-invalid=${#fields.hasErrors('xacNhanMatKhau')}">
+                <p class="field-error" th:if="${#fields.hasErrors('xacNhanMatKhau')}" th:errors="*{xacNhanMatKhau}" role="alert"></p>
+            </div>
+            <label class="auth-check"><input type="checkbox" data-show-password> Hiện mật khẩu</label>
+            <button type="submit" class="btn-primary auth-submit">Đăng ký</button>
+        </form>
+        <p class="auth-switch">Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a></p>
+    </section>
+    <p class="auth-footer">Hệ thống quản lý nhà hàng</p>
+</main>
+<script th:src="@{/js/auth.js}" defer></script>
+</body>
+</html>

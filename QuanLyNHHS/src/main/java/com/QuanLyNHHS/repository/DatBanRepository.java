@@ -12,12 +12,24 @@ import java.util.List;
 @Repository
 public interface DatBanRepository extends JpaRepository<DatBan, Long> {
 
-    /** Lịch sử đặt bàn của một khách hàng */
+    /**
+     * Lịch sử đặt bàn của một khách hàng
+     * @param maKh mã khách hàng
+     * @return danh sách kết quả, có thể rỗng khi không có dữ liệu phù hợp
+     */
     List<DatBan> findByKhachHang_MaKh(Long maKh);
 
-    /** Đặt bàn theo bàn */
+    /**
+     * Đặt bàn theo bàn
+     * @param maBan mã bàn ăn
+     * @return danh sách kết quả, có thể rỗng khi không có dữ liệu phù hợp
+     */
     List<DatBan> findByBanAn_MaBan(Long maBan);
 
-    /** Lọc theo trạng thái */
+    /**
+     * Lọc theo trạng thái
+     * @param trangThai trạng thái dùng để hiển thị, lọc hoặc kiểm tra điều kiện nghiệp vụ
+     * @return danh sách kết quả, có thể rỗng khi không có dữ liệu phù hợp
+     */
     List<DatBan> findByTrangThai(String trangThai);
 }

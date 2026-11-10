@@ -1,209 +1,59 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // 1. Toast Notification Helper
-  window.showToast = function (message, type = 'success') {
-    let container = document.querySelector('.toast-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.className = 'toast-container';
-      document.body.appendChild(container);
+  // Tìm kiếm và bộ lọc dùng chung một trạng thái để không ghi đè kết quả của nhau.
+  function bindFilters(inputId, pillSelector, rowSelector, attribute, display) {
+    const input = document.getElementById(inputId);
+    const pills = pillSelector ? document.querySelectorAll(pillSelector) : [];
+    const rows = document.querySelectorAll(rowSelector);
+    let selected = 'all';
+    function apply() {
+      const keyword = (input?.value || '').toLocaleLowerCase('vi').trim();
+      rows.forEach(row => {
+        const matchesText = row.textContent.toLocaleLowerCase('vi').includes(keyword);
+        const matchesGroup = selected === 'all' || row.getAttribute(attribute) === selected;
+        row.style.display = matchesText && matchesGroup ? display : 'none';
+      });
     }
-
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    const iconClass = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
-    toast.innerHTML = `<i class="fa-solid ${iconClass}"></i><span>${message}</span>`;
-    container.appendChild(toast);
-
-    setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(10px)';
-      toast.style.transition = 'all 0.3s ease';
-      setTimeout(() => toast.remove(), 300);
-    }, 3200);
-  };
-
-  // 2. Filter Pills for Dishes (Món ăn)
-  const filterPills = document.querySelectorAll('.pill-btn[data-category]');
-  const dishCards = document.querySelectorAll('.dish-card');
-  const dishTableRows = document.querySelectorAll('#dishTableBody tr');
-
-  if (filterPills.length > 0) {
-    filterPills.forEach(pill => {
+    input?.addEventListener('input', apply);
+    pills.forEach(pill => {
       pill.addEventListener('click', function () {
-        filterPills.forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-
-        const selectedCat = this.getAttribute('data-category');
-
-        // Filter cards
-        dishCards.forEach(card => {
-          const cardCat = card.getAttribute('data-category');
-          if (selectedCat === 'all' || cardCat === selectedCat) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-
-        // Filter table rows
-        dishTableRows.forEach(row => {
-          const rowCat = row.getAttribute('data-category');
-          if (selectedCat === 'all' || rowCat === selectedCat) {
-            row.style.display = '';
-          } else {
-            row.style.display = 'none';
-          }
-        });
+        pills.forEach(button => button.classList.remove('active'));
+        pill.classList.add('active');
+        selected = pill.getAttribute(attribute);
+        apply();
       });
     });
   }
 
-  // 3. Search Bar for Dishes
-  const searchInput = document.getElementById('searchDishInput');
-  if (searchInput) {
-    searchInput.addEventListener('input', function () {
-      const keyword = this.value.toLowerCase().trim();
+  bindFilters('searchDishInput', '.pill-btn[data-category]',
+    '.dish-card, #dishTableBody tr[data-category]', 'data-category', '');
+  bindFilters('searchStaffInput', '.pill-btn[data-role]',
+    '#staffTableBody tr[data-role]', 'data-role', '');
+  bindFilters('searchCategoryInput', null,
+    '#categoryTableBody tr[data-category-row]', 'data-category-row', '');
 
-      dishCards.forEach(card => {
-        const title = card.querySelector('.dish-title').textContent.toLowerCase();
-        const code = card.querySelector('.dish-code').textContent.toLowerCase();
-        if (title.includes(keyword) || code.includes(keyword)) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-
-      dishTableRows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(keyword)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    });
-  }
-
-  // 4. View Switch: Grid Card vs Table View
-  const btnGridView = document.getElementById('btnGridView');
-  const btnTableView = document.getElementById('btnTableView');
-  const gridContainer = document.getElementById('dishGridContainer');
-  const tableContainer = document.getElementById('dishTableContainer');
-
-  if (btnGridView && btnTableView && gridContainer && tableContainer) {
-    btnGridView.addEventListener('click', function () {
-      btnGridView.classList.add('active');
-      btnTableView.classList.remove('active');
-      gridContainer.style.display = 'grid';
-      tableContainer.style.display = 'none';
-    });
-
-    btnTableView.addEventListener('click', function () {
-      btnTableView.classList.add('active');
-      btnGridView.classList.remove('active');
-      gridContainer.style.display = 'none';
-      tableContainer.style.display = 'block';
-    });
-  }
-
-  // 5. Staff (Nhân viên) Search and Department Filter
-  const searchStaffInput = document.getElementById('searchStaffInput');
-  const staffTableRows = document.querySelectorAll('#staffTableBody tr');
-  const staffRolePills = document.querySelectorAll('.pill-btn[data-role]');
-
-  if (searchStaffInput && staffTableRows.length > 0) {
-    searchStaffInput.addEventListener('input', function () {
-      const keyword = this.value.toLowerCase().trim();
-      staffTableRows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(keyword)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    });
-  }
-
-  if (staffRolePills.length > 0) {
-    staffRolePills.forEach(pill => {
-      pill.addEventListener('click', function () {
-        staffRolePills.forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-
-        const role = this.getAttribute('data-role');
-        staffTableRows.forEach(row => {
-          const rowRole = row.getAttribute('data-role');
-          if (role === 'all' || rowRole === role) {
-            row.style.display = '';
-          } else {
-            row.style.display = 'none';
-          }
-        });
-      });
-    });
-  }
-
-  // 6. Generic Modal Open/Close Controls
-  window.openModal = function (modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.classList.add('active');
+  const gridButton = document.getElementById('btnGridView');
+  const tableButton = document.getElementById('btnTableView');
+  const grid = document.getElementById('dishGridContainer');
+  const table = document.getElementById('dishTableContainer');
+  if (gridButton && tableButton && grid && table) {
+    function switchView(showGrid) {
+      gridButton.classList.toggle('active', showGrid);
+      tableButton.classList.toggle('active', !showGrid);
+      grid.style.display = showGrid ? 'grid' : 'none';
+      table.style.display = showGrid ? 'none' : 'block';
     }
-  };
-
-  window.closeModal = function (modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.classList.remove('active');
-    }
-  };
-
-  // Close modal when clicking outside
-  document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', function (e) {
-      if (e.target === this) {
-        this.classList.remove('active');
-      }
-    });
-  });
-
-  // 7. Form Handlers Simulation
-  const formAddDish = document.getElementById('formAddDish');
-  if (formAddDish) {
-    formAddDish.addEventListener('submit', function (e) {
-      e.preventDefault();
-      closeModal('modalAddDish');
-      showToast('Đã thêm món ăn mới vào thực đơn thành công!', 'success');
-      formAddDish.reset();
-    });
+    gridButton.addEventListener('click', () => switchView(true));
+    tableButton.addEventListener('click', () => switchView(false));
   }
 
-  const formAddStaff = document.getElementById('formAddStaff');
-  if (formAddStaff) {
-    formAddStaff.addEventListener('submit', function (e) {
-      e.preventDefault();
-      closeModal('modalAddStaff');
-      showToast('Đã thêm hồ sơ nhân viên mới thành công!', 'success');
-      formAddStaff.reset();
+  // Biểu mẫu được mở bởi URL để nút quay lại và lỗi kiểm tra dữ liệu vẫn hoạt động.
+  const dialog = document.querySelector('[role="dialog"]');
+  if (dialog) {
+    const firstField = dialog.querySelector('[aria-invalid="true"]')
+      || dialog.querySelector('input:not([type="hidden"]), select, textarea');
+    firstField?.focus();
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') dialog.querySelector('a.modal-close')?.click();
     });
   }
-
-  const formAddCategory = document.getElementById('formAddCategory');
-  if (formAddCategory) {
-    formAddCategory.addEventListener('submit', function (e) {
-      e.preventDefault();
-      closeModal('modalAddCategory');
-      showToast('Đã tạo loại món mới thành công!', 'success');
-      formAddCategory.reset();
-    });
-  }
-
-  // 8. Delete Confirmation Simulation
-  window.confirmDelete = function (itemName) {
-    if (confirm(`Bạn có chắc chắn muốn xóa "${itemName}" không? Hành động này không thể hoàn tác.`)) {
-      showToast(`Đã xóa thành công "${itemName}"!`, 'success');
-    }
-  };
 });

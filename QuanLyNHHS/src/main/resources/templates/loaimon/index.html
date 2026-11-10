@@ -6,6 +6,7 @@
     <title>Danh Mục Loại Món - Hải Sản Hoàng Gia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/danh-muc.css}">
 </head>
 <body>
     <div class="app-container">
@@ -18,6 +19,8 @@
             <div th:replace="~{layout/navbar :: navbar('Loại món', 'fa-solid fa-layer-group')}"></div>
 
             <div class="content-body">
+                <p class="module-message success" role="status" th:if="${successMessage}" th:text="${successMessage}"></p>
+                <p class="module-message error" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></p>
                 <!-- Metrics Row -->
                 <div class="metrics-grid">
                     <div class="metric-card cyan">
@@ -25,7 +28,7 @@
                             <i class="fa-solid fa-tags"></i>
                         </div>
                         <div class="metric-info">
-                            <h3 th:text="${totalCategories}">6</h3>
+                            <h3 th:text="${totalCategories}"></h3>
                             <p>Tổng số danh mục loại món</p>
                         </div>
                     </div>
@@ -35,7 +38,7 @@
                             <i class="fa-solid fa-shrimp"></i>
                         </div>
                         <div class="metric-info">
-                            <h3 th:text="${totalDishesInCategories}">32</h3>
+                            <h3 th:text="${totalDishesInCategories}"></h3>
                             <p>Tổng số món thuộc các loại</p>
                         </div>
                     </div>
@@ -51,10 +54,10 @@
                     </div>
 
                     <div class="toolbar-right">
-                        <button class="btn-primary" onclick="openModal('modalAddCategory')">
+                        <a class="btn-primary" th:href="@{/loai-mon/them}">
                             <i class="fa-solid fa-plus"></i>
                             <span>Thêm loại món</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -72,31 +75,30 @@
                             </tr>
                         </thead>
                         <tbody id="categoryTableBody">
-                            <tr th:each="cat : ${categories}">
-                                <td style="font-weight: 700; color: var(--cyan-primary);" th:text="${cat.maLoai}">LM01</td>
+                            <tr th:each="cat : ${categories}" data-category-row>
+                                <td style="font-weight: 700; color: var(--cyan-primary);" th:text="${cat.maLoai}"></td>
                                 <td>
-                                    <div style="font-weight: 600; color: var(--text-main); font-size: 14.5px;" th:text="${cat.tenLoai}">Tôm & Cua ghẹ</div>
+                                    <div style="font-weight: 600; color: var(--text-main); font-size: 14.5px;" th:text="${cat.tenLoai}"></div>
                                 </td>
-                                <td style="color: var(--text-muted); max-width: 320px;" th:text="${cat.moTa}">Các loại tôm hùm, cua ghẹ tươi sống...</td>
+                                <td style="color: var(--text-muted); max-width: 320px;" th:text="${cat.moTa}"></td>
                                 <td>
-                                    <span class="badge-role service" th:text="${cat.soLuongMon} + ' món'">6 món</span>
+                                    <span class="badge-role service" th:text="${(dishCounts[cat.maLoai] ?: 0) + ' món'}"></span>
                                 </td>
                                 <td>
-                                    <span class="dish-badge-status badge-serving" style="position: static;" th:text="${cat.trangThai}">Hoạt động</span>
+                                    <span class="dish-badge-status badge-serving" style="position: static;" th:text="${cat.trangThai}"></span>
                                 </td>
                                 <td style="text-align: right;">
                                     <div style="display: inline-flex; gap: 8px;">
-                                        <button class="btn-action edit" title="Sửa loại món" onclick="openModal('modalEditCategory')">
+                                        <a class="btn-action edit" title="Sửa" th:href="@{/loai-mon/sua/{id}(id=${cat.maLoai})}" aria-label="Sửa loại món">
                                             <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button class="btn-action delete" title="Xóa loại món" 
-                                                th:data-name="${cat.tenLoai}"
-                                                onclick="confirmDelete(this.getAttribute('data-name'))">
-                                            <i class="fa-solid fa-trash-can"></i>
-                                        </button>
+                                        </a>
+                                        <form class="inline-delete" th:action="@{/loai-mon/xoa/{id}(id=${cat.maLoai})}" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa bản ghi này?');">
+                                            <button class="btn-action delete" type="submit" title="Xóa" aria-label="Xóa loại món"><i class="fa-solid fa-trash-can"></i></button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
+                            <tr th:if="${#lists.isEmpty(categories)}"><td colspan="6">Chưa có loại món.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -105,88 +107,41 @@
         </main>
     </div>
 
-    <!-- Modal Thêm loại món -->
-    <div class="modal-overlay" id="modalAddCategory">
-        <div class="modal-box">
+    <!-- Dùng chung biểu mẫu thêm/sửa; lỗi kiểm tra giữ lại dữ liệu vừa nhập. -->
+    <div class="modal-overlay active" th:if="${showForm == true}">
+        <section class="modal-box" role="dialog" aria-modal="true" aria-labelledby="edit-title">
             <div class="modal-header">
-                <h3>Thêm loại món</h3>
-                <button class="modal-close" onclick="closeModal('modalAddCategory')">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <h3 id="edit-title" th:text="${editingId == null ? 'Thêm loại món' : 'Sửa loại món'}"></h3>
+                <a class="modal-close" th:href="@{/loai-mon}" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></a>
             </div>
-            <form id="formAddCategory">
+            <form th:action="@{${formAction}}" th:object="${form}" method="post">
                 <div class="modal-body">
+                    <div class="module-message error" role="alert" th:if="${#fields.hasGlobalErrors()}">
+                        <p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p>
+                    </div>
+                    <p th:if="${editingId != null}">Mã: <strong th:text="${editingId}"></strong></p>
                     <div class="form-group">
-                        <label>Mã Loại Món</label>
-                        <input type="text" placeholder="VD: LM07" required value="LM07">
+                        <label for="tenLoai">Tên loại món</label>
+                        <input type="text" id="tenLoai" th:field="*{tenLoai}" required maxlength="100" th:attr="aria-invalid=${#fields.hasErrors('tenLoai')}">
+                        <small class="field-error" th:if="${#fields.hasErrors('tenLoai')}" th:errors="*{tenLoai}"></small>
                     </div>
                     <div class="form-group">
-                        <label>Tên Loại Món</label>
-                        <input type="text" placeholder="VD: Món Sashimi Sống Cao Cấp" required>
+                        <label for="trangThai">Trạng thái</label>
+                        <select id="trangThai" th:field="*{trangThai}" required th:attr="aria-invalid=${#fields.hasErrors('trangThai')}"><option value="Hoạt động">Hoạt động</option><option value="Tạm dừng">Tạm dừng</option></select>
+                        <small class="field-error" th:if="${#fields.hasErrors('trangThai')}" th:errors="*{trangThai}"></small>
                     </div>
                     <div class="form-group">
-                        <label>Trạng Thái</label>
-                        <select required>
-                            <option value="Hoạt động">Hoạt động</option>
-                            <option value="Tạm dừng">Tạm dừng</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Mô Tả Danh Mục</label>
-                        <textarea rows="3" placeholder="Mô tả tóm tắt về nhóm các món ăn trong loại này..."></textarea>
+                        <label for="moTa">Mô tả</label>
+                        <textarea id="moTa" th:field="*{moTa}" maxlength="255" rows="3" th:attr="aria-invalid=${#fields.hasErrors('moTa')}"></textarea>
+                        <small class="field-error" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></small>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeModal('modalAddCategory')">Hủy</button>
-                    <button type="submit" class="btn-primary">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Lưu Danh Mục</span>
-                    </button>
+                    <a class="btn-secondary" th:href="@{/loai-mon}">Hủy</a>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-check"></i><span>Lưu loại món</span></button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- Modal Sửa Loại Món -->
-    <div class="modal-overlay" id="modalEditCategory">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>Sửa loại món</h3>
-                <button class="modal-close" onclick="closeModal('modalEditCategory')">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <form onsubmit="event.preventDefault(); closeModal('modalEditCategory'); showToast('Đã cập nhật loại món thành công!');">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Mã Loại Món</label>
-                        <input type="text" value="LM01" readonly style="opacity: 0.7;">
-                    </div>
-                    <div class="form-group">
-                        <label>Tên Loại Món</label>
-                        <input type="text" value="Tôm & Cua ghẹ">
-                    </div>
-                    <div class="form-group">
-                        <label>Trạng Thái</label>
-                        <select>
-                            <option selected>Hoạt động</option>
-                            <option>Tạm dừng</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Mô Tả Danh Mục</label>
-                        <textarea rows="3">Các loại tôm hùm, cua huỳnh đế, ghẹ xanh tươi sống</textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-secondary" onclick="closeModal('modalEditCategory')">Hủy</button>
-                    <button type="submit" class="btn-primary">
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        <span>Cập Nhật</span>
-                    </button>
-                </div>
-            </form>
-        </div>
+        </section>
     </div>
 
     <!-- Scripts -->

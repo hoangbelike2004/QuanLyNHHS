@@ -12,9 +12,17 @@ import java.util.List;
 @Repository
 public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {
 
-    /** Tìm kiếm theo họ tên (không phân biệt hoa thường) */
+    /**
+     * Tìm kiếm theo họ tên (không phân biệt hoa thường)
+     * @param hoTen họ tên
+     * @return danh sách kết quả, có thể rỗng khi không có dữ liệu phù hợp
+     */
     List<KhachHang> findByHoTenContainingIgnoreCase(String hoTen);
 
-    /** Tìm theo số điện thoại */
+    /**
+     * Tìm theo số điện thoại
+     * @param sdt số điện thoại
+     * @return danh sách kết quả, có thể rỗng khi không có dữ liệu phù hợp
+     */
     List<KhachHang> findBySdt(String sdt);
 }

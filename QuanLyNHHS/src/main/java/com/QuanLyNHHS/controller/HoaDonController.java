@@ -19,15 +19,26 @@ import com.QuanLyNHHS.model.HoaDon;
 import com.QuanLyNHHS.repository.MonAnRepository;
 import com.QuanLyNHHS.service.HoaDonService;
 
+/**
+ * Nhận yêu cầu HTTP của module hóa đơn, gọi xử lý và đưa dữ liệu sang Thymeleaf hoặc chuyển hướng.
+ */
 @Controller
 @RequestMapping("/hoa-don")
 public class HoaDonController {
 
+    // DA_THANH_TOAN: giá trị trạng thái Da thanh toan dùng khi thanh toán và thống kê.
     private static final String DA_THANH_TOAN = "Da thanh toan";
 
+    // hoaDonService: thành phần HoaDonService xử lý nghiệp vụ trước khi đọc/ghi database.
     private final HoaDonService hoaDonService;
+    // monAnRepository: thành phần MonAnRepository dùng đọc/ghi và truy vấn dữ liệu; Spring cung cấp đối tượng triển khai.
     private final MonAnRepository monAnRepository;
 
+    /**
+     * Nhận các thành phần phụ thuộc qua constructor và gán vào thuộc tính this để các hàm dùng lại.
+     * @param hoaDonService thành phần HoaDonService xử lý nghiệp vụ trước khi đọc/ghi database
+     * @param monAnRepository thành phần MonAnRepository dùng đọc/ghi và truy vấn dữ liệu; Spring cung cấp đối tượng triển khai
+     */
     public HoaDonController(
             HoaDonService hoaDonService,
             MonAnRepository monAnRepository) {
@@ -37,6 +48,12 @@ public class HoaDonController {
     }
 
     // Danh sách hóa đơn
+    /**
+     * Nạp danh sách hóa đơn cùng dữ liệu lọc/thống kê có trong hàm vào Model rồi trả template.
+     * @param trangThai trạng thái dùng để hiển thị, lọc hoặc kiểm tra điều kiện nghiệp vụ
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @return tên template hoặc đường dẫn chuyển hướng: hoadon/danhsach
+     */
     @GetMapping
     public String danhSach(
             @RequestParam(required = false) String trangThai,
@@ -58,6 +75,12 @@ public class HoaDonController {
     }
 
     // Xem chi tiết hóa đơn
+    /**
+     * Đọc thông tin hóa đơn cùng các món đã gọi và đưa sang trang chi tiết.
+     * @param maHd mã hóa đơn
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @return tên template hoặc đường dẫn chuyển hướng: hoadon/chi-tiet
+     */
     @GetMapping("/chi-tiet/{maHd}")
     public String chiTiet(
             @PathVariable Long maHd,
@@ -75,6 +98,11 @@ public class HoaDonController {
     }
 
     // Hiển thị form tạo hóa đơn
+    /**
+     * Chuẩn bị hóa đơn mới và danh sách món sắp theo tên để mở trang tạo hóa đơn.
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @return tên template hoặc đường dẫn chuyển hướng: hoadon/form
+     */
     @GetMapping("/them")
     public String hienThiFormThem(Model model) {
 
@@ -88,6 +116,14 @@ public class HoaDonController {
     }
 
     // Tạo hóa đơn và lưu các món ăn
+    /**
+     * Nhận yêu cầu tạo hóa đơn chưa thanh toán, gộp các dòng trùng món, lưu chi tiết với đơn giá hiện tại rồi tính tổng tiền, gọi service và chuyển hướng kèm thông báo kết quả.
+     * @param hoaDon hóa đơn đang xử lý
+     * @param maMon danh sách mã món từ form; phần tử thứ i đi cùng soLuong[i]
+     * @param soLuong danh sách số lượng từ form; phần tử thứ i đi cùng maMon[i]
+     * @param redirectAttributes nơi đặt thông báo dùng sau khi chuyển hướng
+     * @return tên template hoặc đường dẫn chuyển hướng: redirect:/hoa-don/chi-tiet/, redirect:/hoa-don/them
+     */
     @PostMapping("/them")
     public String taoHoaDon(
             @ModelAttribute("hoaDon") HoaDon hoaDon,
@@ -96,6 +132,7 @@ public class HoaDonController {
             RedirectAttributes redirectAttributes) {
 
         try {
+            // hoaDonMoi: hóa đơn mới tạo hoặc dữ liệu hóa đơn mới nhận từ form.
             HoaDon hoaDonMoi = hoaDonService.taoHoaDon(
                     hoaDon, maMon, soLuong);
 
@@ -106,7 +143,7 @@ public class HoaDonController {
             return "redirect:/hoa-don/chi-tiet/"
                     + hoaDonMoi.getMaHd();
 
-        } catch (RuntimeException e) {
+        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());
@@ -116,6 +153,13 @@ public class HoaDonController {
     }
 
     // Hiển thị form sửa hóa đơn
+    /**
+     * Chỉ mở form sửa khi hóa đơn tồn tại và chưa thanh toán; nạp món có thể chọn và các dòng đã gọi.
+     * @param maHd mã hóa đơn
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @param redirectAttributes nơi đặt thông báo dùng sau khi chuyển hướng
+     * @return tên template hoặc đường dẫn chuyển hướng: redirect:/hoa-don, hoadon/form-sua
+     */
     @GetMapping("/sua/{maHd}")
     public String hienThiFormSua(
             @PathVariable Long maHd,
@@ -123,6 +167,7 @@ public class HoaDonController {
             RedirectAttributes redirectAttributes) {
 
         try {
+            // hoaDon: hóa đơn đang xử lý.
             HoaDon hoaDon = hoaDonService.timTheoMa(maHd);
 
             if (DA_THANH_TOAN.equals(hoaDon.getTrangThai())) {
@@ -147,7 +192,7 @@ public class HoaDonController {
 
             return "hoadon/form-sua";
 
-        } catch (RuntimeException e) {
+        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());
@@ -157,6 +202,15 @@ public class HoaDonController {
     }
 
     // Cập nhật hóa đơn và toàn bộ danh sách món ăn
+    /**
+     * Nhận yêu cầu chỉ cập nhật hóa đơn chưa thanh toán; kiểm tra thông tin, xử lý giảm giá và tính lại tổng tiền, gọi service và chuyển hướng kèm thông báo kết quả.
+     * @param maHd mã hóa đơn
+     * @param hoaDon hóa đơn đang xử lý
+     * @param maMon danh sách mã món từ form; phần tử thứ i đi cùng soLuong[i]
+     * @param soLuong danh sách số lượng từ form; phần tử thứ i đi cùng maMon[i]
+     * @param redirectAttributes nơi đặt thông báo dùng sau khi chuyển hướng
+     * @return tên template hoặc đường dẫn chuyển hướng: redirect:/hoa-don/chi-tiet/, redirect:/hoa-don/sua/
+     */
     @PostMapping("/sua/{maHd}")
     public String capNhatHoaDon(
             @PathVariable Long maHd,
@@ -177,7 +231,7 @@ public class HoaDonController {
 
             return "redirect:/hoa-don/chi-tiet/" + maHd;
 
-        } catch (RuntimeException e) {
+        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());
@@ -187,6 +241,12 @@ public class HoaDonController {
     }
 
     // Xóa hóa đơn
+    /**
+     * Nhận yêu cầu chỉ xóa hóa đơn chưa thanh toán; xóa chi tiết trước rồi xóa hóa đơn, gọi service và chuyển hướng kèm thông báo kết quả.
+     * @param maHd mã hóa đơn
+     * @param redirectAttributes nơi đặt thông báo dùng sau khi chuyển hướng
+     * @return tên template hoặc đường dẫn chuyển hướng: redirect:/hoa-don
+     */
     @PostMapping("/xoa/{maHd}")
     public String xoaHoaDon(
             @PathVariable Long maHd,
@@ -199,7 +259,7 @@ public class HoaDonController {
                     "thongBao",
                     "Xoa hoa don thanh cong.");
 
-        } catch (RuntimeException e) {
+        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());
@@ -209,6 +269,12 @@ public class HoaDonController {
     }
 
     // Thanh toán hóa đơn
+    /**
+     * Nhận yêu cầu từ chối hóa đơn đã thanh toán hoặc chưa có món; tính lại tổng tiền rồi đổi trạng thái sang da thanh toan, gọi service và chuyển hướng kèm thông báo kết quả.
+     * @param maHd mã hóa đơn
+     * @param redirectAttributes nơi đặt thông báo dùng sau khi chuyển hướng
+     * @return tên template hoặc đường dẫn chuyển hướng: redirect:/hoa-don/chi-tiet/
+     */
     @PostMapping("/thanh-toan/{maHd}")
     public String thanhToan(
             @PathVariable Long maHd,
@@ -221,7 +287,7 @@ public class HoaDonController {
                     "thongBao",
                     "Thanh toan thanh cong.");
 
-        } catch (RuntimeException e) {
+        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());

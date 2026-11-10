@@ -1,59 +1,140 @@
 package com.QuanLyNHHS.controller;
 
-import com.QuanLyNHHS.model.NhanVien;
+import com.QuanLyNHHS.dto.NhanVienForm;
+import com.QuanLyNHHS.service.NhanVienService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Nhận yêu cầu HTTP của module nhân viên, gọi xử lý và đưa dữ liệu sang Thymeleaf hoặc chuyển hướng.
+ */
 @Controller
 @RequestMapping("/nhan-vien")
 public class NhanVienController {
+    // service: thành phần NhanVienService xử lý nghiệp vụ trước khi đọc/ghi database.
+    private final NhanVienService service;
 
-    private List<NhanVien> getSampleStaff() {
-        List<NhanVien> list = new ArrayList<>();
-        list.add(new NhanVien("NV01", "Nguyễn Cao Hoàng", "0912 345 678", "hoang.nguyen@nhhs.vn", 
-                "Quản lý nhà hàng", "Toàn thời gian", "10/01/2022", 22000000, "Đang làm việc"));
-        
-        list.add(new NhanVien("NV02", "Trần Văn Hải", "0988 123 456", "hai.tran@nhhs.vn", 
-                "Bếp trưởng", "Ca tối (14:00 - 22:30)", "15/03/2022", 20000000, "Đang làm việc"));
-
-        list.add(new NhanVien("NV03", "Lê Thị Thu Thảo", "0977 654 321", "thao.le@nhhs.vn", 
-                "Thu ngân trưởng", "Ca sáng (07:30 - 15:30)", "05/06/2023", 11000000, "Đang làm việc"));
-
-        list.add(new NhanVien("NV04", "Hoàng Minh Tuấn", "0905 889 911", "tuan.hoang@nhhs.vn", 
-                "Đầu bếp món nướng", "Ca tối (14:00 - 22:30)", "20/08/2023", 14000000, "Đang làm việc"));
-
-        list.add(new NhanVien("NV05", "Phạm Quỳnh Anh", "0934 567 890", "quynhanh.pham@nhhs.vn", 
-                "Lễ tân & Chăm sóc khách hàng", "Ca sáng (08:00 - 16:30)", "12/11/2023", 9500000, "Đang làm việc"));
-
-        list.add(new NhanVien("NV06", "Vũ Đức Anh", "0944 222 333", "ducanh.vu@nhhs.vn", 
-                "Nhân viên phục vụ", "Ca tối (16:00 - 23:00)", "02/02/2024", 8000000, "Đang làm việc"));
-
-        list.add(new NhanVien("NV07", "Đỗ Văn Long", "0918 777 666", "long.do@nhhs.vn", 
-                "Nhân viên phục vụ", "Ca sáng (08:00 - 16:00)", "18/03/2024", 8000000, "Nghỉ phép"));
-
-        list.add(new NhanVien("NV08", "Nguyễn Thị Mai", "0966 333 888", "mai.nguyen@nhhs.vn", 
-                "Thu ngân", "Ca tối (15:00 - 23:00)", "01/04/2024", 9000000, "Đang làm việc"));
-
-        return list;
+    /**
+     * Nhận các thành phần phụ thuộc qua constructor và gán vào thuộc tính this để các hàm dùng lại.
+     * @param service thành phần NhanVienService xử lý nghiệp vụ trước khi đọc/ghi database
+     */
+    public NhanVienController(NhanVienService service) {
+        this.service = service;
     }
 
+    /**
+     * Giới hạn các trường được phép gán từ request vào DTO, tránh nhận thêm thuộc tính ngoài dự kiến.
+     * @param binder bộ gán dữ liệu request vào form; chỉ các trường được cho phép mới được nhận
+     */
+    @InitBinder("form")
+    void bind(WebDataBinder binder) {
+        binder.setAllowedFields("hoTen", "gioiTinh", "sdt", "email", "chucVu", "caLamViec", "luong", "ngayVaoLam", "trangThai");
+    }
+
+    /**
+     * Nạp danh sách nhân viên cùng dữ liệu lọc/thống kê có trong hàm vào Model rồi trả template.
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @return tên template hoặc đường dẫn chuyển hướng: nhanvien/index
+     */
     @GetMapping
     public String index(Model model) {
-        List<NhanVien> staffList = getSampleStaff();
-        long totalStaff = staffList.size();
-        long activeStaff = staffList.stream().filter(s -> "Đang làm việc".equals(s.getTrangThai())).count();
-        long onLeaveStaff = staffList.stream().filter(s -> "Nghỉ phép".equals(s.getTrangThai())).count();
-
+        // staffList: danh sách nhân viên.
+        var staffList = service.findAll();
         model.addAttribute("staffList", staffList);
-        model.addAttribute("totalStaff", totalStaff);
-        model.addAttribute("activeStaff", activeStaff);
-        model.addAttribute("onLeaveStaff", onLeaveStaff);
+        model.addAttribute("totalStaff", staffList.size());
+        model.addAttribute("activeStaff", staffList.stream().filter(/* s: nhân viên hiện tại trong phép lọc danh sách. */ s -> "Đang làm việc".equals(s.getTrangThai())).count());
+        model.addAttribute("onLeaveStaff", staffList.stream().filter(/* s: nhân viên hiện tại trong phép lọc danh sách. */ s -> "Nghỉ phép".equals(s.getTrangThai())).count());
         model.addAttribute("activeMenu", "nhanvien");
+        if (!model.containsAttribute("form")) model.addAttribute("form", new NhanVienForm());
         return "nhanvien/index";
+    }
+
+    /**
+     * Tạo DTO rỗng và mở biểu mẫu thêm mới; chưa lưu dữ liệu vào database.
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @return tên template hoặc đường dẫn chuyển hướng do hàm hiển thị tương ứng cung cấp
+     */
+    @GetMapping("/them")
+    public String create(Model model) {
+        model.addAttribute("form", new NhanVienForm());
+        return showForm(null, model);
+    }
+
+    /**
+     * Tìm bản ghi theo mã, đưa dữ liệu hiện tại vào form và mở giao diện sửa.
+     * @param id khóa chính của nhân viên
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @return tên template hoặc đường dẫn chuyển hướng do hàm hiển thị tương ứng cung cấp
+     */
+    @GetMapping("/sua/{id}")
+    public String edit(@PathVariable Long id, Model model) {
+        model.addAttribute("form", NhanVienForm.from(service.getById(id)));
+        return showForm(id, model);
+    }
+
+    /**
+     * Nhận DTO nhân viên, kiểm tra BindingResult rồi gọi service lưu; thành công chuyển hướng, có lỗi thì trả lại form và giữ dữ liệu nhập.
+     * @param id khóa chính của nhân viên (null để thêm mới, có giá trị để sửa)
+     * @param form đối tượng NhanVienForm chứa dữ liệu nhập của biểu mẫu; được kiểm tra ràng buộc bằng @Valid
+     * @param errors kết quả gán dữ liệu và kiểm tra form; chứa lỗi từng trường hoặc lỗi nghiệp vụ chung
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @param redirect nơi đặt thông báo dùng sau khi chuyển hướng
+     * @return tên template hoặc đường dẫn chuyển hướng: redirect:/nhan-vien
+     */
+    @PostMapping({"/them", "/sua/{id}"})
+    public String save(@PathVariable(required = false) Long id,
+            @Valid @ModelAttribute("form") NhanVienForm form, BindingResult errors,
+            Model model, RedirectAttributes redirect) {
+        if (!errors.hasErrors()) {
+            try {
+                service.save(id, form);
+                redirect.addFlashAttribute("successMessage", "Đã lưu nhân viên.");
+                return "redirect:/nhan-vien";
+            } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ IllegalArgumentException | EntityNotFoundException e) {
+                errors.reject("save", e.getMessage());
+            } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ DataIntegrityViolationException e) {
+                errors.reject("save", "Dữ liệu liên quan vừa thay đổi hoặc không hợp lệ. Hãy kiểm tra lại.");
+            }
+        }
+        return showForm(id, model);
+    }
+
+    /**
+     * Gọi service xóa nhân viên và chuyển hướng kèm thông báo thành công hoặc lỗi; chỉ nhận yêu cầu POST.
+     * @param id khóa chính của nhân viên
+     * @param redirect nơi đặt thông báo dùng sau khi chuyển hướng
+     * @return tên template hoặc đường dẫn chuyển hướng: redirect:/nhan-vien
+     */
+    @PostMapping("/xoa/{id}")
+    public String delete(@PathVariable Long id, RedirectAttributes redirect) {
+        try {
+            service.delete(id);
+            redirect.addFlashAttribute("successMessage", "Đã xóa nhân viên.");
+        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ IllegalArgumentException | EntityNotFoundException e) {
+            redirect.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ DataIntegrityViolationException e) {
+            redirect.addFlashAttribute("errorMessage", "Dữ liệu đang được sử dụng, không thể xóa.");
+        }
+        return "redirect:/nhan-vien";
+    }
+
+    /**
+     * Bật hộp thoại thêm/sửa, đặt editingId và formAction rồi nạp lại dữ liệu danh sách để hiển thị cùng form.
+     * @param id khóa chính của nhân viên
+     * @param model nơi đặt các thuộc tính để Thymeleaf đọc và tạo HTML
+     * @return tên template hoặc đường dẫn chuyển hướng do hàm hiển thị tương ứng cung cấp
+     */
+    private String showForm(Long id, Model model) {
+        model.addAttribute("showForm", true);
+        model.addAttribute("editingId", id);
+        model.addAttribute("formAction", id == null ? "/nhan-vien/them" : "/nhan-vien/sua/" + id);
+        return index(model);
     }
 }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập - Hải sản Hoàng Gia</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body class="auth-page">
+<main class="auth-shell">
+    <div class="auth-brand"><span class="brand-icon">HG</span><span>Hải sản Hoàng Gia</span></div>
+    <section class="auth-panel" aria-labelledby="auth-title">
+        <h1 id="auth-title">Đăng nhập</h1>
+        <p class="auth-description">Sử dụng tài khoản để vào hệ thống quản lý.</p>
+        <p class="auth-message error" role="alert" th:if="${param.error}">Tên đăng nhập hoặc mật khẩu không đúng.</p>
+        <p class="auth-message success" role="status" th:if="${param.registered}">Đăng ký thành công. Bạn có thể đăng nhập.</p>
+        <p class="auth-message" role="status" th:if="${param.logout}">Bạn đã đăng xuất.</p>
+        <form th:action="@{/login}" method="post" class="auth-form">
+            <div class="auth-field">
+                <label for="tenDangNhap">Tên đăng nhập</label>
+                <input id="tenDangNhap" name="tenDangNhap" type="text" autocomplete="username" maxlength="30" autocapitalize="none" spellcheck="false" required autofocus>
+            </div>
+            <div class="auth-field">
+                <label for="matKhau">Mật khẩu</label>
+                <input id="matKhau" name="matKhau" type="password" class="auth-password" autocomplete="current-password" maxlength="72" required>
+            </div>
+            <label class="auth-check"><input type="checkbox" data-show-password> Hiện mật khẩu</label>
+            <button type="submit" class="btn-primary auth-submit">Đăng nhập</button>
+        </form>
+        <p class="auth-switch">Chưa có tài khoản? <a th:href="@{/register}">Đăng ký</a></p>
+    </section>
+    <p class="auth-footer">Hệ thống quản lý nhà hàng</p>
+</main>
+<script th:src="@{/js/auth.js}" defer></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+-- Chay thu cong bang NHHS_APP sau khi khoi dong ung dung de Hibernate tao/cap nhat bang.
+-- Sua cac gia tri ben duoi thanh du lieu ban muon su dung, roi Run Script (F5).
+-- Script CHI THEM du lieu; khong xoa du lieu cu. Chay lai se them mot bo du lieu nua.
+-- Mo worksheet/session moi, khong co giao dich dang sua do, truoc khi chay.
+WHENEVER SQLERROR EXIT SQL.SQLCODE ROLLBACK
+SET DEFINE OFF
+SET SERVEROUTPUT ON
+
+DECLARE
+    V_NV NHAN_VIEN.MA_NV%TYPE;
+    V_LOAI_HAI_SAN LOAI_MON.MA_LOAI%TYPE;
+    V_LOAI_DO_UONG LOAI_MON.MA_LOAI%TYPE;
+    V_MON_TOM MON_AN.MA_MON%TYPE;
+    V_MON_MUC MON_AN.MA_MON%TYPE;
+    V_MON_NUOC MON_AN.MA_MON%TYPE;
+    V_BAN BAN_AN.MA_BAN%TYPE;
+    V_BAN_DAT BAN_AN.MA_BAN%TYPE;
+    V_KH KHACH_HANG.MA_KH%TYPE;
+    V_NCC NHA_CUNG_CAP.MA_NCC%TYPE;
+    V_NL_TOM NGUYEN_LIEU.MA_NL%TYPE;
+    V_NL_MUC NGUYEN_LIEU.MA_NL%TYPE;
+    V_PN PHIEU_NHAP.MA_PN%TYPE;
+    V_HD HOA_DON.MA_HD%TYPE;
+BEGIN
+    -- 1. Nhan vien: MA_NV la NUMBER, ma NV01 chi la cach hien thi tren giao dien.
+    INSERT INTO NHAN_VIEN
+        (MA_NV, HO_TEN, GIOI_TINH, SDT, CHUC_VU, LUONG, NGAY_VAO_LAM,
+         EMAIL, CA_LAM_VIEC, TRANG_THAI)
+    VALUES
+        (SEQ_NHAN_VIEN.NEXTVAL, 'Nguyễn Văn An', 'Nam', '0901000001',
+         'Quản lý nhà hàng', 18000000, DATE '2026-11-01',
+         'an@example.com', 'Toàn thời gian', 'Đang làm việc')
+    RETURNING MA_NV INTO V_NV;
+
+    INSERT INTO NHAN_VIEN
+        (MA_NV, HO_TEN, GIOI_TINH, SDT, CHUC_VU, LUONG, NGAY_VAO_LAM,
+         EMAIL, CA_LAM_VIEC, TRANG_THAI)
+    VALUES
+        (SEQ_NHAN_VIEN.NEXTVAL, 'Trần Thị Bình', 'Nữ', '0901000002',
+         'Thu ngân', 9000000, DATE '2026-11-02',
+         'binh@example.com', 'Ca sáng (07:30 - 15:30)', 'Nghỉ phép');
+
+    -- 2. Loai mon truoc, mon an sau. Dung bien de khong phu thuoc ma 1, 2, 3.
+    INSERT INTO LOAI_MON (MA_LOAI, TEN_LOAI, MO_TA, TRANG_THAI)
+    VALUES (SEQ_LOAI_MON.NEXTVAL, 'Hải sản', 'Các món hải sản', 'Hoạt động')
+    RETURNING MA_LOAI INTO V_LOAI_HAI_SAN;
+
+    INSERT INTO LOAI_MON (MA_LOAI, TEN_LOAI, MO_TA, TRANG_THAI)
+    VALUES (SEQ_LOAI_MON.NEXTVAL, 'Đồ uống', 'Nước uống các loại', 'Hoạt động')
+    RETURNING MA_LOAI INTO V_LOAI_DO_UONG;
+
+    INSERT INTO MON_AN (MA_MON, MA_LOAI, TEN_MON, DON_VI, DON_GIA, TRANG_THAI, MO_TA, HINH_ANH)
+    VALUES (SEQ_MON_AN.NEXTVAL, V_LOAI_HAI_SAN, 'Tôm hấp', 'Đĩa', 300000,
+            'Đang phục vụ', 'Tôm hấp sả', NULL)
+    RETURNING MA_MON INTO V_MON_TOM;
+
+    INSERT INTO MON_AN (MA_MON, MA_LOAI, TEN_MON, DON_VI, DON_GIA, TRANG_THAI, MO_TA, HINH_ANH)
+    VALUES (SEQ_MON_AN.NEXTVAL, V_LOAI_HAI_SAN, 'Mực nướng', 'Đĩa', 180000,
+            'Đang phục vụ', 'Mực nướng muối ớt', NULL)
+    RETURNING MA_MON INTO V_MON_MUC;
+
+    INSERT INTO MON_AN (MA_MON, MA_LOAI, TEN_MON, DON_VI, DON_GIA, TRANG_THAI, MO_TA, HINH_ANH)
+    VALUES (SEQ_MON_AN.NEXTVAL, V_LOAI_DO_UONG, 'Nước suối', 'Chai', 15000,
+            'Tạm hết', NULL, NULL)
+    RETURNING MA_MON INTO V_MON_NUOC;
+
+    -- 3. Khoa chinh IDENTITY: bo cot ma khoi INSERT, lay ma bang RETURNING.
+    INSERT INTO BAN_AN (TEN_BAN, SO_CHO, KHU_VUC, TRANG_THAI)
+    VALUES ('Bàn 01', 4, 'Tầng 1', 'Trống') RETURNING MA_BAN INTO V_BAN;
+
+    INSERT INTO BAN_AN (TEN_BAN, SO_CHO, KHU_VUC, TRANG_THAI)
+    VALUES ('Bàn 02', 6, 'Tầng 1', 'Đã đặt') RETURNING MA_BAN INTO V_BAN_DAT;
+
+    INSERT INTO KHACH_HANG (HO_TEN, SDT, EMAIL, DIEM_TICH_LUY)
+    VALUES ('Lê Minh Châu', '0902000001', 'chau@example.com', 0)
+    RETURNING MA_KH INTO V_KH;
+
+    INSERT INTO DAT_BAN (MA_KH, MA_BAN, NGAY_DAT, SO_NGUOI, TIEN_COC, TRANG_THAI)
+    VALUES (V_KH, V_BAN_DAT, TRUNC(SYSDATE) + 1, 4, 100000, 'DA_XAC_NHAN');
+
+    -- 4. Danh muc kho, sau do phieu nhap va chi tiet phieu nhap.
+    INSERT INTO NHA_CUNG_CAP (MA_NCC, TEN_NCC, SDT, DIA_CHI, EMAIL)
+    VALUES (SEQ_NHA_CUNG_CAP.NEXTVAL, 'Hải sản Minh Hải', '0903000001',
+            'Thành phố Hồ Chí Minh', 'minhhai@example.com')
+    RETURNING MA_NCC INTO V_NCC;
+
+    INSERT INTO NGUYEN_LIEU (MA_NL, TEN_NL, DON_VI, SO_LUONG_TON, TRANG_THAI)
+    VALUES (SEQ_NGUYEN_LIEU.NEXTVAL, 'Tôm tươi', 'Kg', 0, 'HOAT_DONG')
+    RETURNING MA_NL INTO V_NL_TOM;
+
+    INSERT INTO NGUYEN_LIEU (MA_NL, TEN_NL, DON_VI, SO_LUONG_TON, TRANG_THAI)
+    VALUES (SEQ_NGUYEN_LIEU.NEXTVAL, 'Mực tươi', 'Kg', 0, 'HOAT_DONG')
+    RETURNING MA_NL INTO V_NL_MUC;
+
+    INSERT INTO PHIEU_NHAP (MA_PN, MA_NCC, MA_NV, NGAY_NHAP, TONG_TIEN, PHIEN_BAN)
+    VALUES (SEQ_PHIEU_NHAP.NEXTVAL, V_NCC, V_NV, TRUNC(SYSDATE), 2900000, 0)
+    RETURNING MA_PN INTO V_PN;
+
+    INSERT INTO CT_PHIEU_NHAP (MA_PN, MA_NL, SO_LUONG, DON_GIA, THANH_TIEN)
+    VALUES (V_PN, V_NL_TOM, 10, 200000, 2000000);
+    INSERT INTO CT_PHIEU_NHAP (MA_PN, MA_NL, SO_LUONG, DON_GIA, THANH_TIEN)
+    VALUES (V_PN, V_NL_MUC, 5, 180000, 900000);
+
+    -- INSERT truc tiep khong di qua PhieuNhapService, nen phai cong ton mot lan.
+    -- Trigger TRG_CTPN_THANH_TIEN cua du an chi tinh tien, khong cong ton.
+    UPDATE NGUYEN_LIEU SET SO_LUONG_TON = SO_LUONG_TON + 10 WHERE MA_NL = V_NL_TOM;
+    UPDATE NGUYEN_LIEU SET SO_LUONG_TON = SO_LUONG_TON + 5 WHERE MA_NL = V_NL_MUC;
+
+    -- 5. Hoa don da thanh toan de bao cao co du lieu.
+    -- 1 * 300000 + 2 * 180000 - 10000 = 650000.
+    INSERT INTO HOA_DON (MA_BAN, MA_NV, MA_KH, NGAY_LAP, GIAM_GIA, TONG_TIEN, TRANG_THAI)
+    VALUES (V_BAN, V_NV, V_KH, TRUNC(SYSDATE), 10000, 650000, 'Da thanh toan')
+    RETURNING MA_HD INTO V_HD;
+
+    INSERT INTO CT_HOA_DON (MA_HD, MA_MON, SO_LUONG, DON_GIA, THANH_TIEN)
+    VALUES (V_HD, V_MON_TOM, 1, 300000, 300000);
+    INSERT INTO CT_HOA_DON (MA_HD, MA_MON, SO_LUONG, DON_GIA, THANH_TIEN)
+    VALUES (V_HD, V_MON_MUC, 2, 180000, 360000);
+
+    DBMS_OUTPUT.PUT_LINE('Da them du lieu. Nhan vien: ' || V_NV || ', hoa don: ' || V_HD);
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE;
+END;
+/
+COMMIT;
+
+SELECT MA_NV, HO_TEN, EMAIL, CA_LAM_VIEC, TRANG_THAI FROM NHAN_VIEN ORDER BY MA_NV;
+SELECT MA_MON, MA_LOAI, TEN_MON, DON_GIA FROM MON_AN ORDER BY MA_MON;
+SELECT MA_NL, TEN_NL, SO_LUONG_TON FROM NGUYEN_LIEU ORDER BY MA_NL;
+SELECT MA_HD, TONG_TIEN, TRANG_THAI FROM HOA_DON ORDER BY MA_HD;

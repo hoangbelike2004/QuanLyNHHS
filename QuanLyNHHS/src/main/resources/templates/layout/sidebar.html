@@ -95,13 +95,14 @@
 
         <!-- Sidebar User Footer -->
         <div class="sidebar-footer">
-            <div class="user-avatar">
-                H
-            </div>
+            <div class="user-avatar" th:text="${#strings.isEmpty(tenNguoiDung) ? 'U' : #strings.substring(tenNguoiDung, 0, 1)}">U</div>
             <div class="user-info">
-                <h4>Nguyễn Cao Hoàng</h4>
-                <p>Quản trị viên hệ thống</p>
+                <h4 th:text="${tenNguoiDung}" th:title="${tenNguoiDung}">Tài khoản</h4>
+                <p>Tài khoản nội bộ</p>
             </div>
+            <form class="logout-form" th:action="@{/logout}" method="post">
+                <button class="logout-button" type="submit" title="Đăng xuất" aria-label="Đăng xuất"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i></button>
+            </form>
         </div>
     </aside>
 </body>

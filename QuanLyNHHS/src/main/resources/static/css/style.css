@@ -56,6 +56,11 @@ button:disabled { opacity: .5; cursor: default; }
 .user-avatar { width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid #4a535e; background: #2c323a; color: #c9d0d9; border-radius: 50%; font-size: 12px; font-weight: 600; flex-shrink: 0; }
 .user-info h4 { font-size: 12px; font-weight: 600; }
 .user-info p { margin-top: 2px; color: var(--text-dim); font-size: 11px; }
+.sidebar-footer .user-info { flex: 1; min-width: 0; }
+.sidebar-footer .user-info h4 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.logout-form { margin: 0; }
+.logout-button { width: 30px; height: 30px; display: grid; place-items: center; background: transparent; color: var(--text-muted); border: 1px solid var(--border-light); border-radius: 4px; }
+.logout-button:hover { color: var(--text-main); background: var(--bg-card-hover); }
 .main-wrapper { flex: 1; min-width: 0; margin-left: 224px; min-height: 100vh; }
 .top-navbar { min-height: 60px; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--border-light); background: var(--bg-navbar); }
 .navbar-left, .navbar-right { display: flex; align-items: center; gap: 12px; min-width: 0; }

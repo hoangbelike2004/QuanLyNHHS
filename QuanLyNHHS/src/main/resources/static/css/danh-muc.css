@@ -1,0 +1,9 @@
+.module-message { padding: 12px 16px; margin-bottom: 16px; border-radius: 8px; }
+.module-message.success { background: #123d31; color: #a7f3d0; }
+.module-message.error { background: #481f2b; color: #fecdd3; }
+.field-error { display: block; color: #fda4af; margin-top: 6px; }
+[aria-invalid="true"] { border-color: #fb7185; }
+.inline-delete { display: inline-flex; margin: 0; }
+a.btn-primary, a.btn-secondary, a.btn-action, a.modal-close { text-decoration: none; }
+.modal-overlay .modal-box { max-height: 90vh; overflow-y: auto; }
+.modal-overlay.active { overflow-y: auto; }

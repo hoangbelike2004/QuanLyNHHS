@@ -1,0 +1,22 @@
+.auth-page { min-height: 100vh; display: grid; align-items: center; }
+.auth-shell { width: min(100%, 430px); margin: 0 auto; padding: 36px 20px; }
+.auth-brand { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 600; margin-bottom: 24px; }
+.auth-panel { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 5px; padding: 28px; }
+.auth-panel h1 { font-size: 23px; font-weight: 600; margin-bottom: 8px; }
+.auth-description { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; }
+.auth-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+.auth-field label { font-size: 13px; font-weight: 500; }
+.auth-field input { width: 100%; min-height: 42px; background: var(--bg-input); color: var(--text-main); border: 1px solid #434c57; border-radius: 4px; padding: 10px 11px; }
+.auth-field input[aria-invalid='true'] { border-color: var(--rose-danger); }
+.auth-field small { color: var(--text-dim); font-size: 11px; line-height: 1.6; }
+.auth-check { display: flex; align-items: center; gap: 7px; color: var(--text-muted); font-size: 12px; margin: 0 0 20px; cursor: pointer; }
+.auth-check input { width: 15px; height: 15px; margin: 0; accent-color: var(--cyan-dark); }
+.auth-submit { width: 100%; min-height: 42px; }
+.auth-switch { font-size: 13px; color: var(--text-muted); margin-top: 22px; text-align: center; }
+.auth-switch a { color: var(--cyan-primary); text-decoration: underline; text-underline-offset: 3px; }
+.auth-footer { color: var(--text-dim); font-size: 11px; text-align: center; margin-top: 20px; }
+.auth-message { padding: 12px; margin-bottom: 18px; border: 1px solid var(--border-light); border-radius: 4px; font-size: 12px; }
+.auth-message.error { background: var(--rose-glow); color: var(--rose-danger); }
+.auth-message.success { background: var(--emerald-glow); color: var(--emerald-success); }
+.field-error { color: var(--rose-danger); font-size: 12px; line-height: 1.5; }
+@media (max-width: 450px) { .auth-shell { padding: 24px 16px; } .auth-panel { padding: 22px 18px; } }
