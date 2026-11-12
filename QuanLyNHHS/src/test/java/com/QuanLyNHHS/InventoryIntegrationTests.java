@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.net.CookieManager;
 import java.net.http.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -35,9 +36,12 @@ class InventoryIntegrationTests {
     Long supplierId;
     Long shrimp;
     Long crab;
+    HttpClient browser;
+    String csrf;
 
     @BeforeEach
     void setup() {
+        browser = HttpClient.newBuilder().cookieHandler(new CookieManager()).build();
         jdbc.update("DELETE FROM CT_PHIEU_NHAP");
         jdbc.update("DELETE FROM PHIEU_NHAP");
         jdbc.update("DELETE FROM NGUYEN_LIEU");
@@ -48,6 +52,20 @@ class InventoryIntegrationTests {
         supplierId = suppliers.save(null, supplier).getMaNcc();
         shrimp = material("Tôm sú");
         crab = material("Cua biển");
+        try {
+            HttpResponse<String> loginPage = get("/login");
+            assertEquals(200, loginPage.statusCode());
+            csrf = java.util.regex.Pattern.compile("name=\"_csrf\"[^>]*value=\"([^\"]+)\"")
+                    .matcher(loginPage.body()).results().findFirst().orElseThrow().group(1);
+            HttpResponse<String> login = post("/login", Map.of(
+                    "username", "admin", "password", "integration-test-only"));
+            assertEquals(302, login.statusCode());
+            HttpResponse<String> authenticatedPage = get("/login");
+            csrf = java.util.regex.Pattern.compile("name=\"_csrf\"[^>]*value=\"([^\"]+)\"")
+                    .matcher(authenticatedPage.body()).results().findFirst().orElseThrow().group(1);
+        } catch (Exception e) {
+            throw new IllegalStateException("Không đăng nhập được cho test HTTP", e);
+        }
     }
 
     Long material(String name) {
@@ -295,7 +313,7 @@ class InventoryIntegrationTests {
     }
 
     HttpResponse<String> get(String path) throws Exception {
-        return HttpClient.newHttpClient()
+        return browser
                 .send(
                         HttpRequest.newBuilder(URI.create("http://localhost:" + port + path))
                                 .GET()
@@ -304,14 +322,13 @@ class InventoryIntegrationTests {
     }
 
     HttpResponse<String> post(String path, Map<String, String> fields) throws Exception {
-        String body =
-                fields.entrySet().stream()
-                        .map(e ->
-                                URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8)
-                                        + "="
-                                        + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
-                        .collect(java.util.stream.Collectors.joining("&"));
-        return HttpClient.newHttpClient()
+        Map<String, String> submitted = new HashMap<>(fields);
+        submitted.put("_csrf", csrf);
+        String body = submitted.entrySet().stream()
+                .map(e -> URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8) + "="
+                        + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
+                .collect(java.util.stream.Collectors.joining("&"));
+        return browser
                 .send(
                         HttpRequest.newBuilder(URI.create("http://localhost:" + port + path))
                                 .header("Content-Type", "application/x-www-form-urlencoded")
@@ -353,7 +370,7 @@ class InventoryIntegrationTests {
             assertEquals(200, response.statusCode(), path + ": " + response.body());
             assertTrue(response.body().contains("<h1"), path);
         }
-        assertEquals(302, get("/").statusCode());
+        assertEquals(200, get("/").statusCode());
         assertEquals(404, get("/phieu-nhap/99999999").statusCode());
         assertEquals(405, get("/nguyen-lieu/" + shrimp + "/xoa").statusCode());
     }

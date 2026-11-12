@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - Nhà hàng Hải Sản'">Khách hàng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/reservation.css}">
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='khachhang'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Khách hàng', 'fa-solid fa-users')}"></div>
+        <div class="content-body reservation-module">
+            <nav class="reservation-nav" aria-label="Khách hàng và đặt bàn">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/khach-hang}" th:classappend="${activeMenu == 'khachhang'} ? 'selected' : ''">Khách hàng</a>
+                <a th:href="@{/ban-an}" th:classappend="${activeMenu == 'banan'} ? 'selected' : ''">Bàn ăn</a>
+                <a th:href="@{/dat-ban}" th:classappend="${activeMenu == 'datban'} ? 'selected' : ''">Đặt bàn</a>
+            </nav>
+<!-- Thanh điều hướng -->
+
+
+<div class="container mt-4">
+    <!-- Tiêu đề trang -->
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h3 class="text-primary mb-0"><i class="fa-solid fa-users me-2"></i>Danh sách khách hàng</h3>
+        <a href="/khach-hang/them" class="btn btn-primary">
+            <i class="fa-solid fa-user-plus me-1"></i> Thêm khách hàng
+        </a>
+    </div>
+
+    <!-- Thông báo -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-circle-check me-1"></i>
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Tìm kiếm -->
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body py-2">
+            <form method="get" action="/khach-hang" class="d-flex gap-2">
+                <input type="text" name="keyword" class="form-control" placeholder="Tìm theo tên khách hàng..."
+                       th:value="${keyword}">
+                <button type="submit" class="btn btn-outline-primary px-4">
+                    <i class="fa-solid fa-magnifying-glass"></i> Tìm
+                </button>
+                <a href="/khach-hang" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-rotate-left"></i> Xóa lọc
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bảng danh sách -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Mã KH</th>
+                        <th>Họ tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th class="text-center">Điểm tích lũy</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(danhSachKH)}">
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-inbox fs-4 d-block mb-2"></i> Chưa có khách hàng nào.
+                        </td>
+                    </tr>
+                    <tr th:each="kh, stat : ${danhSachKH}">
+                        <td th:text="${stat.index + 1}"></td>
+                        <td><span class="badge bg-secondary" th:text="${kh.maKh}"></span></td>
+                        <td class="fw-semibold" th:text="${kh.hoTen}"></td>
+                        <td th:text="${kh.sdt}"></td>
+                        <td th:text="${kh.email}"></td>
+                        <td class="text-center">
+                            <span class="badge bg-info text-dark" th:text="${kh.diemTichLuy}"></span>
+                        </td>
+                        <td class="text-center">
+                            <a th:href="@{/khach-hang/{maKh}/lich-su-dat-ban(maKh=${kh.maKh})}"
+                               class="btn btn-sm btn-outline-info me-1" title="Lịch sử đặt bàn">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </a>
+                            <a th:href="@{/khach-hang/sua/{maKh}(maKh=${kh.maKh})}"
+                               class="btn btn-sm btn-outline-warning me-1" title="Sửa">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <form th:action="@{/khach-hang/xoa/{maKh}(maKh=${kh.maKh})}" method="post"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted small">
+            Tổng: <strong th:text="${#lists.size(danhSachKH)}">0</strong> khách hàng
+        </div>
+    </div>
+</div>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/reservation.js}" defer></script>
+</body>
+</html>

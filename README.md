@@ -1,6 +1,6 @@
-# Kho & Nhập hàng — Lý Tiến Đạt
+# Quản lý nhà hàng Hải Sản Hoàng Gia
 
-Phần triển khai trên nhánh `DatNew`, theo phân công bốn bảng `NHA_CUNG_CAP`, `NGUYEN_LIEU`, `PHIEU_NHAP`, `CT_PHIEU_NHAP`. Giữ Spring Boot 4.1.1, Java 27, Spring Data JPA và Thymeleaf của repo. Không triển khai các module bán hàng, thực đơn, nhân viên hoặc phân quyền của thành viên khác.
+Nhánh `DatNew` gồm quản lý kho, nhân viên, thực đơn, khách hàng, bàn ăn, đặt bàn và hóa đơn. Dùng Spring Boot 4.1.1, Java 27, Spring Data JPA và Thymeleaf.
 
 ## Chạy demo
 
@@ -9,6 +9,7 @@ Yêu cầu JDK 27. Maven Wrapper đã có sẵn:
 ```powershell
 cd QuanLyNHHS
 .\mvnw.cmd test
+$env:APP_ADMIN_PASSWORD='mat_khau_quan_tri_cua_ban'
 .\mvnw.cmd spring-boot:run
 ```
 
@@ -18,7 +19,7 @@ Mở `http://localhost:8080/` hoặc `/kho`. Tạo nhà cung cấp → tạo ngu
 - `/nguyen-lieu`: thêm, xem, sửa, ngừng sử dụng nguyên liệu và xem tồn kho.
 - `/phieu-nhap`: danh sách, lập, xem chi tiết, sửa và xóa phiếu nhập nhiều dòng.
 
-Profile mặc định `demo` dùng H2 trong bộ nhớ; **dữ liệu demo mất khi dừng ứng dụng**. Chỉ có một nhân viên mẫu `Nhân viên kho (demo)`, không có nhà cung cấp, nguyên liệu hoặc phiếu giả. Đăng nhập/phân quyền chưa có trong bộ khung và thuộc module Security của nhóm.
+Profile mặc định `demo` dùng H2 trong bộ nhớ; **dữ liệu demo mất khi dừng ứng dụng**. Mở `/login`, đăng nhập tài khoản `admin` bằng `APP_ADMIN_PASSWORD`. Sau khi tạo nhân viên, khách hàng và bàn, tạo đặt bàn rồi chọn nhân viên phụ trách trong form xác nhận. Đặt bàn đã xác nhận có thể gọi món và lập hóa đơn; hóa đơn giữ mã nhân viên được chọn.
 
 ## Logic Java
 
@@ -34,7 +35,7 @@ Profile mặc định `demo` dùng H2 trong bộ nhớ; **dữ liệu demo mất
 
 ## Oracle
 
-Profile `oracle` không tự tạo/xóa/cập nhật schema; Hibernate chỉ kiểm tra mapping. Trong schema mới:
+Profile `oracle` dùng Hibernate `update` để bổ sung bảng/cột còn thiếu cho các module ứng dụng, gồm `DAT_BAN.MA_NV` và `HOA_DON.MA_DAT`. Sao lưu schema có dữ liệu trước khi nâng cấp. Các procedure, trigger và ràng buộc đặc thù của kho vẫn cần script SQL. Trong schema mới:
 
 1. Tạo bảng `NHAN_VIEN` từ module của nhóm trước. Nếu chỉ chạy thử trong schema riêng chưa có bảng này, có thể chạy **tùy chọn** `QuanLyNHHS/database/oracle/00_employee_demo.sql`.
 2. Trong SQL Developer (Run Script/F5) hoặc SQL*Plus, chạy `QuanLyNHHS/database/oracle/01_inventory.sql`. Script tạo bốn bảng, sequence, ràng buộc, index và gọi `02_routines.sql` cùng thư mục. Không chạy script tạo bảng trên schema đã có bốn bảng này.
@@ -43,9 +44,10 @@ Profile `oracle` không tự tạo/xóa/cập nhật schema; Hibernate chỉ ki�
 
 ```powershell
 $env:SPRING_PROFILES_ACTIVE='oracle'
-$env:ORACLE_URL='jdbc:oracle:thin:@localhost:1521/FREEPDB1'
+$env:ORACLE_URL='jdbc:oracle:thin:@//localhost:1521/orclpdb'
 $env:ORACLE_USERNAME='ten_schema'
 $env:ORACLE_PASSWORD='mat_khau_cua_ban'
+$env:APP_ADMIN_PASSWORD='mat_khau_quan_tri_cua_ban'
 cd QuanLyNHHS
 .\mvnw.cmd spring-boot:run
 ```
@@ -71,8 +73,8 @@ cd QuanLyNHHS
 
 Kiểm thử tích hợp dùng database H2 thật và HTTP/Thymeleaf thật, bao gồm tính tiền/làm tròn, CRUD phiếu, đổi nguyên liệu, rollback khi không đủ tồn, dữ liệu sai, tràn số, phiếu cũ, nhập đồng thời, ràng buộc danh mục và chống ghi đè tồn/tổng tiền qua form. Các kiểm thử không đòi hỏi Oracle đang chạy.
 
-Đã bổ sung kiểm thử chặn đổi đơn vị khi còn tồn dù không có chi tiết phiếu tham chiếu, và kiểm tra form phiếu rỗng vẫn có dòng nhập để người dùng sửa tiếp. Bộ kiểm thử gồm 22 ca. Code Java dùng constructor injection và tên biến thể hiện nghiệp vụ; các template, CSS và JavaScript được định dạng thành nhiều dòng để dễ bảo trì.
+Đã bổ sung kiểm thử luồng xác nhận bàn → gọi món → hóa đơn và đăng nhập cho các kiểm thử HTTP. Toàn bộ bộ kiểm thử hiện có 32 ca.
 
-Giao diện dùng HTML/CSS/JavaScript cục bộ, không cần CDN hay frontend build. Phong cách Framed sheet (seed `2124240024`), giữ font hệ thống, nền xám biển và sổ nhập hàng là phần chính. Mỗi trang tập trung vào danh sách danh mục, lượng tồn hoặc nội dung phiếu. Không sửa layout dùng chung của các module khác.
+Giao diện dùng HTML/CSS/JavaScript cục bộ, không cần frontend build.
 
 Kiểm tra giao diện: lint không có lỗi/cảnh báo; đã xem form nhập ở 1440px, 768px, 390px và thử thêm/xóa dòng trên trình duyệt. Bảng cuộn trong khung riêng trên điện thoại, trang không tràn ngang; không có lỗi console. Script đo giao diện tự động không khởi động được Chrome/Edge trong môi trường này, nên đã kiểm tra bằng trình duyệt tích hợp.
