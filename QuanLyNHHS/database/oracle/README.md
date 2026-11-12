@@ -73,6 +73,29 @@ Không chạy `01_inventory.sql` trên schema đã được Hibernate tạo bả
 
 ## 3. Chạy bộ INSERT có đủ quan hệ
 
+### Bộ dữ liệu kiểm thử đầy đủ, có tài khoản đăng nhập
+
+File [`04_du_lieu_kiem_thu.sql`](04_du_lieu_kiem_thu.sql) thêm dữ liệu vào **toàn bộ 13 bảng entity hiện có**: tài khoản, nhân viên, loại món, món ăn, bàn, khách, đặt bàn, nhà cung cấp, nguyên liệu, phiếu nhập và chi tiết, hóa đơn và chi tiết. Giá món, đơn giá nhập, số lượng, tổng tiền và các trạng thái được đặt sát nghiệp vụ nhà hàng hải sản. Tên người, tên cơ sở, số điện thoại và email là **dữ liệu giả lập**, không phải thông tin đã xác minh của người hoặc doanh nghiệp thật. Các dòng sẽ được ghi vào Oracle thật khi bạn chạy script.
+
+Mở file UTF-8 và chạy **Run Script (F5)** trên schema ứng dụng sau khi ứng dụng đã tạo bảng/sequence. Chỉ chạy một lần: chạy lại sẽ bị trùng `TEN_DANG_NHAP` và toàn bộ lần chạy sau sẽ rollback. Không chạy script này sau `03_insert_data.sql` nếu bạn muốn một bộ dữ liệu sạch; hai script độc lập.
+
+Script chỉ thêm **một** tài khoản đăng nhập: `nhhs_admin` / `NhhsAdmin@2026` (họ tên hiển thị: Nguyễn Minh An). Ba nhân viên là bản ghi của bảng `NHAN_VIEN`, không phải ba tài khoản đăng nhập.
+
+Trước khi đăng nhập, kiểm tra trong đúng kết nối Oracle của ứng dụng:
+
+```sql
+SELECT USER FROM DUAL;
+SELECT TEN_DANG_NHAP, HO_TEN FROM TAI_KHOAN ORDER BY MA_TK;
+```
+
+Nếu chưa thấy `nhhs_admin`, script chưa được chạy thành công trên schema này. Ứng dụng không tự nạp script khi khởi động; mật khẩu chỉ dùng được sau khi bản ghi đã được `COMMIT`.
+
+Mật khẩu trong `TAI_KHOAN` đã được băm bằng BCrypt độ khó 12, khớp `SecurityConfig`. Hiện tại ứng dụng cấp `ROLE_USER` cho mọi tài khoản và không có phân quyền riêng theo tên tài khoản. Đây là mật khẩu công khai trong repository để kiểm thử; hãy đổi hoặc xóa các tài khoản này trước khi dùng cơ sở dữ liệu cho mục đích khác.
+
+Script có một hóa đơn đã thanh toán để thử báo cáo doanh thu và một hóa đơn chưa thanh toán để thử thao tác thanh toán. Phiếu nhập và tồn kho được cập nhật cùng giao dịch để sửa/xóa phiếu nhập từ giao diện vẫn nhất quán.
+
+### Bộ INSERT mẫu tối giản
+
 1. Trong SQL Developer, kết nối bằng schema của ứng dụng, thường là `NHHS_APP`.
 2. Mở worksheet mới, không có giao dịch chưa lưu, tắt Auto Commit để script quản lý giao dịch.
 3. Mở file UTF-8 `03_insert_data.sql` trong thư mục này. Đổi tên, số điện thoại, giá, ngày… thành dữ liệu muốn sử dụng.
