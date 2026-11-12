@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' - Nhà hàng Hải Sản'">Form Bàn ăn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/reservation.css}">
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='banan'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Bàn ăn', 'fa-solid fa-chair')}"></div>
+        <div class="content-body reservation-module">
+            <nav class="reservation-nav" aria-label="Khách hàng và đặt bàn">
+                <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+                <a th:href="@{/khach-hang}" th:classappend="${activeMenu == 'khachhang'} ? 'selected' : ''">Khách hàng</a>
+                <a th:href="@{/ban-an}" th:classappend="${activeMenu == 'banan'} ? 'selected' : ''">Bàn ăn</a>
+                <a th:href="@{/dat-ban}" th:classappend="${activeMenu == 'datban'} ? 'selected' : ''">Đặt bàn</a>
+            </nav>
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/ban-an">Bàn ăn</a></li>
+            <li class="breadcrumb-item active" th:text="${pageTitle}"></li>
+        </ol>
+    </nav>
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fa-solid fa-chair me-2"></i><span th:text="${pageTitle}">Form Bàn ăn</span></h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${errorMessage}" class="alert alert-danger">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i><span th:text="${errorMessage}"></span>
+                    </div>
+                    <form th:object="${banAn}"
+                          th:action="${isEdit} ? @{/ban-an/sua/{id}(id=${banAn.maBan})} : @{/ban-an/them}"
+                          method="post" class="needs-validation" novalidate>
+
+                        <!-- Tên bàn -->
+                        <div class="mb-3">
+                            <label class="form-label" for="tenBan">Tên bàn <span class="text-danger">*</span></label>
+                            <input type="text" id="tenBan" class="form-control" th:field="*{tenBan}"
+                                   placeholder="Ví dụ: Bàn 01" required maxlength="50">
+                        </div>
+
+                        <!-- Số chỗ ngồi -->
+                        <div class="mb-3">
+                            <label class="form-label" for="soCho">Số chỗ ngồi <span class="text-danger">*</span></label>
+                            <input type="number" id="soCho" class="form-control" th:field="*{soCho}"
+                                   min="1" max="50" placeholder="Ví dụ: 4" required>
+                        </div>
+
+                        <!-- Khu vực -->
+                        <div class="mb-3">
+                            <label class="form-label" for="khuVuc">Khu vực</label>
+                            <select id="khuVuc" class="form-select" th:field="*{khuVuc}">
+                                <option value="">-- Chọn khu vực --</option>
+                                <option value="Tầng 1">Tầng 1</option>
+                                <option value="Tầng 2">Tầng 2</option>
+                                <option value="Sân vườn">Sân vườn</option>
+                                <option value="Phòng VIP">Phòng VIP</option>
+                            </select>
+                        </div>
+
+                        <!-- Trạng thái -->
+                        <div class="mb-3">
+                            <label class="form-label" for="trangThai">Trạng thái <span class="text-danger">*</span></label>
+                            <select id="trangThai" class="form-select" th:field="*{trangThai}" required>
+                                <option value="">-- Chọn trạng thái --</option>
+                                <option value="Trống">🟢 Trống</option>
+                                <option value="Đã đặt">🟡 Đã đặt</option>
+                                <option value="Đang dùng">🔴 Đang dùng</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="/ban-an" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-floppy-disk me-1"></i>
+                                <span th:text="${isEdit} ? 'Cập nhật' : 'Thêm mới'">Lưu</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/reservation.js}" defer></script>
+</body>
+</html>

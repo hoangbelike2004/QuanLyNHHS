@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tổng quan - Hải sản Hoàng Gia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-container">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Tổng quan', 'fa-solid fa-house')}"></div>
+        <div class="content-body">
+            <div class="overview-heading">
+                <div><h1>Quản lý nhà hàng</h1><p>Hải sản Hoàng Gia</p></div>
+                <div class="overview-actions">
+                    <a class="btn-primary" th:href="@{/hoa-don/them}">Lập hóa đơn</a>
+                    <a class="btn-secondary" th:href="@{/dat-ban/them}">Đặt bàn</a>
+                    <a class="btn-secondary" th:href="@{/phieu-nhap/them}">Nhập hàng</a>
+                </div>
+            </div>
+            <div class="overview-sections">
+                <section class="overview-section">
+                    <h2>Bán hàng và phục vụ</h2>
+                    <div class="overview-links">
+                        <a th:href="@{/ban-an}"><span><strong>Bàn ăn</strong><small>Danh sách bàn và trạng thái phục vụ</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                        <a th:href="@{/dat-ban}"><span><strong>Đặt bàn</strong><small>Tiếp nhận và theo dõi đặt bàn</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                        <a th:href="@{/hoa-don}"><span><strong>Hóa đơn</strong><small>Lập đơn, chọn món và thanh toán</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                        <a th:href="@{/khach-hang}"><span><strong>Khách hàng</strong><small>Thông tin liên hệ và lịch sử đặt bàn</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </section>
+                <section class="overview-section">
+                    <h2>Danh mục và nhân sự</h2>
+                    <div class="overview-links">
+                        <a th:href="@{/mon-an}"><span><strong>Món ăn</strong><small>Giá bán và tình trạng phục vụ</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                        <a th:href="@{/loai-mon}"><span><strong>Loại món</strong><small>Phân nhóm thực đơn</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                        <a th:href="@{/nhan-vien}"><span><strong>Nhân viên</strong><small>Hồ sơ và thông tin làm việc</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </section>
+                <section class="overview-section">
+                    <h2>Kho và nhập hàng</h2>
+                    <div class="overview-links">
+                        <a th:href="@{/phieu-nhap}"><span><strong>Phiếu nhập</strong><small>Nhập hàng và theo dõi chi phí</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                        <a th:href="@{/nguyen-lieu}"><span><strong>Nguyên liệu</strong><small>Đơn vị tính và số lượng tồn</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                        <a th:href="@{/nha-cung-cap}"><span><strong>Nhà cung cấp</strong><small>Danh sách đơn vị cung ứng</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </section>
+                <section class="overview-section">
+                    <h2>Báo cáo</h2>
+                    <div class="overview-links"><a th:href="@{/bao-cao}"><span><strong>Doanh thu</strong><small>Xem theo khoảng ngày, hóa đơn và món bán</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></div>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

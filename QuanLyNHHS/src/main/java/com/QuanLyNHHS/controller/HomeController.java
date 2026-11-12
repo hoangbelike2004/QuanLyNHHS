@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
+    @GetMapping("/")
+    public String home(Model model) {
+        model.addAttribute("activeMenu", "dashboard");
+        return "index";
+    }
+
     @GetMapping("/hello")
     public String helloPage(Model model) {
         // Truyền một biến tên là "message" sang cho file HTML

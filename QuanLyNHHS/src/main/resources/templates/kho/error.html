@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{kho/fragments :: head('Không thể xử lý')}"></head>
+  <body>
+    <div class="shell">
+      <aside th:replace="~{kho/fragments :: nav}"></aside>
+      <main>
+        <div th:replace="~{kho/fragments :: messages}"></div>
+        <h1>Không thể xử lý yêu cầu</h1>
+        <p role="alert" th:text="${message}"></p>
+        <a th:href="@{/phieu-nhap}">Về danh sách phiếu nhập</a>
+      </main>
+    </div>
+  </body>
+</html>

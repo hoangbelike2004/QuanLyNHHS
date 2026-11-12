@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <aside id="app-sidebar" class="sidebar" th:fragment="sidebar">
+        <!-- Brand / Logo -->
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                HG
+            </div>
+            <div class="brand-text">
+                <h2>Hải sản Hoàng Gia</h2>
+                <span>Quản lý nhà hàng</span>
+            </div>
+        </div>
+
+        <!-- Menu Navigation -->
+        <div class="sidebar-menu">
+            <div class="menu-label">Tổng quan</div>
+            <ul class="menu-list">
+                <li class="menu-item" th:classappend="${activeMenu == 'home' or activeMenu == 'dashboard'} ? 'active' : ''">
+                    <a th:href="@{/}">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Tổng quan</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Danh mục</div>
+            <ul class="menu-list">
+                <!-- Thực đơn (Món ăn) -->
+                <li class="menu-item" th:classappend="${activeMenu == 'monan'} ? 'active' : ''">
+                    <a th:href="@{/mon-an}">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>Món ăn</span>
+                    </a>
+                </li>
+                <!-- Loại món -->
+                <li class="menu-item" th:classappend="${activeMenu == 'loaimon'} ? 'active' : ''">
+                    <a th:href="@{/loai-mon}">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Loại món</span>
+                    </a>
+                </li>
+                <!-- Nhân viên -->
+                <li class="menu-item" th:classappend="${activeMenu == 'nhanvien'} ? 'active' : ''">
+                    <a th:href="@{/nhan-vien}">
+                        <i class="fa-solid fa-user-group"></i>
+                        <span>Nhân viên</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Nghiệp vụ</div>
+            <ul class="menu-list">
+                <li class="menu-item" th:classappend="${activeMenu == 'khachhang'} ? 'active' : ''">
+                    <a th:href="@{/khach-hang}">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Khách hàng</span>
+                    </a>
+                </li>
+                <li class="menu-item" th:classappend="${activeMenu == 'banan'} ? 'active' : ''">
+                    <a th:href="@{/ban-an}">
+                        <i class="fa-solid fa-chair"></i>
+                        <span>Bàn ăn</span>
+                    </a>
+                </li>
+                <li class="menu-item" th:classappend="${activeMenu == 'datban'} ? 'active' : ''">
+                    <a th:href="@{/dat-ban}">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <span>Đặt bàn</span>
+                    </a>
+                </li>
+                <li class="menu-item" th:classappend="${activeMenu == 'hoadon'} ? 'active' : ''">
+                    <a th:href="@{/hoa-don}">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>Hóa đơn</span>
+                    </a>
+                </li>
+                <li class="menu-item" th:classappend="${activeMenu == 'baocao'} ? 'active' : ''">
+                    <a th:href="@{/bao-cao}">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Báo cáo</span>
+                    </a>
+                </li>
+                <li class="menu-item" th:classappend="${activeMenu == 'kho'} ? 'active' : ''">
+                    <a th:href="@{/kho}">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                        <span>Kho & nhập hàng</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Sidebar User Footer -->
+        <div class="sidebar-footer">
+            <div class="user-avatar">
+                H
+            </div>
+            <div class="user-info">
+                <h4>Nguyễn Cao Hoàng</h4>
+                <p>Quản trị viên hệ thống</p>
+            </div>
+        </div>
+    </aside>
+</body>
+</html>

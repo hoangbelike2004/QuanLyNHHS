@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{kho/fragments :: head('Chi tiết phiếu nhập')}"></head>
+  <body>
+    <div class="shell">
+      <aside th:replace="~{kho/fragments :: nav}"></aside>
+      <main>
+        <div th:replace="~{kho/fragments :: messages}"></div>
+        <header>
+          <h1 th:text="'Phiếu nhập #' + ${phieu.maPn}"></h1>
+          <div class="actions">
+            <a th:href="@{/phieu-nhap}">Danh sách</a>
+            <a
+              class="button"
+              th:href="@{/phieu-nhap/{id}/sua(id=${phieu.maPn})}"
+            >
+              Sửa phiếu
+            </a>
+          </div>
+        </header>
+        <dl class="facts">
+          <div>
+            <dt>Nhà cung cấp</dt>
+            <dd th:text="${phieu.nhaCungCap.tenNcc}"></dd>
+          </div>
+          <div>
+            <dt>Mã nhân viên</dt>
+            <dd th:text="${phieu.maNv}"></dd>
+          </div>
+          <div>
+            <dt>Ngày nhập</dt>
+            <dd th:text="${phieu.ngayNhap}"></dd>
+          </div>
+        </dl>
+        <h2>Chi tiết nhập hàng</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nguyên liệu</th>
+                <th>Đơn vị</th>
+                <th class="number">Số lượng</th>
+                <th class="number">Đơn giá (VNĐ)</th>
+                <th class="number">Thành tiền (VNĐ)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="c : ${phieu.chiTiet}">
+                <td th:text="${c.nguyenLieu.tenNl}"></td>
+                <td th:text="${c.nguyenLieu.donVi}"></td>
+                <td
+                  class="number"
+                  th:text="${#numbers.formatDecimal(c.soLuong, 1, 'POINT', 2, 'COMMA')}"
+                ></td>
+                <td
+                  class="number"
+                  th:text="${#numbers.formatDecimal(c.donGia, 1, 'POINT', 2, 'COMMA')}"
+                ></td>
+                <td
+                  class="number"
+                  th:text="${#numbers.formatDecimal(c.thanhTien, 1, 'POINT', 2, 'COMMA')}"
+                ></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="4">Tổng tiền (VNĐ)</th>
+                <td
+                  class="number total"
+                  th:text="${#numbers.formatDecimal(phieu.tongTien, 1, 'POINT', 2, 'COMMA')}"
+                ></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <form
+          class="delete-section"
+          method="post"
+          th:action="@{/phieu-nhap/{id}/xoa(id=${phieu.maPn})}"
+          data-confirm="Xóa phiếu nhập này và trừ lại số lượng đã nhập khỏi tồn kho?"
+        >
+          <input type="hidden" name="phienBan" th:value="${phieu.phienBan}" />
+          <p>
+            Xóa phiếu sẽ trừ lại toàn bộ số lượng đã nhập khỏi tồn kho. Thao tác
+            bị chặn nếu không đủ tồn.
+          </p>
+          <button class="danger" type="submit">Xóa phiếu nhập</button>
+        </form>
+      </main>
+    </div>
+    <script src="/js/kho.js" defer></script>
+  </body>
+</html>

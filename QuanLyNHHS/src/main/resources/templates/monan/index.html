@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thực đơn - Hải Sản Hoàng Gia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .menu-page { max-width: 1100px; margin: 0 auto; }
+        .menu-page h1 { font-size: 24px; margin: 0 0 20px; }
+        .menu-section { margin-bottom: 28px; }
+        .menu-section h2 { font-size: 18px; margin: 0 0 12px; }
+        .menu-form { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 16px; margin-bottom: 14px; border: 1px solid var(--border-light); background: var(--bg-card); }
+        .menu-form label { display: block; font-size: 13px; margin-bottom: 5px; }
+        .menu-form input, .menu-form select { min-width: 150px; width: 100%; padding: 9px 10px; border: 1px solid var(--border-light); border-radius: 4px; background: #fff; color: #182536; }
+        .menu-form .field { flex: 1 1 170px; }
+        .menu-table { overflow-x: auto; border: 1px solid var(--border-light); background: var(--bg-card); }
+        .menu-message { padding: 12px 14px; margin-bottom: 16px; border: 1px solid var(--border-light); }
+        .menu-error { color: #ffb2b2; }
+        .menu-price { text-align: right; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='monan'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Thực đơn', 'fa-solid fa-utensils')}"></div>
+        <div class="content-body">
+            <div class="menu-page">
+                <h1>Thực đơn</h1>
+                <p th:if="${successMessage}" class="menu-message" th:text="${successMessage}"></p>
+                <p th:if="${errorMessage}" class="menu-message menu-error" th:text="${errorMessage}"></p>
+
+                <section class="menu-section" id="loai-mon">
+                    <h2>Loại món</h2>
+                    <form class="menu-form" th:action="@{/mon-an/loai/them}" method="post">
+                        <div class="field"><label for="tenLoai">Tên loại món</label><input id="tenLoai" name="tenLoai" maxlength="100" required></div>
+                        <button class="btn-primary" type="submit">Thêm loại món</button>
+                    </form>
+                    <div class="menu-table">
+                        <table class="custom-table">
+                            <thead><tr><th>Mã loại</th><th>Tên loại</th><th>Trạng thái</th></tr></thead>
+                            <tbody>
+                                <tr th:each="loai : ${categories}">
+                                    <td th:text="${loai.maLoai}">1</td>
+                                    <td th:text="${loai.tenLoai}">Hải sản</td>
+                                    <td th:text="${loai.trangThai}">Hoạt động</td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(categories)}"><td colspan="3">Chưa có loại món. Thêm một loại trước khi thêm món ăn.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="menu-section">
+                    <h2>Món ăn</h2>
+                    <form class="menu-form" th:action="@{/mon-an/them}" method="post">
+                        <div class="field"><label for="tenMon">Tên món</label><input id="tenMon" name="tenMon" maxlength="150" required></div>
+                        <div class="field"><label for="maLoai">Loại món</label>
+                            <select id="maLoai" name="maLoai" required>
+                                <option value="">-- Chọn loại --</option>
+                                <option th:each="loai : ${categories}" th:if="${loai.trangThai == 'Hoạt động'}"
+                                        th:value="${loai.maLoai}" th:text="${loai.tenLoai}"></option>
+                            </select>
+                        </div>
+                        <div class="field"><label for="donVi">Đơn vị</label><input id="donVi" name="donVi" maxlength="20" placeholder="Đĩa, phần, con"></div>
+                        <div class="field"><label for="donGia">Đơn giá (đ)</label><input id="donGia" name="donGia" type="number" min="0" step="0.01" required></div>
+                        <button class="btn-primary" type="submit">Thêm món</button>
+                    </form>
+                    <div class="menu-table">
+                        <table class="custom-table">
+                            <thead><tr><th>Mã món</th><th>Tên món</th><th>Loại món</th><th>Đơn vị</th><th class="menu-price">Đơn giá</th><th>Trạng thái</th></tr></thead>
+                            <tbody>
+                                <tr th:each="mon : ${dishes}">
+                                    <td th:text="${mon.maMon}">1</td>
+                                    <td th:text="${mon.tenMon}">Tên món</td>
+                                    <td th:text="${mon.loaiMon != null ? mon.loaiMon.tenLoai : '—'}">—</td>
+                                    <td th:text="${mon.donVi != null ? mon.donVi : '—'}">—</td>
+                                    <td class="menu-price" th:text="${mon.donGia != null ? #numbers.formatDecimal(mon.donGia, 0, 'COMMA', 0, 'POINT') + ' đ' : '—'}">—</td>
+                                    <td th:text="${mon.trangThai}">Đang phục vụ</td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(dishes)}"><td colspan="6">Chưa có món ăn. Thêm món để gọi món cho bàn đã xác nhận.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
