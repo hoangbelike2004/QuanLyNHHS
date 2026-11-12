@@ -1,0 +1,83 @@
+{
+  "plannedPages": 13,
+  "figures": 0,
+  "pages": [
+    {
+      "page": 1,
+      "title": "TRANG BÌA",
+      "characters": 733
+    },
+    {
+      "page": 2,
+      "title": "1. Phần của Hoàng và những điều phải nói đúng",
+      "characters": 1151
+    },
+    {
+      "page": 3,
+      "title": "2. Bảy việc nên nắm trước khi báo cáo",
+      "characters": 1116
+    },
+    {
+      "page": 4,
+      "title": "3. Vì sao danh sách món xuất hiện trên màn hình?",
+      "characters": 1382
+    },
+    {
+      "page": 5,
+      "title": "4. Đoạn select danh sách món bạn vừa hỏi",
+      "characters": 1514
+    },
+    {
+      "page": 6,
+      "title": "5. Thymeleaf: những thuộc tính dễ được hỏi",
+      "characters": 1129
+    },
+    {
+      "page": 7,
+      "title": "6. Luồng thêm và sửa: học thật chắc một ví dụ",
+      "characters": 1651
+    },
+    {
+      "page": 8,
+      "title": "7. Xóa, kiểm tra dữ liệu và giao dịch",
+      "characters": 1383
+    },
+    {
+      "page": 9,
+      "title": "8. Java và Spring: giải thích bằng lời đơn giản",
+      "characters": 1599
+    },
+    {
+      "page": 10,
+      "title": "9. Database và các truy vấn của phần mình",
+      "characters": 1353
+    },
+    {
+      "page": 11,
+      "title": "10. Đăng nhập và bảo mật: phần dễ bị hỏi sâu",
+      "characters": 1512
+    },
+    {
+      "page": 12,
+      "title": "11. Những câu cô có thể hỏi và câu trả lời ngắn",
+      "characters": 2940
+    },
+    {
+      "page": 13,
+      "title": "12. Kịch bản demo và bài nói mẫu",
+      "characters": 2141
+    }
+  ],
+  "packageParts": [
+    "[Content_Types].xml",
+    "_rels/.rels",
+    "word/document.xml",
+    "word/styles.xml",
+    "word/settings.xml",
+    "word/_rels/document.xml.rels",
+    "word/header1.xml",
+    "word/footer1.xml",
+    "docProps/core.xml",
+    "docProps/app.xml"
+  ]
+}

@@ -12,9 +12,8 @@
     <div class="auth-brand"><span class="brand-icon">HG</span><span>Hải sản Hoàng Gia</span></div>
     <section class="auth-panel" aria-labelledby="auth-title">
         <h1 id="auth-title">Đăng nhập</h1>
-        <p class="auth-description">Sử dụng tài khoản để vào hệ thống quản lý.</p>
+        <p class="auth-description">Sử dụng tài khoản do quản trị viên cấp để vào hệ thống quản lý.</p>
         <p class="auth-message error" role="alert" th:if="${param.error}">Tên đăng nhập hoặc mật khẩu không đúng.</p>
-        <p class="auth-message success" role="status" th:if="${param.registered}">Đăng ký thành công. Bạn có thể đăng nhập.</p>
         <p class="auth-message" role="status" th:if="${param.logout}">Bạn đã đăng xuất.</p>
         <form th:action="@{/login}" method="post" class="auth-form">
             <div class="auth-field">
@@ -28,7 +27,7 @@
             <label class="auth-check"><input type="checkbox" data-show-password> Hiện mật khẩu</label>
             <button type="submit" class="btn-primary auth-submit">Đăng nhập</button>
         </form>
-        <p class="auth-switch">Chưa có tài khoản? <a th:href="@{/register}">Đăng ký</a></p>
+        <p class="auth-switch">Chưa có tài khoản? Vui lòng liên hệ quản trị viên để được cấp.</p>
     </section>
     <p class="auth-footer">Hệ thống quản lý nhà hàng</p>
 </main>

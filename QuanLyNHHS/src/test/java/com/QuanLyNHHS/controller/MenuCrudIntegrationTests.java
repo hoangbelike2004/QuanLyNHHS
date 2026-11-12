@@ -348,30 +348,69 @@ class MenuCrudIntegrationTests {
     }
 
     /**
-     * Kiểm tra đăng ký chuẩn hóa tên, băm BCrypt và đăng nhập bằng phiên HTTP.
+     * Kiểm tra trang đăng nhập hướng dẫn liên hệ quản trị viên và không còn đăng ký.
      */
     @Test
-    void registrationAndFormLoginStillUseBcryptAndSession() throws Exception {
-        // register: kết quả request mở trang đăng ký trong kiểm thử.
-        var register = mvc.perform(get("/register")).andReturn();
-        // anonymousSession: phiên của người dùng chưa đăng nhập, dùng thử đăng ký/đăng nhập.
-        var anonymousSession = (MockHttpSession) register.getRequest().getSession();
-        // token: token CSRF lấy từ request đã mở form.
-        var token = (CsrfToken) register.getRequest().getAttribute(CsrfToken.class.getName());
-        // result: kết quả trả về từ thao tác kiểm thử để đọc status, HTML hoặc flash.
-        var result = mvc.perform(post("/register").session(anonymousSession)
+    void loginPageDirectsUsersToAdministratorWithoutRegistration() throws Exception {
+        var result = mvc.perform(get("/login").param("registered", "true")).andReturn();
+        assertEquals(200, result.getResponse().getStatus());
+        String html = result.getResponse().getContentAsString();
+        assertTrue(html.contains("tài khoản do quản trị viên cấp"));
+        assertTrue(html.contains("liên hệ quản trị viên"));
+        assertFalse(html.contains("/register"));
+        assertFalse(html.contains("Đăng ký"));
+        assertTrue(html.contains("name=\"_csrf\""));
+        assertEquals("/", mvc.perform(get("/login").session(session)).andReturn().getResponse().getRedirectedUrl());
+    }
+
+    /**
+     * Kiểm tra URL đăng ký cũ không thể tạo tài khoản, kể cả khi POST có CSRF hợp lệ.
+     */
+    @Test
+    void registrationIsUnavailableForAnonymousAndAuthenticatedUsers() throws Exception {
+        var loginPage = mvc.perform(get("/login")).andReturn();
+        var anonymousSession = (MockHttpSession) loginPage.getRequest().getSession();
+        var token = (CsrfToken) loginPage.getRequest().getAttribute(CsrfToken.class.getName());
+        var anonymousGet = mvc.perform(get("/register").session(anonymousSession)).andReturn();
+        assertEquals(302, anonymousGet.getResponse().getStatus());
+        assertTrue(anonymousGet.getResponse().getRedirectedUrl().endsWith("/login"));
+        var anonymousPost = mvc.perform(post("/register").session(anonymousSession)
                 .param(token.getParameterName(), token.getToken()).param("hoTen", "Người dùng")
-                .param("tenDangNhap", "NguoiDung").param("matKhau", "matkhau123")
+                .param("tenDangNhap", "nguoidung").param("matKhau", "matkhau123")
                 .param("xacNhanMatKhau", "matkhau123")).andReturn();
-        assertEquals(302, result.getResponse().getStatus());
-        // account: entity tài khoản đọc từ database hoặc được tạo để lưu tên đăng nhập và mật khẩu đã băm.
-        var account = accounts.findByTenDangNhap("nguoidung").orElseThrow();
-        assertTrue(passwordEncoder.matches("matkhau123", account.getMatKhau()));
-        // login: kết quả request đăng nhập trong kiểm thử.
-        var login = mvc.perform(post("/login").session(anonymousSession)
+        assertEquals(302, anonymousPost.getResponse().getStatus());
+        assertTrue(anonymousPost.getResponse().getRedirectedUrl().endsWith("/login"));
+        assertEquals(404, mvc.perform(get("/register").session(session)).andReturn().getResponse().getStatus());
+        assertEquals(404, submit("/register", "hoTen", "Người dùng", "tenDangNhap", "nguoidung",
+                "matKhau", "matkhau123", "xacNhanMatKhau", "matkhau123").getResponse().getStatus());
+        assertEquals(0, accounts.count());
+    }
+
+    /**
+     * Kiểm tra tài khoản được cấp với mật khẩu BCrypt vẫn đăng nhập và dùng phiên HTTP.
+     */
+    @Test
+    void provisionedAccountCanLoginWithBcryptAndSession() throws Exception {
+        var account = new TaiKhoan();
+        account.setHoTen("Người dùng");
+        account.setTenDangNhap("nguoidung");
+        account.setMatKhau(passwordEncoder.encode("matkhau123"));
+        accounts.saveAndFlush(account);
+
+        var loginPage = mvc.perform(get("/login")).andReturn();
+        var anonymousSession = (MockHttpSession) loginPage.getRequest().getSession();
+        var token = (CsrfToken) loginPage.getRequest().getAttribute(CsrfToken.class.getName());
+        var failedLogin = mvc.perform(post("/login").session(anonymousSession)
                 .param(token.getParameterName(), token.getToken()).param("tenDangNhap", "nguoidung")
+                .param("matKhau", "saimatkhau")).andReturn();
+        assertEquals("/login?error", failedLogin.getResponse().getRedirectedUrl());
+        assertNull(anonymousSession.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY));
+
+        var login = mvc.perform(post("/login").session(anonymousSession)
+                .param(token.getParameterName(), token.getToken()).param("tenDangNhap", " NguoiDung ")
                 .param("matKhau", "matkhau123")).andReturn();
         assertEquals(302, login.getResponse().getStatus());
+        assertEquals("/", login.getResponse().getRedirectedUrl());
         assertNotNull(anonymousSession.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY));
         assertEquals(200, mvc.perform(get("/nhan-vien").session(anonymousSession)).andReturn().getResponse().getStatus());
     }

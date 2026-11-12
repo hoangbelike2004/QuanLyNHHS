@@ -26,7 +26,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(/* authorize: đối tượng cấu hình điều kiện truy cập các URL. */ authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+                        .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(/* form: đối tượng cấu hình form đăng nhập của Spring Security. */ form -> form
                         .loginPage("/login")

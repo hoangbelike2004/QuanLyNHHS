@@ -93,6 +93,6 @@ public class LoaiMonService {
         }
         repository.delete(entity);
         // flush thực thi lệnh xóa để phát hiện lỗi ràng buộc ngay trong giao dịch này.
-        repository.flush();
+          repository.flush();
     }
 }

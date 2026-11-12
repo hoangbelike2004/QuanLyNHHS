@@ -1,0 +1,24 @@
+﻿[
+    {
+        "hasLiveTOC":  true,
+        "textColor":  "000000",
+        "xmlPartsValidated":  15,
+        "layoutValidation":  "OOXML structure and style validation; Word repagination and PDF export completed; selected PDF pages visually reviewed.",
+        "paragraphs":  754,
+        "bytes":  44179,
+        "tables":  24,
+        "font":  "Times New Roman",
+        "file":  "BTL.docx"
+    },
+    {
+        "hasLiveTOC":  false,
+        "textColor":  "000000",
+        "xmlPartsValidated":  15,
+        "layoutValidation":  "OOXML structure and style validation; Word repagination and PDF export completed; selected PDF pages visually reviewed.",
+        "paragraphs":  249,
+        "bytes":  29041,
+        "tables":  3,
+        "font":  "Times New Roman",
+        "file":  "ON_TAP_BAO_VE_HOANG.docx"
+    }
+]

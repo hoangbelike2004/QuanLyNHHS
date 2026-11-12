@@ -79,7 +79,7 @@ Không chạy `01_inventory.sql` trên schema đã được Hibernate tạo bả
 4. Chọn **Run Script (F5)** để chạy cả file. File dùng khối PL/SQL nên cần chạy cả `DECLARE … END;` và dấu `/` ở dòng riêng.
 5. Kiểm tra thông báo và kết quả SELECT cuối file, rồi tải lại các trang của ứng dụng. Thay đổi SQL đã COMMIT sẽ được đọc ở lần tải trang tiếp theo.
 
-Script thêm nhân viên, loại món, món ăn, bàn, khách hàng, đặt bàn, nhà cung cấp, nguyên liệu, phiếu nhập/chi tiết và hóa đơn/chi tiết. Không tạo tài khoản đăng nhập; dùng `/register` để mật khẩu được mã hóa đúng cách.
+Script thêm nhân viên, loại món, món ăn, bàn, khách hàng, đặt bàn, nhà cung cấp, nguyên liệu, phiếu nhập/chi tiết và hóa đơn/chi tiết. Không tạo tài khoản đăng nhập. Hệ thống không hỗ trợ tự đăng ký; quản trị viên cấp tài khoản trong bảng `TAI_KHOAN`. Tên đăng nhập lưu bằng chữ thường, không có khoảng trắng đầu/cuối; cột `MAT_KHAU` phải chứa mật khẩu đã băm BCrypt (độ khó 12), không lưu mật khẩu dạng rõ. Hiện chưa có màn hình quản trị cấp tài khoản trong ứng dụng.
 
 **Mỗi lần chạy thành công sẽ thêm một bộ dữ liệu nữa.** Chỉ chạy một lần nếu không muốn lặp dữ liệu. Nếu một INSERT lỗi, khối PL/SQL ROLLBACK toàn bộ bộ dữ liệu của lần chạy đó. Sequence/identity vẫn có thể nhảy số sau ROLLBACK; đây không phải lỗi.
 
