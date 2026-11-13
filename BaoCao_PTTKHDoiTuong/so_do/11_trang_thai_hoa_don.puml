@@ -1,0 +1,34 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+hide empty description
+state "Chưa thanh toán\nChua thanh toan" as C
+state "Đã thanh toán\nDa thanh toan" as D
+state "Đã xóa\n(không còn bản ghi)" as X
+[*] --> C : tạo hợp lệ
+C --> C : sửa thông tin / món hợp lệ\n/ tính lại tổng
+C --> D : thanhToan() [có chi tiết]\n/ tính lại tổng, ghi trạng thái
+C --> X : xoaHoaDon()\n/ xóa chi tiết rồi xóa hóa đơn
+X --> [*]
+note right of D
+Không cho sửa, xóa hoặc
+thanh toán lại bằng service.
+Không có hoàn tiền trong phạm vi.
+end note
+
+@enduml

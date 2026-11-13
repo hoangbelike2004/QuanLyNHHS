@@ -1,0 +1,75 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+left to right direction
+class "Khách hàng" as KH {
+ họ tên
+ điện thoại
+ điểm tích lũy
+}
+class "Lượt đặt bàn" as DB {
+ ngày đặt
+ số người
+ tiền cọc
+ trạng thái
+}
+class "Bàn ăn" as BA {
+ tên bàn
+ số chỗ
+ khu vực
+ trạng thái
+}
+class "Nhân viên" as NV {
+ họ tên
+ chức vụ
+}
+class "Hóa đơn" as HD {
+ ngày lập
+ giảm giá
+ tổng tiền
+ trạng thái
+}
+class "Dòng hóa đơn" as CT {
+ số lượng
+ đơn giá bán
+ thành tiền
+}
+class "Món ăn" as MA {
+ tên món
+ đơn vị bán
+ giá hiện tại
+ trạng thái
+}
+class "Loại món" as LM {
+ tên loại
+ mô tả
+}
+KH "1" -- "0..*" DB : thực hiện
+BA "1" -- "0..*" DB : được đặt
+KH "0..1" -- "0..*" HD : nhận
+BA "1" -- "0..*" HD : phục vụ tại
+NV "1" -- "0..*" HD : lập
+HD "1" *-- "1..*" CT : gồm
+MA "1" -- "0..*" CT : được bán
+LM "1" -- "0..*" MA : phân loại
+note bottom of CT
+Đơn giá tại lúc ghi chứng từ
+khác giá hiện tại của món.
+end note
+
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+left to right direction
+class "Nhà cung cấp" as NCC {
+ tên nhà cung cấp
+ điện thoại
+ địa chỉ
+}
+class "Nhân viên" as NV {
+ họ tên
+ chức vụ
+}
+class "Phiếu nhập" as PN {
+ ngày nhập
+ tổng tiền
+}
+class "Dòng phiếu nhập" as CT {
+ số lượng nhập
+ đơn giá nhập
+ thành tiền
+}
+class "Nguyên liệu" as NL {
+ tên nguyên liệu
+ đơn vị
+ số lượng tồn
+ trạng thái
+}
+NCC "1" -- "0..*" PN : cung cấp
+NV "1" -- "0..*" PN : lập
+PN "1" *-- "1..*" CT : gồm
+NL "1" -- "0..*" CT : được nhập
+note bottom of PN
+Mỗi phiếu thuộc một nhà cung cấp.
+Mỗi nguyên liệu chỉ xuất hiện một lần/phiếu.
+Sửa hoặc xóa phiếu phải điều chỉnh lại tồn.
+end note
+
+@enduml

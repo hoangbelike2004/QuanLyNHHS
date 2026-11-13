@@ -1,0 +1,101 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+hide methods
+left to right direction
+entity KHACH_HANG {
+ * MA_KH : NUMBER <<PK>>
+ --
+ HO_TEN : VARCHAR2(100)
+ SDT : VARCHAR2(15)
+ EMAIL : VARCHAR2(100)
+ DIEM_TICH_LUY : NUMBER(10,0)
+}
+entity DAT_BAN {
+ * MA_DAT : NUMBER <<PK>>
+ --
+ MA_KH : NUMBER <<FK>>
+ MA_BAN : NUMBER <<FK>>
+ NGAY_DAT : DATE
+ SO_NGUOI : NUMBER(3)
+ TIEN_COC : NUMBER(12,2)
+ TRANG_THAI : VARCHAR2(20)
+}
+entity BAN_AN {
+ * MA_BAN : NUMBER <<PK>>
+ --
+ TEN_BAN : VARCHAR2(50)
+ SO_CHO : NUMBER(3)
+ KHU_VUC : VARCHAR2(50)
+ TRANG_THAI : VARCHAR2(20)
+}
+entity HOA_DON {
+ * MA_HD : NUMBER <<PK>>
+ --
+ MA_BAN : NUMBER <<FK logic>>
+ MA_NV : NUMBER <<FK logic>>
+ MA_KH : NUMBER <<FK logic, nullable>>
+ NGAY_LAP : DATE
+ GIAM_GIA : NUMBER(12,2)
+ TONG_TIEN : NUMBER(14,2)
+ TRANG_THAI : VARCHAR2(20)
+}
+entity CT_HOA_DON {
+ * MA_HD : NUMBER <<PK, FK logic>>
+ * MA_MON : NUMBER <<PK, FK logic>>
+ --
+ SO_LUONG : NUMBER(10,2)
+ DON_GIA : NUMBER(12,2)
+ THANH_TIEN : NUMBER(14,2)
+}
+entity MON_AN {
+ * MA_MON : NUMBER <<PK>>
+ --
+ MA_LOAI : NUMBER <<FK>>
+ TEN_MON : VARCHAR2(150)
+ DON_VI : VARCHAR2(20)
+ DON_GIA : NUMBER(12,2)
+ TRANG_THAI : VARCHAR2(20)
+ HINH_ANH : VARCHAR2(1000)
+ MO_TA : VARCHAR2(1000)
+}
+entity LOAI_MON {
+ * MA_LOAI : NUMBER <<PK>>
+ --
+ TEN_LOAI : VARCHAR2(100)
+ MO_TA : VARCHAR2(255)
+ TRANG_THAI : VARCHAR2(20)
+}
+entity NHAN_VIEN {
+ * MA_NV : NUMBER <<PK>>
+ --
+ HO_TEN : VARCHAR2(100)
+ CHUC_VU : VARCHAR2(50)
+ LUONG : NUMBER(12,2)
+ ... thuộc tính hồ sơ
+}
+KHACH_HANG ||--o{ DAT_BAN
+BAN_AN ||--o{ DAT_BAN
+KHACH_HANG |o..o{ HOA_DON
+BAN_AN ||..o{ HOA_DON
+NHAN_VIEN ||..o{ HOA_DON
+HOA_DON ||..o{ CT_HOA_DON
+MON_AN ||..o{ CT_HOA_DON
+LOAI_MON ||--o{ MON_AN
+
+@enduml

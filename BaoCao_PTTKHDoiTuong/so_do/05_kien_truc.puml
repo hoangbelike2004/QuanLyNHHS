@@ -1,0 +1,42 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+top to bottom direction
+rectangle "Trình duyệt\nHTML / CSS / JavaScript" as B
+package "Ứng dụng Spring Boot" {
+ rectangle "Spring Security\nĐăng nhập, phiên, CSRF" as SEC
+ rectangle "Controller\nHTTP, Model, BindingResult" as C
+ rectangle "DTO / Form\nDữ liệu được phép nhập" as D
+ rectangle "Service\nQuy tắc nghiệp vụ, giao dịch" as S
+ rectangle "Repository interface\nJPA hoặc JDBC ở module kho" as R
+ rectangle "Entity / Model\nDữ liệu và ánh xạ lưu trữ" as E
+ rectangle "Thymeleaf\nTạo HTML phía máy chủ" as V
+}
+database "Oracle Database\nDữ liệu bền vững" as DB
+B --> SEC : HTTP
+SEC --> C : đã xác thực
+C --> D : nhận / kiểm tra
+C --> S : gọi nghiệp vụ
+S --> R : đọc / ghi
+S --> E : tạo / cập nhật
+R --> E : ánh xạ
+R --> DB : SQL / JDBC
+C --> V : Model + template
+V --> B : HTML
+
+@enduml

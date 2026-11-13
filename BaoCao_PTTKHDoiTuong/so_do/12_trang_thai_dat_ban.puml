@@ -1,0 +1,37 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+hide empty description
+state "Chờ xác nhận\nCHO_XAC_NHAN" as C
+state "Đã xác nhận\nDA_XAC_NHAN" as X
+state "Đã hủy\nDA_HUY" as H
+state "Hoàn thành\nHOAN_THANH" as T
+[*] --> C : tiếp nhận [bàn trống]\n/ giữ bàn
+C --> X : xác nhận [chưa kết thúc]
+C --> H : hủy\n/ trả bàn trống
+X --> H : hủy\n/ trả bàn trống
+X --> T : hoàn thành phục vụ\n/ trả bàn trống
+H --> [*]
+T --> [*]
+note bottom of X
+MÔ HÌNH ĐỀ XUẤT CHẶT CHẼ HƠN CODE.
+Service hiện ghi trạng thái trực tiếp;
+chưa kiểm tra đầy đủ trạng thái nguồn.
+end note
+
+@enduml

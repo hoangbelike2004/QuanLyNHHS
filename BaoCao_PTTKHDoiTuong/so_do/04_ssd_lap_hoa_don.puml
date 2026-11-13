@@ -1,0 +1,34 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+actor "Thu ngân" as A
+participant ":Hệ thống" as S
+A -> S : yêuCầuLậpHóaĐơn()
+S --> A : danh sách bàn, nhân viên, khách, món
+A -> S : lậpHóaĐơn(bàn, nhân viên, khách?,\ndanh sách món và lượng, giảm giá)
+alt dữ liệu hợp lệ
+ S --> A : mã hóa đơn, chi tiết, tổng tiền,\ntrạng thái chưa thanh toán
+else dữ liệu không hợp lệ
+ S --> A : thông báo lỗi; không tạo chứng từ dở dang
+end
+note over A,S
+SSD chỉ mô tả sự kiện tại ranh giới hệ thống.
+Giá bán và tổng tiền do hệ thống xác định.
+end note
+
+@enduml

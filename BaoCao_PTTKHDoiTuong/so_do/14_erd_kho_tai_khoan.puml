@@ -1,0 +1,84 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+hide methods
+left to right direction
+entity NHA_CUNG_CAP {
+ * MA_NCC : NUMBER <<PK>>
+ --
+ TEN_NCC : VARCHAR2(150)
+ SDT : VARCHAR2(15)
+ DIA_CHI : VARCHAR2(200)
+ EMAIL : VARCHAR2(100)
+}
+entity PHIEU_NHAP {
+ * MA_PN : NUMBER <<PK>>
+ --
+ MA_NCC : NUMBER <<FK>>
+ MA_NV : NUMBER <<FK logic>>
+ NGAY_NHAP : DATE
+ TONG_TIEN : NUMBER(14,2)
+ PHIEN_BAN : NUMBER
+}
+entity CT_PHIEU_NHAP {
+ * MA_PN : NUMBER <<PK, FK>>
+ * MA_NL : NUMBER <<PK, FK>>
+ --
+ SO_LUONG : NUMBER(10,2)
+ DON_GIA : NUMBER(12,2)
+ THANH_TIEN : NUMBER(14,2)
+}
+entity NGUYEN_LIEU {
+ * MA_NL : NUMBER <<PK>>
+ --
+ TEN_NL : VARCHAR2(100)
+ DON_VI : VARCHAR2(20)
+ SO_LUONG_TON : NUMBER(10,2)
+ TRANG_THAI : VARCHAR2(20)
+}
+entity NHAN_VIEN {
+ * MA_NV : NUMBER <<PK>>
+ --
+ HO_TEN : VARCHAR2(100)
+ GIOI_TINH : VARCHAR2(10)
+ SDT : VARCHAR2(15)
+ CHUC_VU : VARCHAR2(50)
+ LUONG : NUMBER(12,2)
+ NGAY_VAO_LAM : DATE
+ EMAIL : VARCHAR2(100)
+ CA_LAM_VIEC : VARCHAR2(100)
+ TRANG_THAI : VARCHAR2(30)
+}
+entity TAI_KHOAN {
+ * MA_TK : NUMBER <<PK>>
+ --
+ HO_TEN : VARCHAR2(100)
+ TEN_DANG_NHAP : VARCHAR2(30) <<UQ>>
+ MAT_KHAU : VARCHAR2(100)
+}
+NHA_CUNG_CAP ||--o{ PHIEU_NHAP
+NHAN_VIEN ||..o{ PHIEU_NHAP
+PHIEU_NHAP ||--o{ CT_PHIEU_NHAP
+NGUYEN_LIEU ||--o{ CT_PHIEU_NHAP
+note bottom of TAI_KHOAN
+Bảng bổ sung ngoài 12 bảng nghiệp vụ.
+Chưa liên kết với NHAN_VIEN;
+chưa lưu vai trò riêng.
+end note
+
+@enduml

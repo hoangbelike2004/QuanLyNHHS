@@ -1,0 +1,12 @@
+✔ dish search and category filter remain combined when either changes (3.773541ms)
+✔ employee search preserves selected position and vice versa (0.613625ms)
+✔ category search handles names, codes, and clearing the query (1.62225ms)
+✔ dish view buttons switch containers and active indicators (0.544042ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 80.808208

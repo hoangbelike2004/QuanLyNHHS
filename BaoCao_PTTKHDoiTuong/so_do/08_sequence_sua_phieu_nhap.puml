@@ -1,0 +1,55 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+autonumber
+actor "Thủ kho" as A
+boundary "PhieuNhap\nController" as C
+control "PhieuNhap\nService" as S
+participant "Repository liên quan" as R
+participant "EntityManager" as EM
+A -> C : POST sửa phiếu (id)
+C -> S : save(id, form có phienBan)
+group @Transactional
+ S -> R : findForUpdate(id)
+ R --> S : phiếu và chi tiết cũ
+ S -> S : checkVersion(phiếu, form.phienBan)
+ alt form cũ / dữ liệu sai
+  S --> C : ngoại lệ; rollback
+ else dữ liệu hợp lệ
+  S -> EM : lock(phiếu, FORCE_INCREMENT)
+  S -> R : khóa NCC, kiểm tra nhân viên
+  S -> S : kiểm tra dòng; tính tổng
+  loop nguyên liệu theo mã tăng dần
+   S -> R : findForUpdate(maNl)
+   S -> EM : refresh(nl, PESSIMISTIC_WRITE)
+   S -> S : adjustStock(nl, mới - cũ)
+  end
+  S -> S : cập nhật phiếu và dòng
+  S -> R : saveAndFlush(phiếu)
+  R --> S : Phiếu nhập
+  S --> C : Phiếu nhập
+ end
+end
+C --> A : chuyển hướng / báo lỗi
+note over S,R
+R là vai trò rút gọn cho các repository:
+PhieuNhap, NhaCungCap, NguyenLieu,
+NhanVienNhapKho (JDBC).
+end note
+
+@enduml

@@ -1,0 +1,283 @@
+
+--- TRANG 1 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+HƯỚNG DẪN THỰC HIỆN 
+BÀI TẬP LỚN 
+Học phần: Phân tích và thiết kế hướng đối tượng (OOAD) 
+Hiểu bài toán — xây dựng mô hình — giải thích quyết định thiết kế 
+ 
+
+--- TRANG 2 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+LỜI MỞ ĐẦU 
+Bài tập lớn (BTL) yêu cầu nhóm vận dụng kiến thức Phân tích và thi ết kế hướng đối tượng để chuyển 
+một bài toán nghiệp vụ thành mô hình phần mềm có căn cứ, nhất quán và có thể giải thích được. Trọng 
+tâm không ph ải là t ạo ra nhi ều sơ đ ồ hoặc viết nhiều mã ngu ồn, mà là th ể hiện quá trình suy nghĩ t ừ 
+yêu cầu đến mô hình phân tích, từ mô hình phân tích đến thiết kế. 
+Bài toán thực tế → Yêu cầu nghiệp vụ → Mô hình phân tích → Mô hình thiết kế → (Cài đặt) 
+Không có một lời giải UML duy nhất cho mỗi đề tài. Một phương án có thể được đánh giá tốt nếu phù 
+hợp với nghiệp vụ, nhất quán, đáp ứng yêu cầu và nhóm giải thích được các quyết định quan trọng. 
+1. MỤC TIÊU VÀ NGUYÊN TẮC THỰC HIỆN 
+Sau khi hoàn thành BTL, nhóm cần thể hiện được khả năng: 
+• Hiểu và mô tả bài toán nghiệp vụ, xác định phạm vi và các giả định cần thiết. 
+• Xác định Actor, mục tiêu người dùng, Use Case và quy tắc nghiệp vụ. 
+• Xây dựng mô hình khái niệm phản ánh đúng các đối tượng và quan hệ trong miền nghiệp vụ. 
+• Phân bổ trách nhiệm cho các lớp và mô tả sự tương tác giữa chúng. 
+• Chuyển từ mô hình phân tích sang mô hình thiết kế có căn cứ. 
+• Kiểm tra tính nhất quán giữa các mô hình; giải thích và điều chỉnh các quyết định thiết kế. 
+Nguyên tắc làm việc 
+• Phân tích trước, thiết kế sau; không bắt đầu bằng vẽ lớp hoặc viết code khi chưa hiểu nghiệp vụ. 
+• Mọi thành phần quan trọng trong mô hình phải có lý do nghiệp vụ hoặc lý do thiết kế. 
+• Không mở rộng phạm vi chỉ để tăng số lượng chức năng, lớp, bảng hoặc sơ đồ. 
+• Ghi rõ giả định và bảo đảm toàn bộ báo cáo nhất quán với các giả định đó. 
+• Mỗi thành viên phải hiểu phần mình phụ trách và các phần có liên quan. 
+• Dùng công cụ để tạo và lưu mô hình có th ể chỉnh sửa; không nộp sơ đồ khó đọc hoặc không truy 
+xuất được tệp nguồn. 
+2. CHỌN ĐỀ TÀI VÀ XÁC ĐỊNH PHẠM VI 
+Nhóm có thể chọn một đề tài tại Mục 8 hoặc đề xuất đề tài khác có độ phức tạp tương đương. Quy mô 
+nhóm là 3–5 sinh viên/nhóm, ho ặc theo phân công c ủa giảng viên. Nhóm c ần phân công công vi ệc rõ 
+ràng; việc phân công không thay thế trách nhiệm hiểu chung sản phẩm. 
+2.1. Câu hỏi cần trả lời trước khi mô hình hóa 
+• Bài toán nào đang được giải quyết và ai là người sử dụng hệ thống? 
+• Những nghiệp vụ nào nằm trong phạm vi? Những nghiệp vụ nào chủ động không thực hiện? 
+• Các quy tắc nghiệp vụ quan trọng là gì? 
+• Những giả định nào cần đặt ra do đề bài chưa mô tả chi tiết? 
+• Những tình huống bất thường nào đáng xem xét? 
+
+--- TRANG 3 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+2.2. Kiểm soát độ phức tạp 
+• Không chọn phạm vi chỉ gồm CRUD mà thiếu quy tắc nghiệp vụ. 
+• Không chọn hệ thống quá lớn so với thời gian và nhân lực. 
+• Ưu tiên một số nghiệp vụ có quy trình, điều kiện hoặc ngoại lệ đủ rõ để phân tích sâu. 
+• Không thêm lớp hoặc bảng chỉ nhằm tăng số lượng; mỗi thành phần phải có ý nghĩa. 
+3. QUY TRÌNH THỰC HIỆN VÀ SẢN PHẨM 
+Nhóm thực hiện theo các mốc dưới đây. Giảng viên có thể điều chỉnh thời điểm nộp theo lịch học. Sản 
+phẩm trung gian giúp nhóm nhận phản hồi sớm và thể hiện quá trình phát triển mô hình. 
+Mốc Sản phẩm cần nộp Điều cần thể hiện 
+1. Bài toán và phạm vi Mô tả bài toán; phạm vi; giả định; Actor dự kiến; quy tắc nghiệp vụ ban đầu. Nhóm hiểu vấn đề đang giải quyết và giới hạn đến đâu. 
+2. Phân tích yêu cầu Use Case Diagram; đặc tả một số UC tiêu biểu; NFR phù hợp. Actor, mục tiêu, luồng chính và ngoại lệ có căn cứ. 
+3. Mô hình phân tích Conceptual Model; CRC hoặc bảng trách nhiệm; SSD nếu được yêu cầu. Lớp và quan hệ xuất phát từ nghiệp vụ; trách nhiệm được giải thích. 
+4. Thiết kế Sequence Diagram; DCD; State Machine khi phù hợp; ERD nếu được yêu cầu. Các mô hình liên kết, không mâu thuẫn. 
+5. Hoàn thiện và bảo vệ Báo cáo cuối; tệp mô hình nguồn; cài đặt/kiểm thử nếu được yêu cầu. Nhóm giải thích, kiểm tra và điều chỉnh được thiết kế. 
+4. HƯỚNG DẪN PHÂN TÍCH VÀ THIẾT KẾ 
+Các mục dưới đây nêu nhiệm vụ và câu hỏi tự kiểm tra, không phải danh sách đáp án hoặc khuôn mẫu 
+bắt buộc. Nhóm cần vận dụng theo đặc điểm của đề tài. 
+4.1. Phân tích yêu cầu 
+Actor là vai trò tương tác v ới hệ thống, có thể là người hoặc hệ thống bên ngoài. Use Case mô t ả mục 
+tiêu có ý nghĩa đối với Actor. 
+• Actor nào sử dụng hệ thống và họ muốn đạt mục tiêu gì? 
+• Use Case nào thể hiện mục tiêu nghiệp vụ, thay vì chỉ là thao tác giao diện? 
+• Điều kiện nào phải thỏa mãn trước khi nghiệp vụ bắt đầu? 
+• Luồng chính diễn ra thế nào? Có nhánh thay thế hoặc ngoại lệ đáng kể nào? 
+• Kết quả nào được tạo ra hoặc thay đổi sau khi nghiệp vụ kết thúc? 
+• Có yêu cầu phi chức năng thực sự liên quan đến bảo mật, hiệu năng, khả năng sử dụng hoặc môi 
+trường vận hành không? 
+Use Case Diagram c ần th ể hiện ranh gi ới h ệ thống, Actor và các Use Case chính. Ch ỉ dùng 
+<<include>> hoặc <<extend>> khi quan hệ đó phản ánh đúng ý nghĩa nghi ệp vụ; không thêm quan hệ 
+chỉ để sơ đồ phức tạp hơn. Đặc tả UC có thể trình bày bằng bảng hoặc văn bản nhưng phải nêu được 
+tên, tác nhân, mục tiêu, tiền điều kiện, luồng chính, luồng thay thế/ngoại lệ và hậu điều kiện. 
+
+--- TRANG 4 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+4.2. Mô hình khái niệm (Conceptual Model) 
+Mô hình khái niệm mô tả các khái niệm quan trọng của miền nghiệp vụ và mối quan hệ giữa chúng. Ở 
+giai đoạn này, ưu tiên ý nghĩa nghi ệp vụ; chưa c ần đưa chi ti ết giao di ện, framework ho ặc cách tri ển 
+khai vào mô hình. 
+• Mỗi lớp ứng viên đại diện cho khái niệm nghiệp vụ nào? Có căn cứ nào trong yêu cầu? 
+• Quan hệ giữa hai lớp thể hiện sự liên hệ nào? Bội số có hợp lý không? 
+• Quan hệ nào cần lưu thông tin riêng và vì sao? 
+• Thuộc tính nào có ý nghĩa nghiệp vụ? Chi tiết nào chỉ phục vụ cài đặt? 
+• Có lớp nào trùng trách nhiệm, không có ý nghĩa rõ ràng hoặc được đưa vào chỉ để tăng số lượng? 
+Phân tích danh từ có thể giúp tìm lớp ứng viên, nhưng không ph ải mọi danh từ đều trở thành lớp. Cần 
+cân nhắc ý nghĩa, vòng đ ời, dữ liệu, hành vi và vai trò c ủa khái niệm trong phạm vi bài toán. Khóa k ỹ 
+thuật như ID thư ờng thuộc về thiết kế dữ liệu/triển khai; chỉ đưa vào mô hình khái ni ệm khi có lý do 
+phù hợp. 
+4.3. Phân bổ trách nhiệm và CRC 
+CRC (Class –Responsibility–Collaborator) ho ặc b ảng tương đương giúp làm rõ l ớp nào ch ịu trách 
+nhiệm gì và cần phối hợp với lớp nào. Nhóm cần tự trả lời: 
+• Lớp nào nắm thông tin cần thiết để thực hiện trách nhiệm? 
+• Trách nhiệm đó có thuộc về lớp ấy theo ý nghĩa nghiệp vụ không? 
+• Lớp nào cần cộng tác để hoàn thành công việc? 
+• Nếu chuyển trách nhiệm sang lớp khác, điều gì thay đổi về phụ thuộc và tính tập trung? 
+Có th ể vận d ụng GRASP như Information Expert, Creator, Controller, High Cohesion và Low 
+Coupling. Không ch ỉ ghi tên nguyên t ắc; hãy gi ải thích nó ảnh hưởng thế nào đến quyết định cụ thể 
+của nhóm. 
+4.4. Thiết kế hệ thống và biểu đồ tương tác 
+Thiết kế chuyển từ mô tả điều hệ thống cần làm sang mô t ả các thành ph ần phần mềm phối hợp thế 
+nào. Nhóm có th ể phân tách trách nhi ệm giao tiếp, điều phối nghiệp vụ, xử lý miền nghiệp vụ và lưu 
+trữ dữ liệu. Tên lớp và cách phân tầng phụ thuộc phương án thiết kế. 
+Sản phẩm Câu hỏi cần trả lời Điểm tự kiểm tra 
+SSD Actor gửi yêu cầu gì đến hệ thống và nhận kết quả nào? Tập trung vào Actor–System; phù hợp với Use Case. 
+Sequence Diagram Các đối tượng phối hợp thế nào để thực hiện UC? Thông điệp có người gửi/nhận hợp lý; trình tự, điều kiện và vòng lặp có ý nghĩa. 
+DCD Cần lớp phần mềm, thuộc tính, phương thức và quan hệ nào? Phương thức phù hợp trách nhiệm; quan hệ phù hợp tương tác; nhất quán với Sequence. 
+State Machine Đối tượng thay đổi trạng thái thế nào trong vòng đời? Chỉ dùng khi trạng thái có ý nghĩa; chuyển trạng thái và điều kiện rõ. 
+Layering/BCE Trách nhiệm được phân tách ra sao? Tránh dồn toàn bộ logic vào giao diện hoặc một lớp điều phối. 
+ 
+
+--- TRANG 5 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+BCE (Boundary–Control–Entity) là cách tư duy phân tách trách nhi ệm, không ph ải công th ức về số 
+lượng lớp. Có thể dùng cách tổ chức khác nếu giải thích được vai trò và hư ớng phụ thuộc. Chỉ cần vẽ 
+Sequence Diagram cho một số Use Case tiêu biểu, không nhất thiết cho mọi UC. 
+4.5. Nguyên tắc thiết kế cần vận dụng 
+Nguyên tắc Câu hỏi tự kiểm tra 
+Information Expert Lớp nào có thông tin phù hợp nhất để thực hiện trách nhiệm? 
+Creator Lớp nào có lý do hợp lý để tạo hoặc quản lý vòng đời đối tượng khác? 
+Controller Thành phần nào tiếp nhận và điều phối yêu cầu của Use Case? 
+High Cohesion Các trách nhiệm trong một lớp có liên quan chặt chẽ không? 
+Low Coupling Lớp phụ thuộc vào những thành phần nào? Có phụ thuộc không cần thiết không? 
+SRP Trách nhiệm lớp có tập trung không? Những thay đổi nào có thể khiến lớp phải thay đổi? 
+OCP Khi có biến thể mới, có cách mở rộng hợp lý mà không sửa lan rộng nhiều nơi không? 
+LSP Lớp con có thay thế lớp cha trong ngữ cảnh dự kiến mà không phá vỡ kỳ vọng không? 
+ISP Thành phần sử dụng có bị buộc phụ thuộc vào thao tác không cần thiết không? 
+DIP Logic cấp cao có phụ thuộc chặt vào chi tiết triển khai không? 
+ 
+Không cần cố thể hiện tất cả nguyên tắc trong m ọi đề tài. Chọn nguyên t ắc giúp gi ải thích các quy ết 
+định quan trọng. Lớp có ít phương thức không tự động là lớp thừa; nhiều interface cũng không tự động 
+làm thiết kế tốt hơn. 
+4.6. Thiết kế dữ liệu và ERD 
+Nếu đề bài hoặc yêu cầu học phần có thiết kế dữ liệu (quan hệ), nhóm cần xây dựng ERD và giải thích 
+cách lưu trữ phù hợp nghiệp vụ. Việc chuyển từ mô hình lớp sang mô hình d ữ liệu không nhất thiết là 
+ánh xạ một-một. 
+• Khái niệm nào cần lưu trữ lâu dài? Có lớp nào chỉ phục vụ điều phối hoặc giao tiếp? 
+• Quan hệ một-nhiều, nhiều-nhiều hoặc quan hệ có thuộc tính riêng được biểu diễn thế nào? 
+• Khóa chính, khóa ngoại và ràng buộc có bảo đảm tính toàn vẹn dữ liệu không? 
+• Cách ánh xạ kế thừa hoặc quan hệ đặc biệt được chọn dựa trên lý do gì? 
+• Dữ liệu mẫu có đủ để kiểm tra các quy tắc nghiệp vụ quan trọng không? 
+Không phải mọi lớp đều cần trở thành bảng; không phải mọi quan hệ lớp đều được ánh xạ trực tiếp 
+thành khóa ngoại. Nếu được yêu cầu, nộp thêm script SQL và dữ liệu mẫu. 
+
+--- TRANG 6 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+4.7. Cài đặt và kiểm thử 
+Cài đặt chỉ bắt buộc khi được nêu trong yêu cầu chính thức của BTL. Nếu có cài đặt, mã nguồn cần 
+phản ánh các quyết định thiết kế đã trình bày; nếu khác biệt đáng kể, nhóm phải giải thích lý do. 
+• Chọn các luồng chính và ngoại lệ để xây dựng test case. 
+• Nêu dữ liệu đầu vào, điều kiện, kết quả mong đợi và kết quả thực tế. 
+• Không chỉ chụp giao diện; cần chứng minh quy tắc nghiệp vụ quan trọng hoạt động đúng. 
+• Nếu sử dụng mã do AI gợi ý, phải tự đọc, chạy thử, kiểm tra và chịu trách nhiệm về mã đó. 
+5. CẤU TRÚC BÁO CÁO 
+Cấu trúc dưới đây là đề xuất; giảng viên sẽ quy định rõ phần nào bắt buộc, phần nào tùy điều kiện của 
+học phần. 
+Chương 1. Bài toán và phân tích yêu cầu 
+• Giới thiệu bài toán, mục tiêu và phạm vi hệ thống. 
+• Các giả định và quy tắc nghiệp vụ quan trọng. 
+• Actor và mục tiêu của từng Actor. 
+• Use Case Diagram và danh sách Use Case. 
+• Đặc tả các Use Case tiêu biểu, gồm luồng chính và luồng thay thế/ngoại lệ. 
+• Yêu cầu phi chức năng có liên quan. 
+Chương 2. Mô hình phân tích 
+• Conceptual Model và giải thích các lớp, thuộc tính, quan hệ quan trọng. 
+• Bảng CRC hoặc bảng phân bổ trách nhiệm. 
+• SSD nếu được yêu cầu trong phạm vi học phần. 
+• Giải thích các điểm mơ hồ và cách nhóm quyết định xử lý. 
+Chương 3. Thiết kế hệ thống 
+• Cách phân tách trách nhiệm hoặc kiến trúc tầng. 
+• Sequence Diagram cho 2–3 Use Case tiêu biểu. 
+• DCD có thuộc tính, phương thức và quan hệ cần thiết. 
+• State Machine khi đối tượng có vòng đời đáng mô hình hóa. 
+• Giải thích quyết định thiết kế bằng GRASP/SOLID hoặc lập luận phù hợp. 
+• ERD và giải thích thiết kế dữ liệu nếu được yêu cầu. 
+Chương 4. Cài đặt và kiểm thử (nếu được yêu cầu) 
+• Cấu trúc dự án và công nghệ sử dụng. 
+• Minh chứng cài đặt gắn với Use Case. 
+• Test case cho luồng chính và ngoại lệ; kết quả kiểm thử. 
+• Các điểm chưa hoàn thiện và giới hạn sản phẩm. 
+
+--- TRANG 7 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+Phần cuối báo cáo 
+• Kết luận về mức độ đáp ứng mục tiêu và hạn chế. 
+• Tài liệu tham khảo nếu có. 
+• Phụ lục cần thiết; tránh đưa nội dung dài không phục vụ đánh giá vào thân báo cáo. 
+• Bảng phân công và đóng góp của thành viên theo yêu cầu giảng viên. 
+6. QUY ĐỊNH SỬ DỤNG CÔNG CỤ AI 
+Nhóm được phép dùng AI để hỗ trợ học tập, tra cứu, phản biện phương án, phát hiện lỗi hoặc tạo ví dụ 
+thử nghiệm. Tuy nhiên, AI không thay thế trách nhiệm phân tích, kiểm chứng và bảo vệ sản phẩm của 
+nhóm. 
+1. Nhóm ph ải t ự xác đ ịnh ph ạm vi, các gi ả định nghi ệp v ụ quan tr ọng và các quy ết đ ịnh thi ết k ế 
+chính. 
+2. Mọi nội dung AI đề xuất phải được kiểm tra về tính đúng đắn, phù hợp với đề tài và nhất quán với 
+các phần còn lại. 
+3. Không nộp văn bản, sơ đồ hoặc mã nguồn do AI t ạo ra mà nhóm không hi ểu hoặc không thể giải 
+thích. 
+4. Giảng viên có th ể yêu cầu nhóm công khai công c ụ AI đã dùng, mục đích sử dụng và nội dung đã 
+kiểm tra hoặc chỉnh sửa. 
+5. Giảng viên có th ể yêu cầu thành viên gi ải thích, phát hi ện lỗi, sửa sơ đ ồ hoặc xử lý một thay đ ổi 
+nhỏ trong buổi bảo vệ. 
+6. Đánh giá sẽ dựa trên chất lượng sản phẩm, khả năng kiểm chứng và mức độ làm chủ kiến thức. 
+7. TIÊU CHÍ ĐÁNH GIÁ VÀ BẢO VỆ 
+Trọng số cụ thể do giảng viên công bố theo yêu cầu học phần. Các tiêu chí dưới đây mô tả những khía 
+cạnh cần xem xét. 
+Tiêu chí Dấu hiệu của sản phẩm tốt 
+Hiểu bài toán và phạm vi Phạm vi rõ; giả định có căn cứ; quy tắc nghiệp vụ và ngoại lệ phù hợp. 
+Mô hình phân tích Actor, Use Case, lớp và quan hệ phản ánh nghiệp vụ; không thêm thành phần tùy tiện. 
+Chất lượng thiết kế Trách nhiệm hợp lý; tương tác có logic; quyết định quan trọng được giải thích. 
+Tính nhất quán Các sơ đồ và phần mô tả hỗ trợ nhau, không mâu thuẫn về tên, trách nhiệm, dữ liệu hoặc luồng. 
+Lập luận và phản biện Nêu được phương án đã cân nhắc, lý do lựa chọn và hệ quả. 
+Khả năng bảo vệ Thành viên giải thích sản phẩm, nhận ra điểm yếu và điều chỉnh được khi có yêu cầu hợp lý. 
+Đóng góp cá nhân Phân công minh bạch; từng thành viên hiểu phần việc và các liên kết quan trọng. 
+
+--- TRANG 8 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+8. DANH SÁCH ĐỀ TÀI GỢI Ý 
+Các mô tả dưới đây cung cấp bối cảnh và giới hạn ban đầu, không phải danh sách chức năng bắt buộc 
+hoặc lời giải mẫu. Nhóm tự xác định yêu cầu chi tiết, quy tắc nghiệp vụ, ngoại lệ và mô hình. Có th ể 
+điều chỉnh phạm vi khi được giảng viên chấp thuận. 
+8.1. Hệ thống quản lý thư viện 
+Thư viện đại học muốn tin học hóa việc quản lý tài liệu, bạn đọc và hoạt động mượn–trả. Hệ thống hỗ 
+trợ tìm kiếm tài liệu, theo dõi tình trạng, phục vụ mượn–trả và xử lý các trường hợp phát sinh. 
+Giới hạn tham khảo: Tập trung vào nghiệp vụ thư viện và người sử dụng; không quản lý toàn bộ hoạt 
+động của trường. 
+8.2. Hệ thống quản lý sinh viên 
+Trường đ ại h ọc c ần qu ản lý thông tin sinh viên, l ớp h ọc, môn h ọc và k ết qu ả. Sinh viên đăng ký 
+môn/lớp học phần, nhận kết quả; nhà trường theo dõi tình trạng học tập và xử lý thay đổi đăng ký hoặc 
+trường hợp không đủ điều kiện. 
+Giới hạn tham kh ảo: Tập trung vào qu ản lý h ọc tập; không xây d ựng toàn b ộ hệ thống quản trị đại 
+học. 
+8.3. Hệ thống quản lý khách sạn 
+Khách s ạn c ần h ỗ trợ tìm ki ếm và đ ặt phòng, qu ản lý tình tr ạng phòng, thông tin khách, nh ận/trả 
+phòng, dịch vụ và thanh toán. Có thể phát sinh đổi/hủy đặt phòng, sử dụng thêm dịch vụ và điều chỉnh 
+thanh toán. 
+Giới hạn tham kh ảo: Tập trung vào phòng, đ ặt phòng, lưu trú, d ịch vụ và thanh toán; không qu ản lý 
+toàn bộ nhân sự hoặc tài chính khách sạn. 
+8.4. Hệ thống quản lý phòng tập thể thao 
+Trung tâm thể thao quản lý hội viên, gói dịch vụ, thời hạn và tình trạng sử dụng. Hội viên đăng ký/gia 
+hạn; nhân viên theo dõi thanh toán, việc sử dụng, hết hạn, đổi gói hoặc vi phạm điều kiện. 
+Giới h ạn tham kh ảo: Tập trung vào h ội viên và d ịch vụ; không mô hình hóa chi ti ết kế toán hoặc 
+nhân sự. 
+8.5. Hệ thống quản lý phòng khám 
+Phòng khám hỗ trợ tiếp nhận, đăng ký lịch khám, quản lý lịch, ghi nhận kết quả khám và chi phí. M ột 
+bệnh nhân có thể đến nhiều lần; có thể đổi/hủy lịch hoặc không đến khám. 
+Giới hạn tham khảo: Tập trung vào tiếp nhận–khám–thanh toán; không xây dựng bệnh án điện tử đầy 
+đủ hoặc quản lý toàn bộ bệnh viện. 
+8.6. Hệ thống bán hàng tại cửa hàng 
+Cửa hàng bán l ẻ cần tìm ki ếm sản phẩm, lập giao dịch, thanh toán và theo dõi hàng hóa, giá bán, t ồn 
+kho. Có thể phát sinh hết hàng, đổi lựa chọn, giảm giá, hủy hoặc điều chỉnh giao dịch. 
+
+--- TRANG 9 ---
+HỌC PHẦN PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG (OOAD) 
+Giới hạn tham khảo: Tập trung vào quy trình bán hàng và hàng hóa liên quan; không quản trị toàn bộ 
+doanh nghiệp. 
+8.7. Hệ thống quản lý ký túc xá 
+Trường quản lý khu ký túc xá. Sinh viên đăng ký ch ỗ ở và được bố trí phòng; ban qu ản lý theo dõi 
+phòng, người đang ở, thời gian lưu trú và phí. Có thể đổi phòng, gia hạn hoặc kết thúc lưu trú. 
+Giới hạn tham khảo: Tập trung vào đăng ký, bố trí phòng, lưu trú và phí; không quản lý toàn bộ hoạt 
+động của trường. 
+8.8. Hệ thống quản lý cửa hàng điện thoại 
+Cửa hàng quản lý điện thoại, phụ kiện, hàng nhập, tồn kho, bán hàng và thông tin khách khi c ần. Sau 
+mua hàng có thể phát sinh đổi sản phẩm, bảo hành hoặc xử lý vấn đề liên quan. 
+Giới hạn tham kh ảo: Tập trung vào s ản phẩm, tồn kho, bán hàng và ho ạt động sau bán; không mô 
+hình hóa toàn bộ chuỗi cung ứng. 
+8.9. Hệ thống quản lý công việc của nhóm 
+Nhóm phát tri ển phần mềm theo dõi d ự án, công vi ệc, người thực hiện và ti ến độ. Công vi ệc có th ể 
+được giao, cập nhật, hoàn thành, đ ổi người thực hiện, đổi ưu tiên/trạng thái hoặc phụ thuộc công việc 
+khác. 
+Giới hạn tham kh ảo: Tập trung vào dự án, công việc, thành viên và ti ến độ; không cần quản lý nhân 
+sự hoặc chấm công. 
+8.10. Hệ thống quản lý nhà hàng 
+Nhà hàng hỗ trợ đặt bàn hoặc tiếp nhận khách, quản lý bàn, gọi món, cập nhật phục vụ và thanh toán. 
+Có thể đổi số khách, đổi/hủy món, tách/gộp thanh toán hoặc đổi trạng thái bàn. 
+Giới hạn tham kh ảo: Tập trung vào đ ặt bàn, ph ục vụ, gọi món, tr ạng thái bàn và thanh toán; không 
+quản lý toàn bộ hoạt động nhà hàng. 

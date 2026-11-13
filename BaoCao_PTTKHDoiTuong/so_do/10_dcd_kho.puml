@@ -1,0 +1,83 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+top to bottom direction
+class PhieuNhapController <<boundary>> {
+ +save(id, form, ...): String
+ +delete(id, phienBan, ...): String
+}
+class PhieuNhapForm <<DTO>> {
+ -maNcc: Long
+ -maNv: Long
+ -ngayNhap: LocalDate
+ -phienBan: Long
+ -chiTiet: List
+}
+class PhieuNhapService <<control>> {
+ +save(id, form): PhieuNhap
+ +delete(id, phienBan): void
+ -checkVersion(...)
+ -lockMaterials(ids): Map
+ -adjustStock(...)
+}
+class PhieuNhap <<entity>> {
+ -maPn: Long
+ -ngayNhap: LocalDate
+ -tongTien: BigDecimal
+ -phienBan: Long {version}
+ -maNv: Long
+ -chiTiet: List
+}
+class CTPhieuNhap <<entity>> {
+ -id: CTPhieuNhapId
+ -soLuong: BigDecimal
+ -donGia: BigDecimal
+ -thanhTien: BigDecimal
+}
+class NguyenLieu <<entity>> {
+ -maNl: Long
+ -soLuongTon: BigDecimal
+ -trangThai: String
+}
+class NhaCungCap <<entity>>
+interface PhieuNhapRepository {
+ +findForUpdate(id): Optional
+ +saveAndFlush(...): PhieuNhap
+}
+interface NguyenLieuRepository {
+ +findForUpdate(id): Optional
+}
+PhieuNhapController --> PhieuNhapService
+PhieuNhapController ..> PhieuNhapForm
+PhieuNhapService ..> PhieuNhapForm
+PhieuNhapService --> PhieuNhapRepository
+PhieuNhapService --> NguyenLieuRepository
+PhieuNhap "1" *-- "1..*" CTPhieuNhap
+CTPhieuNhap "0..*" --> "1" NguyenLieu
+PhieuNhap "0..*" --> "1" NhaCungCap
+PhieuNhapService ..> PhieuNhap
+PhieuNhapRepository -[hidden]down-> NguyenLieuRepository
+note bottom of NguyenLieu
+Service còn phụ thuộc:
+NhaCungCapRepository,
+NhanVienNhapKhoRepository,
+EntityManager.
+Lược getter/setter thường dùng.
+end note
+
+@enduml

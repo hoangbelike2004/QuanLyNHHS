@@ -1,0 +1,337 @@
+[
+  {
+    "page": 1,
+    "title": "TRANG BÌA",
+    "scale": 1,
+    "used_pt": 0
+  },
+  {
+    "page": 2,
+    "title": "LỜI MỞ ĐẦU VÀ CĂN CỨ THỰC HIỆN",
+    "scale": 1.0,
+    "used_pt": 536.7,
+    "available_pt": 725.7
+  },
+  {
+    "page": 3,
+    "title": "MỤC LỤC",
+    "scale": 1.0,
+    "used_pt": 681.9,
+    "available_pt": 725.7
+  },
+  {
+    "page": 4,
+    "title": "DANH MỤC HÌNH VÀ THUẬT NGỮ",
+    "scale": 1.0,
+    "used_pt": 556.2,
+    "available_pt": 725.7
+  },
+  {
+    "page": 5,
+    "title": "1.1. Bài toán, mục tiêu và bối cảnh",
+    "scale": 1.0,
+    "used_pt": 534.6,
+    "available_pt": 725.7
+  },
+  {
+    "page": 6,
+    "title": "1.2. Phạm vi và các giả định",
+    "scale": 1.0,
+    "used_pt": 596.1,
+    "available_pt": 725.7
+  },
+  {
+    "page": 7,
+    "title": "1.3. Quy tắc nghiệp vụ",
+    "scale": 1.0,
+    "used_pt": 670.3,
+    "available_pt": 725.7
+  },
+  {
+    "page": 8,
+    "title": "1.4. Tác nhân và mục tiêu người dùng",
+    "scale": 1.0,
+    "used_pt": 540.3,
+    "available_pt": 725.7
+  },
+  {
+    "page": 9,
+    "title": "1.5. Biểu đồ Use Case tổng quát",
+    "scale": 1.0,
+    "used_pt": 671.4,
+    "available_pt": 725.7
+  },
+  {
+    "page": 10,
+    "title": "1.6. Danh sách ca sử dụng",
+    "scale": 1.0,
+    "used_pt": 614.6,
+    "available_pt": 725.7
+  },
+  {
+    "page": 11,
+    "title": "1.7. Đặc tả UC01 và UC02",
+    "scale": 1.0,
+    "used_pt": 568.2,
+    "available_pt": 725.7
+  },
+  {
+    "page": 12,
+    "title": "1.8. Đặc tả UC03 – Tiếp nhận, xử lý đặt bàn",
+    "scale": 1.0,
+    "used_pt": 530.5,
+    "available_pt": 725.7
+  },
+  {
+    "page": 13,
+    "title": "1.9. Đặc tả UC04 – Lập, điều chỉnh hóa đơn",
+    "scale": 1.0,
+    "used_pt": 511.4,
+    "available_pt": 725.7
+  },
+  {
+    "page": 14,
+    "title": "1.10. Đặc tả UC05 – Ghi nhận thanh toán",
+    "scale": 1.0,
+    "used_pt": 538.7,
+    "available_pt": 725.7
+  },
+  {
+    "page": 15,
+    "title": "1.11. Đặc tả UC06 – Lập, điều chỉnh phiếu nhập",
+    "scale": 1.0,
+    "used_pt": 469.8,
+    "available_pt": 725.7
+  },
+  {
+    "page": 16,
+    "title": "1.12. Đặc tả UC07 và phạm vi các UC hỗ trợ",
+    "scale": 1.0,
+    "used_pt": 556.5,
+    "available_pt": 725.7
+  },
+  {
+    "page": 17,
+    "title": "1.13. Yêu cầu phi chức năng và tiêu chí chấp nhận",
+    "scale": 1.0,
+    "used_pt": 577.5,
+    "available_pt": 725.7
+  },
+  {
+    "page": 18,
+    "title": "2.1. Tìm lớp khái niệm từ yêu cầu",
+    "scale": 1.0,
+    "used_pt": 537.0,
+    "available_pt": 725.7
+  },
+  {
+    "page": 19,
+    "title": "2.2. Mô hình khái niệm bán hàng và đặt bàn",
+    "scale": 1.0,
+    "used_pt": 625.6,
+    "available_pt": 725.7
+  },
+  {
+    "page": 20,
+    "title": "2.3. Mô hình khái niệm nhập kho",
+    "scale": 1.0,
+    "used_pt": 643.1,
+    "available_pt": 725.7
+  },
+  {
+    "page": 21,
+    "title": "2.4. Bảng CRC và phân bổ trách nhiệm",
+    "scale": 1.0,
+    "used_pt": 591.6,
+    "available_pt": 725.7
+  },
+  {
+    "page": 22,
+    "title": "2.5. SSD cho UC04 – Lập hóa đơn",
+    "scale": 1.0,
+    "used_pt": 677.0,
+    "available_pt": 725.7
+  },
+  {
+    "page": 23,
+    "title": "2.6. Điểm mơ hồ và hợp đồng nghiệp vụ",
+    "scale": 1.0,
+    "used_pt": 508.6,
+    "available_pt": 725.7
+  },
+  {
+    "page": 24,
+    "title": "3.1. Kiến trúc và hướng phụ thuộc",
+    "scale": 1.0,
+    "used_pt": 604.6,
+    "available_pt": 725.7
+  },
+  {
+    "page": 25,
+    "title": "3.2. Sequence Diagram – Lập hóa đơn",
+    "scale": 1.0,
+    "used_pt": 657.0,
+    "available_pt": 725.7
+  },
+  {
+    "page": 26,
+    "title": "3.3. Sequence Diagram – Ghi nhận thanh toán",
+    "scale": 1.0,
+    "used_pt": 674.2,
+    "available_pt": 725.7
+  },
+  {
+    "page": 27,
+    "title": "3.4. Sequence Diagram – Điều chỉnh phiếu nhập",
+    "scale": 1.0,
+    "used_pt": 674.2,
+    "available_pt": 725.7
+  },
+  {
+    "page": 28,
+    "title": "3.5. DCD của phân hệ hóa đơn",
+    "scale": 1.0,
+    "used_pt": 705.6,
+    "available_pt": 725.7
+  },
+  {
+    "page": 29,
+    "title": "3.6. DCD của phân hệ nhập kho",
+    "scale": 1.0,
+    "used_pt": 705.6,
+    "available_pt": 725.7
+  },
+  {
+    "page": 30,
+    "title": "3.7. State Machine của hóa đơn",
+    "scale": 1.0,
+    "used_pt": 586.0,
+    "available_pt": 725.7
+  },
+  {
+    "page": 31,
+    "title": "3.8. State Machine đặt bàn và khoảng cách cài đặt",
+    "scale": 1.0,
+    "used_pt": 643.9,
+    "available_pt": 725.7
+  },
+  {
+    "page": 32,
+    "title": "3.9. Giải thích quyết định thiết kế bằng GRASP/SOLID",
+    "scale": 1.0,
+    "used_pt": 561.7,
+    "available_pt": 725.7
+  },
+  {
+    "page": 33,
+    "title": "3.10. ERD bán hàng, khách và đặt bàn",
+    "scale": 1.0,
+    "used_pt": 606.7,
+    "available_pt": 725.7
+  },
+  {
+    "page": 34,
+    "title": "3.11. ERD nhập kho và bảng tài khoản bổ sung",
+    "scale": 1.0,
+    "used_pt": 597.1,
+    "available_pt": 725.7
+  },
+  {
+    "page": 35,
+    "title": "3.12. Khóa, ánh xạ và ràng buộc dữ liệu",
+    "scale": 1.0,
+    "used_pt": 686.9,
+    "available_pt": 725.7
+  },
+  {
+    "page": 36,
+    "title": "3.13. Thiết kế giao dịch và ví dụ tính toán",
+    "scale": 1.0,
+    "used_pt": 567.8,
+    "available_pt": 725.7
+  },
+  {
+    "page": 37,
+    "title": "3.14. Ma trận truy vết và kiểm tra nhất quán",
+    "scale": 1.0,
+    "used_pt": 601.8,
+    "available_pt": 725.7
+  },
+  {
+    "page": 38,
+    "title": "4.1. Công nghệ và cấu trúc dự án",
+    "scale": 1.0,
+    "used_pt": 582.4,
+    "available_pt": 725.7
+  },
+  {
+    "page": 39,
+    "title": "4.2. Minh chứng cài đặt UC04 và UC05",
+    "scale": 1.0,
+    "used_pt": 528.9,
+    "available_pt": 725.7
+  },
+  {
+    "page": 40,
+    "title": "4.3. Minh chứng UC06 và xác thực tài khoản",
+    "scale": 1.0,
+    "used_pt": 552.8,
+    "available_pt": 725.7
+  },
+  {
+    "page": 41,
+    "title": "4.4. Giao diện và điểm kiểm tra khi chạy demo",
+    "scale": 1.0,
+    "used_pt": 629.7,
+    "available_pt": 725.7
+  },
+  {
+    "page": 42,
+    "title": "4.5. Phạm vi và kết quả kiểm chứng thực tế",
+    "scale": 1.0,
+    "used_pt": 557.8,
+    "available_pt": 725.7
+  },
+  {
+    "page": 43,
+    "title": "4.6. Test case đặt bàn, hóa đơn và thanh toán",
+    "scale": 1.0,
+    "used_pt": 626.3,
+    "available_pt": 725.7
+  },
+  {
+    "page": 44,
+    "title": "4.7. Test case kho, báo cáo và bảo mật",
+    "scale": 1.0,
+    "used_pt": 566.1,
+    "available_pt": 725.7
+  },
+  {
+    "page": 45,
+    "title": "4.8. Giới hạn sản phẩm và hướng hoàn thiện",
+    "scale": 1.0,
+    "used_pt": 561.1,
+    "available_pt": 725.7
+  },
+  {
+    "page": 46,
+    "title": "KẾT LUẬN VÀ TÀI LIỆU THAM KHẢO",
+    "scale": 1.0,
+    "used_pt": 538.8,
+    "available_pt": 725.7
+  },
+  {
+    "page": 47,
+    "title": "PHỤ LỤC A. PHÂN CÔNG VÀ CHUẨN BỊ BẢO VỆ",
+    "scale": 1.0,
+    "used_pt": 540.1,
+    "available_pt": 725.7
+  },
+  {
+    "page": 48,
+    "title": "PHỤ LỤC B. TỆP NGUỒN VÀ THÔNG TIN CẦN BỔ SUNG",
+    "scale": 1.0,
+    "used_pt": 596.6,
+    "available_pt": 725.7
+  }
+]

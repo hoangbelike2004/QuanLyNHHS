@@ -1,0 +1,57 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+left to right direction
+actor "Nhân viên nội bộ" as NV
+actor "Phục vụ" as PV
+actor "Thu ngân" as TN
+actor "Thủ kho" as TK
+actor "Quản lý" as QL
+PV --|> NV
+TN --|> NV
+TK --|> NV
+QL --|> NV
+rectangle "HỆ THỐNG QUẢN LÝ NHÀ HÀNG HẢI SẢN" {
+ usecase "UC01\nĐăng nhập / đăng xuất" as U1
+ usecase "UC02\nQuản lý thực đơn" as U2
+ usecase "UC03\nTiếp nhận, xử lý đặt bàn" as U3
+ usecase "UC04\nLập, điều chỉnh hóa đơn" as U4
+ usecase "UC05\nGhi nhận thanh toán" as U5
+ usecase "UC06\nLập, điều chỉnh phiếu nhập" as U6
+ usecase "UC07\nXem báo cáo doanh thu" as U7
+ usecase "UC08\nQuản lý hồ sơ nhân viên" as U8
+ usecase "UC09\nQuản lý danh mục kho" as U9
+ usecase "UC10\nQuản lý khách hàng, bàn ăn" as U10
+}
+NV -- U1
+PV -- U3
+PV -- U10
+TN -- U4
+TN -- U5
+QL -- U2
+QL -- U7
+QL -- U8
+TK -- U6
+TK -- U9
+note bottom of U1
+Vai trò theo nghiệp vụ.
+Code hiện tại dùng ROLE_USER chung;
+chưa hạn chế URL theo từng vai trò.
+end note
+
+@enduml

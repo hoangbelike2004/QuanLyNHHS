@@ -1,0 +1,79 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+top to bottom direction
+class HoaDonController <<boundary>> {
+ +taoHoaDon(...): String
+ +capNhatHoaDon(...): String
+ +thanhToan(...): String
+}
+class HoaDonService <<control>> {
+ +taoHoaDon(...): HoaDon
+ +capNhatHoaDon(...): HoaDon
+ +thanhToan(maHd): HoaDon
+ +tinhLaiTongTien(maHd): HoaDon
+ -kiemTraVaGopDanhSachMon(...)
+ -luuChiTietHoaDon(...)
+}
+class HoaDon <<entity>> {
+ -maHd: Long
+ -maBan, maNv, maKh: Long
+ -giamGia: BigDecimal
+ -tongTien: BigDecimal
+ -trangThai: String
+ +setTrangThai(value): void
+}
+class CTHoaDon <<entity>> {
+ -id: CTHoaDonId
+ -soLuong: BigDecimal
+ -donGia: BigDecimal
+ -thanhTien: BigDecimal
+ +setId(id): void
+}
+class CTHoaDonId <<value object>> {
+ -maHd: Long
+ -maMon: Long
+ +equals(obj): boolean
+ +hashCode(): int
+}
+interface HoaDonRepository {
+ +findById(maHd): Optional
+ +save(hd): HoaDon
+}
+interface CTHoaDonRepository {
+ +save(ct): CTHoaDon
+ +countById_MaHd(maHd): long
+ +tinhTongTienTheoHoaDon(...)
+}
+interface MonAnRepository {
+ +findById(maMon): Optional
+}
+HoaDonController --> HoaDonService
+HoaDonService --> HoaDonRepository
+HoaDonService --> CTHoaDonRepository
+HoaDonService --> MonAnRepository
+HoaDonRepository ..> HoaDon
+CTHoaDonRepository ..> CTHoaDon
+CTHoaDon *-- CTHoaDonId
+note bottom of HoaDon
+Quan hệ bàn, khách, nhân viên lưu bằng Long.
+Không có collection chi tiết trong entity HoaDon.
+Các thao tác repository cơ bản kế thừa JpaRepository.
+end note
+
+@enduml

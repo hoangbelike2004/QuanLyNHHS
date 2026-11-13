@@ -1,0 +1,57 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+autonumber
+actor "Thu ngân" as A
+boundary "HoaDon\nController" as C
+control "HoaDon\nService" as S
+participant "HoaDon\nRepository" as H
+participant "MonAn\nRepository" as M
+participant "CTHoaDon\nRepository" as D
+A -> C : POST /hoa-don/them
+C -> S : taoHoaDon(hd, ids, qty)
+activate S
+S -> S : kiểm tra đầu vào;\ngộp món trùng
+alt không hợp lệ
+ S --> C : IllegalArgumentException
+ C --> A : trả form / thông báo lỗi
+else hợp lệ
+ group @Transactional
+ S -> H : save(hd chưa thanh toán)
+ H --> S : hd có maHd
+ loop mỗi món sau gộp
+  S -> M : findById(maMon)
+  M --> S : món có đơn giá
+  S -> S : tạo CTHoaDon; lượng × giá
+  S -> D : save(chiTiet)
+ end
+ S -> S : tinhLaiTongTien(maHd)
+ S -> D : tinhTongTienTheoHoaDon(maHd)
+ D --> S : tổng chi tiết
+ S -> H : save(hd với tổng sau giảm)
+ end
+ S --> C : HoaDon
+ C --> A : chuyển hướng chi tiết
+end
+deactivate S
+note over S,D
+Lỗi phát sinh trong giao dịch làm rollback.
+Không cập nhật trạng thái bàn trong luồng này.
+end note
+
+@enduml

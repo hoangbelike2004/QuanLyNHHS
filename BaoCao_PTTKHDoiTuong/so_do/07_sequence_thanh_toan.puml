@@ -1,0 +1,55 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam dpi 180
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam ArrowColor #37536B
+skinparam classBackgroundColor #F0F6FA
+skinparam classBorderColor #37536B
+skinparam usecaseBackgroundColor #F0F6FA
+skinparam packageBackgroundColor #FFFFFF
+skinparam sequenceParticipantBackgroundColor #EDF4F8
+skinparam sequenceLifeLineBorderColor #78909C
+skinparam sequenceMessageAlign center
+skinparam padding 5
+hide circle
+autonumber
+actor "Thu ngân" as A
+boundary "HoaDon\nController" as C
+control "HoaDon\nService" as S
+participant "HoaDon\nRepository" as H
+participant "CTHoaDon\nRepository" as D
+A -> C : POST thanh toán (maHd)
+C -> S : thanhToan(maHd)
+group @Transactional
+ S -> H : findById(maHd)
+ H --> S : hóa đơn
+ alt đã thanh toán
+  S --> C : IllegalStateException
+ else chưa thanh toán
+  S -> D : countById_MaHd(maHd)
+  D --> S : số dòng
+  alt số dòng = 0
+   S --> C : IllegalStateException
+  else có món
+   S -> S : tinhLaiTongTien(maHd)
+   S -> D : tinhTongTienTheoHoaDon(maHd)
+   D --> S : tổng chi tiết
+   S -> H : save(hd với tổng tiền mới)
+   S -> S : đặt Da thanh toan
+   S -> H : save(hd)
+   S --> C : HoaDon
+  end
+ end
+end
+C --> A : kết quả / thông báo
+note over S,H
+Chưa gọi BanAnService để giải phóng bàn.
+Kiểm tra trạng thái hiện chưa khóa chống
+hai yêu cầu thanh toán đồng thời.
+end note
+
+@enduml
