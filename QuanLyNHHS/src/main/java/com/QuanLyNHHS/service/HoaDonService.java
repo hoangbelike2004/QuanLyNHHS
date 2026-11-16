@@ -1,4 +1,3 @@
-
 package com.QuanLyNHHS.service;
 
 import java.math.BigDecimal;
@@ -20,7 +19,8 @@ import com.QuanLyNHHS.repository.HoaDonRepository;
 import com.QuanLyNHHS.repository.MonAnRepository;
 
 /**
- * Xử lý nghiệp vụ hóa đơn và phối hợp các repository trước khi trả kết quả cho controller.
+ * Xử lý nghiệp vụ hóa đơn và phối hợp các repository trước khi trả kết quả cho
+ * controller.
  */
 @Service
 public class HoaDonService {
@@ -51,9 +51,9 @@ public class HoaDonService {
         this.banAnRepository = banAnRepository;
     }
 
-    // Lấy tất cả hóa đơn
+// Lấy tất cả hóa đơn: ưu tiên chưa thanh toán lên trước
     public List<HoaDon> layTatCaHoaDon() {
-        return hoaDonRepository.findAllByOrderByNgayLapDesc();
+        return hoaDonRepository.findAllSapXepTheoTrangThai();
     }
 
     // Tìm hóa đơn theo trạng thái
@@ -64,8 +64,8 @@ public class HoaDonService {
     // Tìm hóa đơn theo mã
     public HoaDon timTheoMa(Long maHd) {
         return hoaDonRepository.findById(maHd)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
+                .orElseThrow(()
+                        -> new IllegalArgumentException(
                                 "Khong tim thay hoa don: " + maHd));
     }
 
@@ -89,8 +89,8 @@ public class HoaDonService {
 
         // Kiểm tra bàn có tồn tại hay không
         BanAn banAn = banAnRepository.findById(hoaDon.getMaBan())
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
+                .orElseThrow(()
+                        -> new IllegalArgumentException(
                                 "Khong tim thay ban: " + hoaDon.getMaBan()));
 
         // Không cho tạo hóa đơn nếu bàn không trống
@@ -108,8 +108,8 @@ public class HoaDonService {
         }
 
         // Kiểm tra và gộp danh sách món
-        Map<Long, BigDecimal> danhSachMon =
-                kiemTraVaGopDanhSachMon(maMon, soLuong);
+        Map<Long, BigDecimal> danhSachMon
+                = kiemTraVaGopDanhSachMon(maMon, soLuong);
 
         hoaDon.setNgayLap(LocalDate.now());
         hoaDon.setTrangThai(CHUA_THANH_TOAN);
@@ -170,8 +170,8 @@ public class HoaDonService {
         kiemTraThongTinHoaDon(hoaDonMoi);
 
         // Kiểm tra danh sách món trước khi thay đổi dữ liệu
-        Map<Long, BigDecimal> danhSachMon =
-                kiemTraVaGopDanhSachMon(maMon, soLuong);
+        Map<Long, BigDecimal> danhSachMon
+                = kiemTraVaGopDanhSachMon(maMon, soLuong);
 
         // Cập nhật thông tin hóa đơn
         // Giữ nguyên mã bàn hiện tại
@@ -221,8 +221,8 @@ public class HoaDonService {
 
         HoaDon hoaDon = timTheoMa(maHd);
 
-        BigDecimal tongChiTiet =
-                ctHoaDonRepository.tinhTongTienTheoHoaDon(maHd);
+        BigDecimal tongChiTiet
+                = ctHoaDonRepository.tinhTongTienTheoHoaDon(maHd);
 
         if (tongChiTiet == null) {
             tongChiTiet = BigDecimal.ZERO;
@@ -232,8 +232,8 @@ public class HoaDonService {
                 ? BigDecimal.ZERO
                 : hoaDon.getGiamGia();
 
-        BigDecimal tongSauGiam =
-                tongChiTiet.subtract(giamGia);
+        BigDecimal tongSauGiam
+                = tongChiTiet.subtract(giamGia);
 
         if (tongSauGiam.compareTo(BigDecimal.ZERO) < 0) {
             tongSauGiam = BigDecimal.ZERO;
@@ -300,8 +300,8 @@ public class HoaDonService {
                     "Hoa don phai co it nhat mot mon an hop le");
         }
 
-        Map<Long, BigDecimal> danhSachMon =
-                new LinkedHashMap<>();
+        Map<Long, BigDecimal> danhSachMon
+                = new LinkedHashMap<>();
 
         for (int i = 0; i < maMon.size(); i++) {
 
@@ -336,8 +336,8 @@ public class HoaDonService {
             BigDecimal soLuongMon = entry.getValue();
 
             MonAn monAn = monAnRepository.findById(idMon)
-                    .orElseThrow(() ->
-                            new IllegalArgumentException(
+                    .orElseThrow(()
+                            -> new IllegalArgumentException(
                                     "Khong tim thay mon an co ma: " + idMon));
 
             if (monAn.getDonGia() == null) {
@@ -416,15 +416,15 @@ public class HoaDonService {
             return;
         }
 
-        boolean conHoaDonChuaThanhToan =
-                hoaDonRepository.existsByMaBanAndTrangThai(
+        boolean conHoaDonChuaThanhToan
+                = hoaDonRepository.existsByMaBanAndTrangThai(
                         maBan, CHUA_THANH_TOAN);
 
         if (!conHoaDonChuaThanhToan) {
 
             BanAn banAn = banAnRepository.findById(maBan)
-                    .orElseThrow(() ->
-                            new IllegalArgumentException(
+                    .orElseThrow(()
+                            -> new IllegalArgumentException(
                                     "Khong tim thay ban: " + maBan));
 
             banAn.setTrangThai(BAN_TRONG);

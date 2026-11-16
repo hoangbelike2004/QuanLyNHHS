@@ -65,4 +65,13 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
     // Lấy hóa đơn mới nhất
     List<HoaDon> findAllByOrderByNgayLapDesc();
+
+// Ưu tiên hóa đơn chưa thanh toán, sau đó sắp xếp theo ngày lập mới nhất
+@Query("""
+    SELECT h FROM HoaDon h
+    ORDER BY
+        CASE WHEN h.trangThai = 'Chua thanh toan' THEN 0 ELSE 1 END,
+        h.ngayLap DESC
+    """)
+List<HoaDon> findAllSapXepTheoTrangThai();
 }

@@ -44,8 +44,15 @@
                                 </option>
                             </select>
 
-                            <label for="maNv">Mã nhân viên</label>
-                            <input id="maNv" type="number" th:field="*{maNv}" min="1" required>
+                            <label for="maNv">Nhân viên lập hóa đơn</label>
+
+                            <select id="maNv" th:field="*{maNv}" required>
+                                <option value="">-- Chọn nhân viên --</option>
+
+                                <option th:each="nv : ${danhSachNhanVien}" th:value="${nv.maNv}"
+                                    th:text="${nv.maNv + ' - ' + nv.hoTen}">
+                                </option>
+                            </select>
 
                             <label for="maKh">Mã khách hàng (không bắt buộc)</label>
                             <input id="maKh" type="number" th:field="*{maKh}" min="1">
