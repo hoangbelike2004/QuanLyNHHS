@@ -120,13 +120,6 @@ $notes = @(
     'Đã xử lý quyền cho bốn vai trò, tính tiền và khóa sửa hóa đơn đã thu, điều chỉnh tồn khi sửa phiếu. Bộ Java có 23 bài đạt trên H2; bốn bài JavaScript về lọc giao diện đạt. Chưa chạy giao dịch trên Oracle thật; cần kiểm tra thao tác đồng thời.',
     'Hệ thống nối đặt bàn, bán hàng và nhập kho. Hướng tiếp theo là kiểm thử Oracle và các tình huống nhiều người cùng thao tác.'
 )
-$titles = @(
-    'Hệ thống quản lý nhà hàng hải sản', 'Khảo sát và yêu cầu', 'Use case tổng quát',
-    'Các đối tượng chính', 'Kiến trúc hệ thống', 'Quy trình lập hóa đơn',
-    'Mô tả nghiệp vụ', 'Sửa phiếu nhập, cập nhật tồn kho',
-    'Trạng thái hóa đơn', 'Công cụ và dữ liệu', 'Đã xử lý và kiểm thử', 'Kết luận'
-)
-
 $archive = [IO.Compression.ZipFile]::Open($temporaryPath, [IO.Compression.ZipArchiveMode]::Update)
 try {
     $architecture = Read-ZipXml $archive 'ppt/slides/slide5.xml'
@@ -294,12 +287,4 @@ try {
     [IO.File]::Delete($temporaryPath)
 }
 
-$guide = @('# Gợi ý thuyết trình – Nhóm 4', '', '12 slide, khoảng 8–10 phút. Lời dẫn cũng nằm trong Notes của PowerPoint.', '')
-for ($i = 0; $i -lt $notes.Count; $i++) {
-    $guide += "## Slide $($i + 1). $($titles[$i])"
-    $guide += ''
-    $guide += $notes[$i]
-    $guide += ''
-}
-[IO.File]::WriteAllLines((Join-Path $PSScriptRoot 'Goi_y_thuyet_trinh.md'), $guide[0..($guide.Count - 2)], [Text.UTF8Encoding]::new($false))
 Write-Output "Updated 12 slides with survey, business process, tools, tests and fade transitions: $deliveredPath"

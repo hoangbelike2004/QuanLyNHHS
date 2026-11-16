@@ -1,14 +1,27 @@
-# Thuyết trình BTL Nhóm 4
+# Thuyết trình PTTK hướng đối tượng – Nhóm 4
 
-- **ThuyetTrinh_BTL_PTTKHDoiTuong_Nhom4_cap_nhat.pptx**: bản PowerPoint mới nhất, 12 slide, tỷ lệ 16:9. File gốc đang mở trong PowerPoint nên Windows chưa cho ghi đè.
-- **ThuyetTrinh_BTL_PTTKHDoiTuong_Nhom4.pptx**: bản trước khi thêm khảo sát, mô tả nghiệp vụ, công cụ và kiểm thử.
-- **ThuyetTrinh_BTL_PTTKHDoiTuong_Nhom4.pdf**: bản xem trước cũ; nội dung mới nhất nằm trong PowerPoint.
-- **Goi_y_thuyet_trinh.md**: lời dẫn ngắn, cũng đã nhúng vào Notes của từng slide; thời lượng gợi ý 8–10 phút.
+[`PP_PTTKHT_TMP.pptx`](PP_PTTKHT_TMP.pptx) là bản trình bày hoàn chỉnh, gồm **15 slide** tỷ lệ 16:9. Mỗi slide có ghi chú cho người thuyết trình trong PowerPoint. Thời lượng gợi ý: 10–12 phút.
 
-Thiết kế nền sáng, chữ Arial, màu xanh trầm. Mỗi slide dùng hiệu ứng chuyển trang Fade nhanh, không có animation hoặc âm thanh. Chữ, hình và sơ đồ trong PowerPoint đều chỉnh sửa được. Slide 2 trình bày nguồn khảo sát yêu cầu và bốn nhóm nghiệp vụ; slide 3 là use case tổng quát; slide 7 mô tả quy trình công việc; slide 10 nêu công cụ, thư viện và dữ liệu; slide 11 tách việc đã xử lý với kết quả kiểm thử.
+## Thứ tự trình bày
 
-Đã kiểm tra cấu trúc PPTX mới, 12 slide, Notes, hiệu ứng Fade và vị trí các thành phần. Máy hiện tại không xuất PDF trực tiếp từ PowerPoint, nên PDF và ảnh trong `xem_truoc` chưa phản ánh lần chỉnh sửa này.
+| Slide | Nội dung chính |
+| --- | --- |
+| 1–3 | Đề tài, khảo sát và use case theo bốn vai trò hiện có. |
+| 4–6 | Đối tượng chính; mô hình khái niệm bán hàng và nhập kho. |
+| 7–8 | Kiến trúc tầng và sơ đồ chi tiết đối chiếu mã nguồn. |
+| 9–12 | Lập hóa đơn, luồng nghiệp vụ, điều chỉnh tồn và trạng thái hóa đơn. |
+| 13–15 | Công cụ, bằng chứng kiểm thử và kết luận. |
 
-Nguồn chính: báo cáo Nhóm 4, hướng dẫn học phần, Excel phân công và mã nguồn QuanLyNHHS. Các giới hạn sản phẩm và phạm vi kiểm thử giữ đúng như báo cáo.
+Ba sơ đồ ảnh ở slide 5, 6 và 8 được lấy từ bản MAIN sau khi đối chiếu với các entity, service, repository và cấu hình bảo mật hiện tại. Tệp nguồn của các sơ đồ vẫn ở [`../so_do/`](../so_do/): `02_khai_niem_ban_hang`, `03_khai_niem_nhap_kho`, `05_kien_truc` (`.puml`, `.svg`, `.png`). Đây là **mô hình khái niệm và kiến trúc**; một số quan hệ nghiệp vụ trong sơ đồ được code lưu bằng mã, không ngụ ý mọi quan hệ đều có ánh xạ JPA hoặc khóa ngoại vật lý.
 
-Tệp `tao_powerpoint.py` tạo bố cục gốc; chạy `cap_nhat_powerpoint.ps1` sau đó để áp dụng nội dung trình bày và hiệu ứng chuyển trang. Nếu bản gốc đang mở, script xuất bản mới với hậu tố `_cap_nhat`. Script Python cần `python-pptx==1.0.2`, `reportlab==4.5.1`, `pymupdf==1.26.5` và đường dẫn font Arial phù hợp với máy chạy.
+Slide 11–12 trình bày nghiệp vụ đã cài đặt và quy tắc trạng thái. Hai sơ đồ trạng thái bổ sung từ MAIN không được lặp lại vì TMP đã có phần này; sơ đồ đặt bàn trong MAIN còn mô tả chuyển trạng thái chặt hơn kiểm tra hiện có của `DatBanService`.
+
+Số **23 kiểm thử Java trên H2** ở slide 14 dựa trên ba báo cáo Surefire gần nhất cho `DatabasePagesTests` (4), `MenuCrudIntegrationTests` (18) và `QuanLyNhhsApplicationTests` (1). Đây không phải bằng chứng mọi giao dịch trên Oracle đã chạy thành công. Dữ liệu, ngày chạy và môi trường cần được kiểm tra lại trước buổi bảo vệ.
+
+## Trước khi trình chiếu
+
+1. Mở TMP trong PowerPoint, kiểm tra hiển thị tiếng Việt, sơ đồ và ghi chú ở ba slide mới.
+2. Điền thông tin giảng viên/lớp/mã sinh viên nếu cần trên bìa báo cáo nhóm.
+3. Xuất PDF mới từ TMP sau khi chốt nội dung. Các file PDF trình chiếu cũ không còn là bản tham chiếu cho TMP.
+
+`tao_powerpoint.py` và `cap_nhat_powerpoint.ps1` là script tạo bản 12 slide cũ; chạy chúng sẽ không tái tạo ba slide sơ đồ vừa ghép vào TMP.

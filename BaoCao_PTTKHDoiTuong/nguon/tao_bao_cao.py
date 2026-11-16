@@ -129,7 +129,7 @@ def draw_cover(c):
     center('ĐỀ TÀI',18.9,14)
     center('HỆ THỐNG QUẢN LÝ',17.65,22)
     center('NHÀ HÀNG HẢI SẢN',16.55,22)
-    center('Nhóm 4',14.8,15)
+    center('SINH VIÊN THỰC HIỆN – NHÓM 4',14.8,15)
     c.setFillColor(colors.black);c.setFont('TNR',13)
     c.drawString(3*CM,13.45*CM,'Giảng viên hướng dẫn: ........................................................')
     c.drawString(3*CM,12.55*CM,'Lớp: ....................................................................................')
@@ -137,7 +137,7 @@ def draw_cover(c):
     tt=Table([[para('Họ và tên',12,bold=True,align=TA_LEFT),para('Mã sinh viên',12,bold=True,align=TA_LEFT)]]+[[para(x,12,align=TA_LEFT),para('................................',12,align=TA_LEFT)] for x in members],colWidths=[8*CM,7*CM])
     tt.setStyle(TableStyle([('LINEBELOW',(0,0),(-1,0),.6,BLUE),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7)]))
     w,hh=tt.wrap(15*CM,8*CM);tt.drawOn(c,3*CM,10.8*CM-hh)
-    center('NĂM 2026',3.2,13)
+    center('Hà Nội, năm 2026',3.2,13)
 
 def draw_pdf():
     path=ROOT/(NAME+'.pdf')
@@ -244,12 +244,12 @@ def doc_cover(doc):
     center('PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG',14,after=34)
     center('ĐỀ TÀI',14,after=14)
     center('HỆ THỐNG QUẢN LÝ\nNHÀ HÀNG HẢI SẢN',22,after=25)
-    center('Nhóm 4',15,after=20)
+    center('SINH VIÊN THỰC HIỆN – NHÓM 4',15,after=20)
     add_doc_text(doc,'Giảng viên hướng dẫn: ........................................................',13,align=WD_ALIGN_PARAGRAPH.LEFT)
     add_doc_text(doc,'Lớp: ....................................................................................',13,align=WD_ALIGN_PARAGRAPH.LEFT)
     b=table_data=['Họ và tên','Mã sinh viên']
     doc_table(doc,{'head':b,'rows':[[x,'................................'] for x in ['Hoàng Việt Đức','Nguyễn Cao Hoàng','Đỗ Minh Chiến','Lý Tiến Đạt']],'widths':[.55,.45]},1)
-    center('NĂM 2026',13,after=0)
+    center('Hà Nội, năm 2026',13,after=0)
 
 def draw_docx(layout):
     doc=Document();sec=doc.sections[0]

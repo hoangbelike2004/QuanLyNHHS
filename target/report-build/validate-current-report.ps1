@@ -48,7 +48,5 @@ foreach($name in @('BTL.docx','ON_TAP_BAO_VE_HOANG.docx')) {
   $results+=@{file=$name;bytes=(Get-Item $file).Length;font=$fonts[0];textColor=$colors[0];xmlPartsValidated=$parts.Count;paragraphs=$document.SelectNodes('//w:p',$ns).Count;tables=$document.SelectNodes('//w:tbl',$ns).Count;hasLiveTOC=($bodyText.Contains('MỤC LỤC'));layoutValidation='OOXML structure and style validation; Word repagination and PDF export completed; selected PDF pages visually reviewed.'}
  } finally { $zip.Dispose() }
 }
-$backup=Join-Path $root 'BTL.truoc-chinh-sua-2026-11-10.docx'
-if(!(Test-Path $backup)) {throw 'Missing original report backup.'}
 $results | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $PSScriptRoot 'current-report-validation.json')
 $results | ConvertTo-Json -Depth 5

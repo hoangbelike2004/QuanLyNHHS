@@ -11,4 +11,4 @@
 
 Vai trò `NHAN_VIEN` đã được gộp vào `THU_NGAN`. Bảng `NHAN_VIEN` vẫn giữ để lưu hồ sơ và làm khóa tham chiếu cho hóa đơn, phiếu nhập. Tài khoản `QUAN_LY` cũ được xem là `ADMIN` khi đăng nhập.
 
-Với cơ sở dữ liệu hiện có, chạy [`src/main/resources/migrate_account_roles.sql`](src/main/resources/migrate_account_roles.sql) một lần bằng tài khoản `NHHS_APP` để cập nhật giá trị vai trò trong bảng `TAI_KHOAN`. Ứng dụng vẫn nhận giá trị cũ khi đăng nhập cho đến khi hoàn tất chuyển đổi.
+Các bước chạy migration và nạp dữ liệu nằm trong [hướng dẫn cài đặt và dữ liệu Oracle](database/oracle/README.md). Ứng dụng vẫn nhận giá trị vai trò cũ khi đăng nhập cho đến khi hoàn tất chuyển đổi.

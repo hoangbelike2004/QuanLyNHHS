@@ -36,7 +36,7 @@ BEGIN
     -- TAI_KHOAN: khong co FK toi NHAN_VIEN trong thiet ke hien tai.
     INSERT INTO TAI_KHOAN (MA_TK, HO_TEN, TEN_DANG_NHAP, MAT_KHAU, VAI_TRO)
     VALUES (SEQ_TAI_KHOAN.NEXTVAL, 'Nguyễn Minh An', 'nhhs_admin',
-            '$2a$12$Uajz78eNAQW/4qUsKNe.ieq22HHanirmZaiD6WMkUV2yK3QPLOvse', 'QUAN_LY');
+            '$2a$12$Uajz78eNAQW/4qUsKNe.ieq22HHanirmZaiD6WMkUV2yK3QPLOvse', 'ADMIN');
 
     INSERT INTO NHAN_VIEN (MA_NV, HO_TEN, GIOI_TINH, SDT, CHUC_VU, LUONG,
                            NGAY_VAO_LAM, EMAIL, CA_LAM_VIEC, TRANG_THAI)

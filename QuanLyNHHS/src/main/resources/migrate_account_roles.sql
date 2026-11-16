@@ -1,9 +1,26 @@
--- Run once as NHHS_APP after backing up TAI_KHOAN.
--- Existing manager accounts become admins; employee accounts become cashiers.
+-- Chạy một lần bằng NHHS_APP sau khi sao lưu TAI_KHOAN.
+-- Hỗ trợ cả schema đã chạy bản 05_phan_quyen.sql cũ (constraint chỉ nhận 3 vai trò).
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count
+    FROM USER_CONSTRAINTS
+    WHERE TABLE_NAME = 'TAI_KHOAN'
+      AND CONSTRAINT_NAME = 'CK_TAI_KHOAN_VAI_TRO';
+    IF v_count > 0 THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE TAI_KHOAN DROP CONSTRAINT CK_TAI_KHOAN_VAI_TRO';
+    END IF;
+END;
+/
+
 UPDATE TAI_KHOAN SET VAI_TRO = 'ADMIN'
 WHERE VAI_TRO = 'QUAN_LY' OR VAI_TRO IS NULL;
 
 UPDATE TAI_KHOAN SET VAI_TRO = 'THU_NGAN'
 WHERE VAI_TRO = 'NHAN_VIEN';
+
+ALTER TABLE TAI_KHOAN MODIFY VAI_TRO DEFAULT 'ADMIN' NOT NULL;
+ALTER TABLE TAI_KHOAN ADD CONSTRAINT CK_TAI_KHOAN_VAI_TRO
+    CHECK (VAI_TRO IN ('ADMIN', 'QUAN_LY_KHO', 'KE_TOAN', 'THU_NGAN'));
 
 COMMIT;

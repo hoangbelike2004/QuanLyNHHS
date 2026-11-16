@@ -3,8 +3,6 @@ const path = require('path');
 const Module = require('module');
 const base = fs.readFileSync(path.join(__dirname, 'build_report.js'), 'utf8');
 const root = path.resolve(__dirname, '../..');
-const backup = path.join(root, 'BTL.truoc-chinh-sua-2026-11-10.docx');
-if (!fs.existsSync(backup)) fs.copyFileSync(path.join(root, 'BTL.docx'), backup);
 
 function build(content, output, prefix) {
   let source = base;
@@ -61,5 +59,4 @@ fs.writeFileSync(path.join(__dirname, ${JSON.stringify(prefix + '-blocks.json')}
   compiled._compile(source, filename);
 }
 build('content-current.js', 'BTL.docx', 'BTL-da-chinh');
-build('content-oral.js', 'ON_TAP_BAO_VE_HOANG.docx', 'Hoang-on-tap');
-console.log('Original report preserved at: ' + backup);
+console.log('Run apply-cover-template.ps1 after regenerating the report.');

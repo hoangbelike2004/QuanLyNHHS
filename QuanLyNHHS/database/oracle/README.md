@@ -1,14 +1,26 @@
-# Thêm dữ liệu vào Oracle
+# Cài đặt, chạy ứng dụng và thêm dữ liệu Oracle
 
-## Những gì đã được dọn
+Đây là hướng dẫn duy nhất cho việc chuẩn bị môi trường, chạy ứng dụng, cập nhật schema và nạp dữ liệu. Chạy các lệnh SQL bằng đúng schema của ứng dụng; các script chỉ tác động đến Oracle khi bạn chủ động thực thi.
 
-Ba trang `/nhan-vien`, `/mon-an`, `/loai-mon` đọc dữ liệu từ Oracle thay cho danh sách mẫu trong controller. Khi bảng rỗng, trang hiển thị thông báo chưa có dữ liệu. Số món theo loại được đếm từ `MON_AN`; số lượng đã bán được cộng từ chi tiết hóa đơn có trạng thái `Da thanh toan`.
+## 0. Chuẩn bị và chạy dự án
 
-Email, ca làm, trạng thái nhân viên và ảnh, mô tả món ăn đã được ánh xạ thành cột thật. Bản ghi cũ có thể để trống các cột mới; hệ thống không tự gán thông tin mẫu cho bản ghi cũ.
+- Cài JDK **27** theo `pom.xml`, Maven và Oracle Database Free/XE. Kiểm tra bằng `java -version` và `mvn -version`; cả hai phải dùng đúng JDK.
+- Mở PowerShell tại thư mục `QuanLyNHHS` chứa `pom.xml`, rồi chạy `mvn spring-boot:run`.
+- Sau khi có schema và dữ liệu, chạy `mvn test` để kiểm tra Java/H2. Bộ lọc giao diện có thể kiểm tra bằng `node --test src/test/js/menu-filters.test.cjs` nếu đã cài Node.js. H2 không thay thế kiểm thử giao dịch trên Oracle.
+- Ứng dụng đọc cấu hình từ `src/main/resources/application.properties`; đặt `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` cho đúng PDB/schema trước khi khởi động. Mật khẩu mặc định trong file cấu hình chỉ dành cho môi trường phát triển.
 
-Các giá trị điền sẵn trong modal đã được bỏ. Các biểu mẫu thêm/sửa/xóa ở **ba trang này chưa có endpoint lưu dữ liệu**; chúng hiển thị thông báo chưa hỗ trợ thay cho thông báo thành công giả. Dùng SQL bên dưới để thêm dữ liệu. Các module khác giữ nguyên cách lưu hiện có.
+Ba module `/nhan-vien`, `/mon-an`, `/loai-mon` hiện đọc Oracle và có endpoint thêm/sửa/xóa. SQL bên dưới dùng để tạo dữ liệu kiểm thử hoặc thao tác trực tiếp với schema; không cần chạy SQL cho mỗi lần CRUD trên giao diện.
 
-Không có lệnh xóa dữ liệu Oracle trong thay đổi này. Script INSERT chỉ chạy khi bạn tự mở và thực thi; ứng dụng không tự nạp script.
+## Vai trò hiện tại
+
+| Vai trò | Quyền chính |
+| --- | --- |
+| `ADMIN` | Toàn bộ chức năng, gồm tài khoản, nhân sự, thực đơn, bàn ăn và xóa chứng từ theo quy tắc nghiệp vụ. |
+| `QUAN_LY_KHO` | Nhà cung cấp, nguyên liệu, phiếu nhập và tồn kho. |
+| `KE_TOAN` | Xem báo cáo, hóa đơn và phiếu nhập; không sửa chứng từ. |
+| `THU_NGAN` | Khách hàng, đặt bàn và hóa đơn; không giảm hoặc xóa món đã xác nhận. |
+
+Giá trị cũ `QUAN_LY` được ứng dụng hiểu như `ADMIN`, `NHAN_VIEN` được hiểu như `THU_NGAN` khi đăng nhập. Để chuyển dữ liệu cũ sang bốn giá trị hiện tại, sao lưu bảng `TAI_KHOAN` rồi chạy [`migrate_account_roles.sql`](../../src/main/resources/migrate_account_roles.sql) một lần với schema ứng dụng; đăng xuất và đăng nhập lại để nhận quyền mới. Chỉ chạy **toàn bộ** `05_phan_quyen.sql` khi cả hai cột `VAI_TRO` và `SO_LUONG_DA_XAC_NHAN` đều chưa có; nếu chỉ thiếu một cột, đối chiếu DDL và chạy riêng lệnh `ALTER TABLE` cần thiết.
 
 ## 1. Kiểm tra cấu hình kết nối
 
@@ -47,6 +59,14 @@ Cấu hình hiện tại là `spring.jpa.hibernate.ddl-auto=update`. Sau khi ứ
 
 - `NHAN_VIEN`: `EMAIL`, `CA_LAM_VIEC`, `TRANG_THAI`.
 - `MON_AN`: `HINH_ANH`, `MO_TA`.
+
+Với schema kho cũ, kiểm tra cột `PHIEU_NHAP.PHIEN_BAN` dùng cho `@Version`. Nếu cột chưa tồn tại, sao lưu dữ liệu rồi chạy riêng:
+
+```sql
+ALTER TABLE PHIEU_NHAP ADD (PHIEN_BAN NUMBER(19) DEFAULT 0 NOT NULL);
+```
+
+Nếu cột đã có nhưng chứa `NULL`, cập nhật dữ liệu cũ trước khi đặt `NOT NULL`. Sequence kho phải cấp mã lớn hơn mã hiện có; không reset sequence của schema đang có dữ liệu.
 
 Nếu bạn đã đổi `ddl-auto` thành `none` hoặc `validate`, cần bổ sung các cột này thủ công trước khi chạy:
 
@@ -90,13 +110,13 @@ SELECT TEN_DANG_NHAP, HO_TEN FROM TAI_KHOAN ORDER BY MA_TK;
 
 Nếu chưa thấy `nhhs_admin`, script chưa được chạy thành công trên schema này. Ứng dụng không tự nạp script khi khởi động; mật khẩu chỉ dùng được sau khi bản ghi đã được `COMMIT`.
 
-Mật khẩu trong `TAI_KHOAN` đã được băm bằng BCrypt độ khó 12, khớp `SecurityConfig`. Tài khoản dùng `VAI_TRO` với ba giá trị `QUAN_LY`, `THU_NGAN`, `NHAN_VIEN`. Đây là mật khẩu công khai trong repository để kiểm thử; hãy đổi hoặc xóa các tài khoản này trước khi dùng cơ sở dữ liệu cho mục đích khác.
+Mật khẩu trong `TAI_KHOAN` đã được băm bằng BCrypt độ khó 12, khớp `SecurityConfig`. Tài khoản kiểm thử mang vai trò `ADMIN`; đây là mật khẩu công khai trong repository, cần đổi hoặc xóa trước khi dùng cơ sở dữ liệu cho mục đích khác.
 
 ### Nâng cấp phân quyền
 
-Với cơ sở dữ liệu cũ, chạy `05_phan_quyen.sql` bằng tài khoản sở hữu schema **trước khi khởi động phiên bản ứng dụng này**. Script thêm vai trò và số lượng món đã xác nhận, đồng thời gán tài khoản hiện có vai trò `QUAN_LY` để tránh mất quyền truy cập. Sau đó cập nhật `TAI_KHOAN.VAI_TRO` cho từng người dùng thành `THU_NGAN` hoặc `NHAN_VIEN` phù hợp. Đăng xuất và đăng nhập lại để phiên nhận quyền mới.
+Với schema cũ thiếu **cả hai** cột, có thể chạy `05_phan_quyen.sql` sau khi kiểm tra DDL. Sau đó chạy `migrate_account_roles.sql` để chuyển giá trị cũ sang vai trò hiện tại. Nếu hai cột đã có mà constraint vai trò vẫn là bản cũ, chỉ chạy `migrate_account_roles.sql`. Trên schema mới do Hibernate tạo, không chạy lại `05_phan_quyen.sql` vì lệnh `ADD` sẽ trùng cột.
 
-Thu ngân được lập/sửa hóa đơn chưa thanh toán, xác nhận thanh toán, xác nhận đặt bàn và xem báo cáo. Nhân viên được sửa hóa đơn chưa thanh toán và xác nhận món; số lượng món đã xác nhận không thể bị nhân viên giảm hoặc xóa. Quản lý có toàn quyền. Khi thêm tài khoản mới trực tiếp vào Oracle, cần lưu mật khẩu BCrypt và gán rõ một trong ba giá trị `VAI_TRO`.
+Thu ngân lập/sửa hóa đơn chưa thanh toán, xác nhận món và thanh toán, quản lý khách hàng và đặt bàn; không xem báo cáo doanh thu. Kế toán chỉ xem báo cáo và chứng từ. Quản lý kho xử lý nhập kho. Khi thêm tài khoản mới trực tiếp vào Oracle, cần lưu mật khẩu BCrypt và gán một trong bốn vai trò ở bảng trên.
 
 Script có một hóa đơn đã thanh toán để thử báo cáo doanh thu và một hóa đơn chưa thanh toán để thử thao tác thanh toán. Phiếu nhập và tồn kho được cập nhật cùng giao dịch để sửa/xóa phiếu nhập từ giao diện vẫn nhất quán.
 

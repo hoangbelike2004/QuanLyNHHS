@@ -48,12 +48,8 @@ Thay `{module}` bằng `mon-an`, `loai-mon` hoặc `nhan-vien`:
 
 ## Kiểm tra
 
-Chạy trong thư mục có `pom.xml`:
-
-```powershell
-mvn test
-node --test src/test/js/menu-filters.test.cjs
-```
+Lệnh chạy test Java, JavaScript và chuẩn bị Oracle nằm trong
+[hướng dẫn cài đặt và dữ liệu Oracle](database/oracle/README.md).
 
 Bộ test Java sử dụng profile `test`, H2 trong bộ nhớ, cấu hình riêng không tải
 class mở trình duyệt. H2 chỉ là dependency cho test. Không thực thi SQL vào Oracle.

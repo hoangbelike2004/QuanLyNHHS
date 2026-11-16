@@ -1,7 +1,7 @@
 module.exports = ({page,p,h,code,table,note,schemas}) => {
 page('TRANG BÌA', {type:'cover',lines:[
- {text:'TRƯỜNG: ........................................................................',before:100,after:130},
- {text:'KHOA / BỘ MÔN: ............................................................',after:420},
+ {text:'TRƯỜNG ĐẠI HỌC GIAO THÔNG VẬN TẢI',before:100,after:130},
+ {text:'KHOA CÔNG NGHỆ THÔNG TIN',after:420},
  {text:'BÁO CÁO BÀI TẬP LỚN',style:'CoverTitle',after:180},
  {text:'ĐỀ TÀI',style:'CoverSubtitle',after:120},
  {text:'XÂY DỰNG HỆ THỐNG QUẢN LÝ\nNHÀ HÀNG HẢI SẢN',style:'CoverTitle',after:220},
@@ -9,7 +9,7 @@ page('TRANG BÌA', {type:'cover',lines:[
  {text:'Môn học: ........................................................................',after:150},
  {text:'Giảng viên hướng dẫn: ...................................................',after:150},
  {text:'Lớp: ....................................    Nhóm: 4',after:180},
- {text:'DANH SÁCH THÀNH VIÊN',style:'CoverSubtitle',after:100}
+ {text:'SINH VIÊN THỰC HIỆN – NHÓM 4',style:'CoverSubtitle',after:100}
  ],members:{headers:['STT','Họ và tên','Mã sinh viên','Phần việc'],rows:[
  ['1','Hoàng Việt Đức','','Khách hàng, bàn ăn, đặt bàn'],
  ['2','Nguyễn Cao Hoàng','','Thực đơn, nhân viên, bảo mật'],

@@ -365,7 +365,4 @@ def validate(pptx_path):
 if __name__=='__main__':
     pptx_path=render_pptx();render_pdf()
     (ROOT/'noi_dung_slide.json').write_text(json.dumps(SLIDES,ensure_ascii=False,indent=2))
-    lines=['# Gợi ý thuyết trình – Nhóm 4','', '12 slide, thời lượng gợi ý khoảng 8–10 phút. Lời dẫn cũng có trong phần Notes của PowerPoint.','']
-    for i,d in enumerate(SLIDES,1):lines += [f'## Slide {i}. {d["title"]}','',d['notes'],'']
-    (ROOT/'Goi_y_thuyet_trinh.md').write_text('\n'.join(lines))
     print(json.dumps(validate(pptx_path),ensure_ascii=False,indent=2))
