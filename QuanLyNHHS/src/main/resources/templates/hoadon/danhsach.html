@@ -31,7 +31,7 @@
             <div class="top">
                 <h2>Danh sách hóa đơn</h2>
 
-                <a class="btn green" th:if="${laThuNgan}" th:href="@{/hoa-don/them}">
+                <a class="btn green" th:if="${laThuNgan or laNhanVien}" th:href="@{/hoa-don/them}">
                     + Tạo hóa đơn
                 </a>
             </div>

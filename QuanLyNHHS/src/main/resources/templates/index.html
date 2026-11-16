@@ -16,7 +16,7 @@
             <div class="overview-heading">
                 <div><h1>Quản lý nhà hàng</h1><p>Hải sản Hoàng Gia</p></div>
                 <div class="overview-actions">
-                    <a class="btn-primary" th:if="${laThuNgan}" th:href="@{/hoa-don/them}">Lập hóa đơn</a>
+                    <a class="btn-primary" th:if="${laThuNgan or laNhanVien}" th:href="@{/hoa-don/them}">Lập hóa đơn</a>
                     <a class="btn-secondary" th:if="${laQuanLy}" th:href="@{/dat-ban/them}">Đặt bàn</a>
                     <a class="btn-secondary" th:if="${laQuanLy}" th:href="@{/phieu-nhap/them}">Nhập hàng</a>
                 </div>

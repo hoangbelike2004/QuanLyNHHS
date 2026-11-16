@@ -106,7 +106,7 @@ class MenuCrudIntegrationTests {
         var employeePage = mvc.perform(get("/hoa-don").session(employee)).andReturn();
         assertEquals(404, employeePage.getResponse().getStatus());
         CsrfToken employeeCsrf = (CsrfToken) employeePage.getRequest().getAttribute(CsrfToken.class.getName());
-        assertEquals(403, mvc.perform(get("/hoa-don/them").session(employee)).andReturn().getResponse().getStatus());
+        assertEquals(404, mvc.perform(get("/hoa-don/them").session(employee)).andReturn().getResponse().getStatus());
         assertEquals(403, mvc.perform(post("/hoa-don/thanh-toan/1").session(employee)
                 .param(employeeCsrf.getParameterName(), employeeCsrf.getToken())).andReturn().getResponse().getStatus());
         assertEquals(404, mvc.perform(get("/hoa-don/them").session(cashier)).andReturn().getResponse().getStatus());
