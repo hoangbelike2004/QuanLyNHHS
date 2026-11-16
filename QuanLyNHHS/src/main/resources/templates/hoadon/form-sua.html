@@ -1,14 +1,15 @@
 
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sửa hóa đơn</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" th:href="@{/css/style.css}">
-<link rel="stylesheet" th:href="@{/css/finance.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/finance.css}">
 </head>
 
 <body>
@@ -23,298 +24,327 @@
                 <a th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
             </nav>
 
+            <div class="finance-content">
+                <section class="panel">
 
+                    <h2>Sửa hóa đơn</h2>
 
-<div class="finance-content">
-    <section class="panel">
+                    <p class="description">
+                        Có thể thay đổi thông tin hóa đơn và danh sách món ăn
+                        khi hóa đơn chưa thanh toán.
+                    </p>
 
-        <h2>Sửa hóa đơn</h2>
+                    <div th:if="${thongBao}" class="notice" th:text="${thongBao}"></div>
+                    <div th:if="${loi}" class="error" th:text="${loi}"></div>
 
-        <p class="description">
-            Có thể thay đổi thông tin hóa đơn và danh sách món ăn
-            khi hóa đơn chưa thanh toán.
-        </p>
+                    <form th:action="@{/hoa-don/sua/{id}(id=${hoaDon.maHd})}"
+                          th:object="${hoaDon}"
+                          method="post"
+                          id="invoiceForm">
 
-        <div th:if="${thongBao}" class="notice" th:text="${thongBao}"></div>
-        <div th:if="${loi}" class="error" th:text="${loi}"></div>
+                        <div class="form-group">
+                            <label>Mã hóa đơn</label>
+                            <input type="text" th:value="${hoaDon.maHd}" readonly>
+                        </div>
 
-        <form th:action="@{/hoa-don/sua/{id}(id=${hoaDon.maHd})}"
-              th:object="${hoaDon}"
-              method="post"
-              id="invoiceForm">
+                        <div class="form-group">
+                            <label>Trạng thái</label>
+                            <span class="status" th:text="${hoaDon.trangThai}"></span>
+                        </div>
 
-            <div class="form-group">
-                <label>Mã hóa đơn</label>
-                <input type="text" th:value="${hoaDon.maHd}" readonly>
-            </div>
+                        <div class="form-group">
+                            <label for="maBan">Mã bàn</label>
+                            <input type="number" id="maBan"
+                                   th:field="*{maBan}" min="1" required>
+                        </div>
 
-            <div class="form-group">
-                <label>Trạng thái</label>
-                <span class="status" th:text="${hoaDon.trangThai}"></span>
-            </div>
+                        <div class="form-group">
+                            <label for="maNv">Mã nhân viên</label>
+                            <input type="number" id="maNv"
+                                   th:field="*{maNv}" min="1" required>
+                        </div>
 
-            <div class="form-group">
-                <label for="maBan">Mã bàn</label>
-                <input type="number" id="maBan"
-                       th:field="*{maBan}" min="1" required>
-            </div>
+                        <div class="form-group">
+                            <label for="maKh">Mã khách hàng</label>
+                            <input type="number" id="maKh"
+                                   th:field="*{maKh}" min="1">
+                        </div>
 
-            <div class="form-group">
-                <label for="maNv">Mã nhân viên</label>
-                <input type="number" id="maNv"
-                       th:field="*{maNv}" min="1" required>
-            </div>
+                        <div class="form-group">
+                            <label for="giamGia">Giảm giá (VNĐ)</label>
+                            <input type="number" id="giamGia"
+                                   th:field="*{giamGia}"
+                                   min="0" step="1" required>
+                        </div>
 
-            <div class="form-group">
-                <label for="maKh">Mã khách hàng</label>
-                <input type="number" id="maKh"
-                       th:field="*{maKh}" min="1">
-            </div>
+                        <hr>
 
-            <div class="form-group">
-                <label for="giamGia">Giảm giá (VNĐ)</label>
-                <input type="number" id="giamGia"
-                       th:field="*{giamGia}"
-                       min="0" step="1" required>
-            </div>
+                        <h3>Danh sách món ăn</h3>
 
-            <hr>
+                        <div id="dishList">
 
-            <h3>Danh sách món ăn</h3>
+                            <!-- Hiển thị các món đã có trong hóa đơn -->
+                            <div class="dish-row"
+                                 th:each="ct : ${danhSachChiTiet}">
 
-            <div id="dishList">
+                                <div class="form-group dish-select">
+                                    <label>Món ăn</label>
+                                    <select name="maMon" class="mon-select" required>
+                                        <option value="">-- Chọn món --</option>
 
-                <!-- Hiển thị các món đã có trong hóa đơn -->
-                <div class="dish-row"
-                     th:each="ct : ${danhSachChiTiet}">
+                                        <option th:each="mon : ${danhSachMonAn}"
+                                                th:value="${mon.maMon}"
+                                                th:text="${mon.tenMon}"
+                                                th:attr="data-price=${mon.donGia}"
+                                                th:selected="${mon.maMon == ct.id.maMon}">
+                                        </option>
+                                    </select>
+                                </div>
 
-                    <div class="form-group dish-select">
-                        <label>Món ăn</label>
-                        <select name="maMon" class="mon-select"
-                                required>
-                            <option value="">-- Chọn món --</option>
+                                <div class="form-group">
+                                    <label>Số lượng</label>
+                                    <input type="number" name="soLuong"
+                                           class="quantity"
+                                           min="1" step="1"
+                                           th:value="${ct.soLuong}" required>
+                                </div>
 
-                            <option th:each="mon : ${danhSachMonAn}"
-                                    th:value="${mon.maMon}"
-                                    th:text="${mon.tenMon}"
-                                    th:attr="data-price=${mon.donGia}"
-                                    th:selected="${mon.maMon == ct.id.maMon}">
-                            </option>
-                        </select>
-                    </div>
+                                <div>
+                                    <label>Thành tiền</label>
+                                    <div class="line-total">0 VNĐ</div>
+                                </div>
 
-                    <div class="form-group">
-                        <label>Số lượng</label>
-                        <input type="number" name="soLuong"
-                               class="quantity"
-                               min="0.01" step="0.01"
-                               th:value="${ct.soLuong}" required>
-                    </div>
+                                <div>
+                                    <button type="button"
+                                            class="btn-delete"
+                                            onclick="xoaMon(this)">
+                                        Xóa
+                                    </button>
+                                </div>
+                            </div>
 
-                    <div>
-                        <label>Thành tiền</label>
-                        <div class="line-total">0 VNĐ</div>
-                    </div>
+                        </div>
 
-                    <div>
-                        <button type="button"
-                                class="btn-delete"
-                                onclick="xoaMon(this)">
-                            Xóa
+                        <button type="button" class="btn-add"
+                                onclick="themMon()">
+                            + Thêm món
                         </button>
-                    </div>
-                </div>
 
+                        <div class="summary">
+                            <p>
+                                <span>Tổng tiền món ăn:</span>
+                                <strong id="tongMon">0 VNĐ</strong>
+                            </p>
+
+                            <p>
+                                <span>Giảm giá:</span>
+                                <strong id="hienThiGiamGia">0 VNĐ</strong>
+                            </p>
+
+                            <p class="final-total">
+                                <span>Tổng thanh toán:</span>
+                                <span id="tongThanhToan">0 VNĐ</span>
+                            </p>
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="btn-save">
+                                Lưu thay đổi
+                            </button>
+
+                            <a class="btn-cancel"
+                               th:href="@{/hoa-don/chi-tiet/{id}(id=${hoaDon.maHd})}">
+                                Hủy
+                            </a>
+
+                            <a class="btn-cancel" th:href="@{/hoa-don}">
+                                Danh sách hóa đơn
+                            </a>
+                        </div>
+
+                    </form>
+                </section>
             </div>
 
-            <button type="button" class="btn-add"
-                    onclick="themMon()">
-                + Thêm món
-            </button>
+            <!-- Dữ liệu món ăn lấy từ database -->
+            <script th:inline="javascript">
+                const danhSachMonAn = /*[[${danhSachMonAn}]]*/ [];
 
-            <div class="summary">
-                <p>
-                    <span>Tổng tiền món ăn:</span>
-                    <strong id="tongMon">0 VNĐ</strong>
-                </p>
+                const dishList = document.getElementById("dishList");
 
-                <p>
-                    <span>Giảm giá:</span>
-                    <strong id="hienThiGiamGia">0 VNĐ</strong>
-                </p>
+                function dinhDangTien(tien) {
+                    return new Intl.NumberFormat("vi-VN").format(tien) + " VNĐ";
+                }
 
-                <p class="final-total">
-                    <span>Tổng thanh toán:</span>
-                    <span id="tongThanhToan">0 VNĐ</span>
-                </p>
-            </div>
+                function taoOptions() {
+                    const options = document.createDocumentFragment();
+                    options.appendChild(new Option('-- Chọn món --', ''));
 
-            <div class="actions">
-                <button type="submit" class="btn-save">
-                    Lưu thay đổi
-                </button>
+                    danhSachMonAn.forEach(mon => {
+                        const option = new Option(mon.tenMon, mon.maMon);
+                        option.dataset.price = mon.donGia;
+                        options.appendChild(option);
+                    });
 
-                <a class="btn-cancel"
-                   th:href="@{/hoa-don/chi-tiet/{id}(id=${hoaDon.maHd})}">
-                    Hủy
-                </a>
+                    return options;
+                }
 
-                <a class="btn-cancel" th:href="@{/hoa-don}">
-                    Danh sách hóa đơn
-                </a>
-            </div>
+                function themMon() {
+                    const row = document.createElement("div");
+                    row.className = "dish-row";
 
-        </form>
-    </section>
-</div>
+                    row.innerHTML = `
+                        <div class="form-group dish-select">
+                            <label>Món ăn</label>
+                            <select name="maMon" class="mon-select" required>
+                            </select>
+                        </div>
 
-<!-- Dữ liệu món ăn lấy từ database -->
-<script th:inline="javascript">
-    const danhSachMonAn = /*[[${danhSachMonAn}]]*/ [];
+                        <div class="form-group">
+                            <label>Số lượng</label>
+                            <input type="number" name="soLuong"
+                                   class="quantity"
+                                   min="1" step="1"
+                                   value="1" required>
+                        </div>
 
-    const dishList = document.getElementById("dishList");
+                        <div>
+                            <label>Thành tiền</label>
+                            <div class="line-total">0 VNĐ</div>
+                        </div>
 
-    function dinhDangTien(tien) {
-        return new Intl.NumberFormat("vi-VN").format(tien) + " VNĐ";
-    }
+                        <div>
+                            <button type="button" class="btn-delete"
+                                    onclick="xoaMon(this)">
+                                Xóa
+                            </button>
+                        </div>
+                    `;
 
-    function taoOptions() {
-        const options = document.createDocumentFragment();
-        options.appendChild(new Option('-- Chọn món --', ''));
+                    row.querySelector('.mon-select').appendChild(taoOptions());
 
-        danhSachMonAn.forEach(mon => {
-            const option = new Option(mon.tenMon, mon.maMon);
-            option.dataset.price = mon.donGia;
-            options.appendChild(option);
-        });
+                    dishList.appendChild(row);
+                    tinhTongTien();
+                }
 
-        return options;
-    }
+                // Xử lý khi chọn món đã tồn tại trong hóa đơn
+                function xuLyChonMon(select) {
+                    const maMon = select.value;
 
-    function themMon() {
-        const row = document.createElement("div");
-        row.className = "dish-row";
+                    if (!maMon) {
+                        tinhTongTien();
+                        return;
+                    }
 
-        row.innerHTML = `
-            <div class="form-group dish-select">
-                <label>Món ăn</label>
-                <select name="maMon" class="mon-select" required>
-                </select>
-            </div>
+                    const currentRow = select.closest(".dish-row");
+                    const rows = document.querySelectorAll(".dish-row");
 
-            <div class="form-group">
-                <label>Số lượng</label>
-                <input type="number" name="soLuong"
-                       class="quantity"
-                       min="0.01" step="0.01"
-                       value="1" required>
-            </div>
+                    for (const row of rows) {
+                        if (row === currentRow) {
+                            continue;
+                        }
 
-            <div>
-                <label>Thành tiền</label>
-                <div class="line-total">0 VNĐ</div>
-            </div>
+                        const otherSelect = row.querySelector(".mon-select");
 
-            <div>
-                <button type="button" class="btn-delete"
-                        onclick="xoaMon(this)">
-                    Xóa
-                </button>
-            </div>
-        `;
+                        if (otherSelect.value === maMon) {
+                            const currentQuantity =
+                                currentRow.querySelector(".quantity");
 
-        row.querySelector('.mon-select').appendChild(taoOptions());
-        dishList.appendChild(row);
-        tinhTongTien();
-    }
+                            const otherQuantity =
+                                row.querySelector(".quantity");
 
-    function xoaMon(button) {
-        button.closest(".dish-row").remove();
-        tinhTongTien();
-    }
+                            const soLuongMoi =
+                                Number(otherQuantity.value || 0) +
+                                Number(currentQuantity.value || 0);
 
-    function tinhTongTien() {
-        let tongMon = 0;
+                            otherQuantity.value = soLuongMoi;
 
-        document.querySelectorAll(".dish-row").forEach(row => {
-            const select = row.querySelector(".mon-select");
-            const quantity = row.querySelector(".quantity");
+                            currentRow.remove();
 
-            const option = select.options[select.selectedIndex];
-            const donGia = Number(option?.dataset.price || 0);
-            const soLuong = Number(quantity.value || 0);
+                            tinhTongTien();
+                            return;
+                        }
+                    }
 
-            const thanhTien = donGia * soLuong;
+                    tinhTongTien();
+                }
 
-            row.querySelector(".line-total").textContent =
-                dinhDangTien(thanhTien);
+                function xoaMon(button) {
+                    button.closest(".dish-row").remove();
+                    tinhTongTien();
+                }
 
-            tongMon += thanhTien;
-        });
+                function tinhTongTien() {
+                    let tongMon = 0;
 
-        const giamGia = Math.max(
-            0,
-            Number(document.getElementById("giamGia").value || 0)
-        );
+                    document.querySelectorAll(".dish-row").forEach(row => {
+                        const select = row.querySelector(".mon-select");
+                        const quantity = row.querySelector(".quantity");
 
-        const tongThanhToan = Math.max(0, tongMon - giamGia);
+                        const option = select.options[select.selectedIndex];
+                        const donGia = Number(option?.dataset.price || 0);
+                        const soLuong = Number(quantity.value || 0);
 
-        document.getElementById("tongMon").textContent =
-            dinhDangTien(tongMon);
+                        const thanhTien = donGia * soLuong;
 
-        document.getElementById("hienThiGiamGia").textContent =
-            dinhDangTien(giamGia);
+                        row.querySelector(".line-total").textContent =
+                            dinhDangTien(thanhTien);
 
-        document.getElementById("tongThanhToan").textContent =
-            dinhDangTien(tongThanhToan);
-    }
+                        tongMon += thanhTien;
+                    });
 
-    document.addEventListener("input", function(event) {
-        if (event.target.matches(".quantity, #giamGia")) {
-            tinhTongTien();
-        }
-    });
+                    const giamGia = Math.max(
+                        0,
+                        Number(document.getElementById("giamGia").value || 0)
+                    );
 
-    document.addEventListener("change", function(event) {
-        if (event.target.matches(".mon-select")) {
-            tinhTongTien();
-        }
-    });
+                    const tongThanhToan = Math.max(0, tongMon - giamGia);
 
-    document.getElementById("invoiceForm").addEventListener("submit", function(event) {
-        const rows = document.querySelectorAll(".dish-row");
+                    document.getElementById("tongMon").textContent =
+                        dinhDangTien(tongMon);
 
-        if (rows.length === 0) {
-            event.preventDefault();
-            alert("Hóa đơn phải có ít nhất một món ăn!");
-            return;
-        }
+                    document.getElementById("hienThiGiamGia").textContent =
+                        dinhDangTien(giamGia);
 
-        const seen = new Set();
+                    document.getElementById("tongThanhToan").textContent =
+                        dinhDangTien(tongThanhToan);
+                }
 
-        for (const row of rows) {
-            const maMon = row.querySelector(".mon-select").value;
-            const soLuong = Number(row.querySelector(".quantity").value);
+                document.addEventListener("input", function(event) {
+                    if (event.target.matches(".quantity, #giamGia")) {
+                        tinhTongTien();
+                    }
+                });
 
-            if (!maMon || !Number.isFinite(soLuong) || soLuong <= 0) {
-                event.preventDefault();
-                alert("Vui lòng chọn món và nhập số lượng hợp lệ!");
-                return;
-            }
+                document.addEventListener("change", function(event) {
+                    if (event.target.matches(".mon-select")) {
+                        xuLyChonMon(event.target);
+                    }
+                });
 
-            if (seen.has(maMon)) {
-                event.preventDefault();
-                alert("Một món ăn chỉ được xuất hiện một lần. Hãy sửa số lượng ở dòng món đã có!");
-                return;
-            }
+                document.getElementById("invoiceForm").addEventListener("submit", function(event) {
+                    const rows = document.querySelectorAll(".dish-row");
 
-            seen.add(maMon);
-        }
-    });
+                    if (rows.length === 0) {
+                        event.preventDefault();
+                        alert("Hóa đơn phải có ít nhất một món ăn!");
+                        return;
+                    }
 
-    tinhTongTien();
-</script>
+                    for (const row of rows) {
+                        const maMon = row.querySelector(".mon-select").value;
+                        const soLuong = Number(row.querySelector(".quantity").value);
 
+                        if (!maMon || !Number.isInteger(soLuong) || soLuong < 1) {
+                            event.preventDefault();
+                            alert("Vui lòng chọn món và nhập số lượng nguyên lớn hơn 0!");
+                            return;
+                        }
+                    }
+                });
+
+                tinhTongTien();
+            </script>
 
         </div>
     </main>

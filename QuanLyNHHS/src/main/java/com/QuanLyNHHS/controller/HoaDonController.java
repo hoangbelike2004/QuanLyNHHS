@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.QuanLyNHHS.model.HoaDon;
+import com.QuanLyNHHS.repository.BanAnRepository;
 import com.QuanLyNHHS.repository.MonAnRepository;
 import com.QuanLyNHHS.service.HoaDonService;
 
@@ -33,6 +34,7 @@ public class HoaDonController {
     private final HoaDonService hoaDonService;
     // monAnRepository: thành phần MonAnRepository dùng đọc/ghi và truy vấn dữ liệu; Spring cung cấp đối tượng triển khai.
     private final MonAnRepository monAnRepository;
+    private final BanAnRepository banAnRepository;
 
     /**
      * Nhận các thành phần phụ thuộc qua constructor và gán vào thuộc tính this để các hàm dùng lại.
@@ -41,10 +43,12 @@ public class HoaDonController {
      */
     public HoaDonController(
             HoaDonService hoaDonService,
-            MonAnRepository monAnRepository) {
+            MonAnRepository monAnRepository,
+            BanAnRepository banAnRepository) {
 
         this.hoaDonService = hoaDonService;
         this.monAnRepository = monAnRepository;
+        this.banAnRepository = banAnRepository;
     }
 
     // Danh sách hóa đơn
@@ -112,6 +116,10 @@ public class HoaDonController {
                 "danhSachMonAn",
                 monAnRepository.findAll(Sort.by("tenMon").ascending()));
 
+        model.addAttribute(
+                "danhSachBan",
+                banAnRepository.findByTrangThai("Trống"));
+
         return "hoadon/form";
     }
 
@@ -143,7 +151,7 @@ public class HoaDonController {
             return "redirect:/hoa-don/chi-tiet/"
                     + hoaDonMoi.getMaHd();
 
-        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
+        } catch (RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());
@@ -192,7 +200,7 @@ public class HoaDonController {
 
             return "hoadon/form-sua";
 
-        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
+        } catch (RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());
@@ -231,7 +239,7 @@ public class HoaDonController {
 
             return "redirect:/hoa-don/chi-tiet/" + maHd;
 
-        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
+        } catch (RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());
@@ -259,7 +267,7 @@ public class HoaDonController {
                     "thongBao",
                     "Xoa hoa don thanh cong.");
 
-        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
+        } catch (RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());
@@ -287,7 +295,7 @@ public class HoaDonController {
                     "thongBao",
                     "Thanh toan thanh cong.");
 
-        } catch (/* e: ngoại lệ bị bắt để lấy thông báo lỗi. */ RuntimeException e) {
+        } catch (RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
                     "loi", e.getMessage());

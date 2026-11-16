@@ -9,6 +9,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -21,6 +24,11 @@ public class CTHoaDon {
     // id: khóa kép gồm mã hóa đơn và mã món.
     @EmbeddedId
     private CTHoaDonId id;
+
+    // monAn: món ăn liên kết qua MA_MON, dùng để lấy tên món.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MA_MON", insertable = false, updatable = false)
+    private MonAn monAn;
 
     // soLuong: số lượng của dòng chi tiết.
     @Column(name = "SO_LUONG", precision = 10, scale = 2)
@@ -54,6 +62,22 @@ public class CTHoaDon {
      */
     public void setId(CTHoaDonId id) {
         this.id = id;
+    }
+
+    /**
+     * Đọc món ăn liên kết với chi tiết hóa đơn.
+     * @return đối tượng món ăn
+     */
+    public MonAn getMonAn() {
+        return monAn;
+    }
+
+    /**
+     * Gán món ăn liên kết với chi tiết hóa đơn.
+     * @param monAn đối tượng món ăn
+     */
+    public void setMonAn(MonAn monAn) {
+        this.monAn = monAn;
     }
 
     /**
@@ -196,7 +220,7 @@ public class CTHoaDon {
                 return true;
             }
 
-            if (!(obj instanceof /* other: khóa kép sau khi đã kiểm tra đúng kiểu dữ liệu. */ CTHoaDonId other)) {
+            if (!(obj instanceof CTHoaDonId other)) {
                 return false;
             }
 
