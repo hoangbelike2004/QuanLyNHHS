@@ -18,6 +18,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackageClasses = MonAnRepository.class)
 @Import({MonAnService.class, LoaiMonService.class, NhanVienService.class,
         TaiKhoanService.class, SecurityConfig.class, AuthController.class,
-        NguoiDungAdvice.class, MonAnController.class, LoaiMonController.class,
+        NguoiDungAdvice.class, TaiKhoanController.class, MonAnController.class, LoaiMonController.class,
         NhanVienController.class, DanhMucExceptionHandler.class, HomeController.class})
 public class MenuTestApplication {}

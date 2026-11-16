@@ -31,7 +31,7 @@
             <div class="top">
                 <h2>Danh sách hóa đơn</h2>
 
-                <a class="btn green" th:href="@{/hoa-don/them}">
+                <a class="btn green" th:if="${laThuNgan}" th:href="@{/hoa-don/them}">
                     + Tạo hóa đơn
                 </a>
             </div>
@@ -130,11 +130,11 @@
                                     </a>
 
                                     <!-- Chuyển đến chi tiết hóa đơn để kiểm tra trước khi thanh toán -->
-                                    <a class="btn green" th:if="${hd.trangThai == 'Chua thanh toan'}"
+                                    <a class="btn green" th:if="${laThuNgan and hd.trangThai == 'Chua thanh toan'}"
                                         th:href="@{/hoa-don/chi-tiet/{id}(id=${hd.maHd})}">
                                         Thanh toán
                                     </a>
-                                    <form th:if="${hd.trangThai == 'Chua thanh toan'}"
+                                    <form th:if="${laQuanLy and hd.trangThai == 'Chua thanh toan'}"
                                           th:action="@{/hoa-don/xoa/{id}(id=${hd.maHd})}"
                                           method="post"
                                           onsubmit="return confirm('Bạn có chắc muốn xóa hóa đơn chưa thanh toán này?')">

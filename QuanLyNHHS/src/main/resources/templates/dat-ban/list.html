@@ -25,7 +25,7 @@
 <div class="container-fluid mt-4 px-4">
     <div class="page-header d-flex justify-content-between align-items-center">
         <h3 class="text-primary mb-0"><i class="fa-solid fa-calendar-check me-2"></i>Danh sách đặt bàn</h3>
-        <a href="/dat-ban/them" class="btn btn-primary">
+        <a th:if="${laQuanLy}" href="/dat-ban/them" class="btn btn-primary">
             <i class="fa-solid fa-circle-plus me-1"></i> Đặt bàn mới
         </a>
     </div>
@@ -119,7 +119,7 @@
                         </td>
                         <td class="text-center action-btns">
                             <!-- Sửa -->
-                            <a th:href="@{/dat-ban/sua/{id}(id=${db.maDat})}"
+                            <a th:if="${laQuanLy}" th:href="@{/dat-ban/sua/{id}(id=${db.maDat})}"
                                class="btn btn-sm btn-outline-secondary mb-1" title="Sửa">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
@@ -131,7 +131,7 @@
                                 </button>
                             </form>
                             <!-- Hủy - hiện khi CHO_XAC_NHAN hoặc DA_XAC_NHAN -->
-                            <form th:if="${db.trangThai == 'CHO_XAC_NHAN' or db.trangThai == 'DA_XAC_NHAN'}"
+                            <form th:if="${laQuanLy and (db.trangThai == 'CHO_XAC_NHAN' or db.trangThai == 'DA_XAC_NHAN')}"
                                   th:action="@{/dat-ban/huy/{id}(id=${db.maDat})}" method="post"
                                   onsubmit="return confirm('Hủy đặt bàn này?');">
                                 <button type="submit" class="btn btn-sm btn-outline-danger mb-1" title="Hủy">
@@ -139,14 +139,14 @@
                                 </button>
                             </form>
                             <!-- Hoàn thành - chỉ hiện khi DA_XAC_NHAN -->
-                            <form th:if="${db.trangThai == 'DA_XAC_NHAN'}"
+                            <form th:if="${laQuanLy and db.trangThai == 'DA_XAC_NHAN'}"
                                   th:action="@{/dat-ban/hoan-thanh/{id}(id=${db.maDat})}" method="post">
                                 <button type="submit" class="btn btn-sm btn-secondary mb-1" title="Hoàn thành">
                                     <i class="fa-solid fa-flag"></i> Hoàn thành
                                 </button>
                             </form>
                             <!-- Xóa - chỉ hiện khi DA_HUY hoặc HOAN_THANH -->
-                            <form th:if="${db.trangThai == 'DA_HUY' or db.trangThai == 'HOAN_THANH'}"
+                            <form th:if="${laQuanLy and (db.trangThai == 'DA_HUY' or db.trangThai == 'HOAN_THANH')}"
                                   th:action="@{/dat-ban/xoa/{id}(id=${db.maDat})}" method="post"
                                   onsubmit="return confirm('Xóa vĩnh viễn đặt bàn này?');">
                                 <button type="submit" class="btn btn-sm btn-outline-danger mb-1" title="Xóa">

@@ -2,6 +2,9 @@ package com.QuanLyNHHS.service;
 
 import java.util.List;
 import java.util.Locale;
+import java.nio.charset.StandardCharsets;
+import java.util.Set;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,13 +23,52 @@ import com.QuanLyNHHS.repository.TaiKhoanRepository;
 public class TaiKhoanService implements UserDetailsService {
     // repository: thành phần TaiKhoanRepository dùng đọc/ghi và truy vấn dữ liệu; Spring cung cấp đối tượng triển khai.
     private final TaiKhoanRepository repository;
+    private final PasswordEncoder passwordEncoder;
+    private static final Set<String> VAI_TRO_HOP_LE = Set.of("QUAN_LY", "THU_NGAN", "NHAN_VIEN");
 
     /**
      * Nhận các thành phần phụ thuộc qua constructor và gán vào thuộc tính this để các hàm dùng lại.
      * @param repository thành phần TaiKhoanRepository dùng đọc/ghi và truy vấn dữ liệu; Spring cung cấp đối tượng triển khai
      */
-    public TaiKhoanService(TaiKhoanRepository repository) {
+    public TaiKhoanService(TaiKhoanRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<TaiKhoan> layDanhSach() {
+        return repository.findAll(org.springframework.data.domain.Sort.by("maTk").ascending());
+    }
+
+    @Transactional
+    public TaiKhoan taoTaiKhoan(String hoTen, String tenDangNhap, String matKhau, String vaiTro) {
+        String name = hoTen == null ? "" : hoTen.strip();
+        String username = tenDangNhap == null ? "" : tenDangNhap.strip().toLowerCase(Locale.ROOT);
+        if (name.isBlank() || name.length() > 100) {
+            throw new IllegalArgumentException("Họ tên phải có từ 1 đến 100 ký tự.");
+        }
+        if (!username.matches("[a-z0-9_]{3,30}")) {
+            throw new IllegalArgumentException("Tên đăng nhập phải có 3-30 ký tự chữ thường, số hoặc dấu gạch dưới.");
+        }
+        if (matKhau == null || matKhau.length() < 8
+                || matKhau.getBytes(StandardCharsets.UTF_8).length > 72) {
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 8 ký tự và không quá 72 byte UTF-8.");
+        }
+        if (!VAI_TRO_HOP_LE.contains(vaiTro)) {
+            throw new IllegalArgumentException("Vai trò không hợp lệ.");
+        }
+        if (repository.findByTenDangNhap(username).isPresent()) {
+            throw new IllegalArgumentException("Tên đăng nhập đã tồn tại.");
+        }
+        TaiKhoan account = new TaiKhoan();
+        account.setHoTen(name);
+        account.setTenDangNhap(username);
+        account.setMatKhau(passwordEncoder.encode(matKhau));
+        account.setVaiTro(vaiTro);
+        try {
+            return repository.saveAndFlush(account);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Tên đăng nhập đã tồn tại.", e);
+        }
     }
 
     /**
@@ -56,7 +98,8 @@ public class TaiKhoanService implements UserDetailsService {
          * @param account entity tài khoản đọc từ database hoặc được tạo để lưu tên đăng nhập và mật khẩu đã băm
          */
         public NguoiDung(TaiKhoan account) {
-            super(account.getTenDangNhap(), account.getMatKhau(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+            super(account.getTenDangNhap(), account.getMatKhau(), List.of(new SimpleGrantedAuthority("ROLE_" +
+                    (account.getVaiTro() == null ? "QUAN_LY" : account.getVaiTro()))));
             this.hoTen = account.getHoTen();
         }
         /**

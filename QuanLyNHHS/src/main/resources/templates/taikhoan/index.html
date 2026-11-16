@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý tài khoản</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/finance.css}">
+</head>
+<body>
+<div class="app-container" th:with="activeMenu='taikhoan'">
+    <div th:replace="~{layout/sidebar :: sidebar}"></div>
+    <main class="main-wrapper">
+        <div th:replace="~{layout/navbar :: navbar('Tài khoản', 'fa-solid fa-user-lock')}"></div>
+        <div class="content-body finance-module">
+            <div class="finance-content">
+                <section class="panel">
+                    <h2>Tạo tài khoản</h2>
+                    <p class="description">Cấp tài khoản đăng nhập và chọn quyền truy cập.</p>
+                    <p class="notice" role="status" th:if="${thongBao}" th:text="${thongBao}"></p>
+                    <p class="error" role="alert" th:if="${loi}" th:text="${loi}"></p>
+                    <form th:action="@{/tai-khoan}" method="post" autocomplete="off">
+                        <div class="form-group">
+                            <label for="hoTen">Họ tên</label>
+                            <input id="hoTen" name="hoTen" maxlength="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tenDangNhap">Tên đăng nhập</label>
+                            <input id="tenDangNhap" name="tenDangNhap" minlength="3" maxlength="30"
+                                   pattern="[A-Za-z0-9_]{3,30}" autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="matKhau">Mật khẩu</label>
+                            <input id="matKhau" name="matKhau" type="password" minlength="8"
+                                   autocomplete="new-password" required>
+                            <small>Tối thiểu 8 ký tự, tối đa 72 byte UTF-8.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="vaiTro">Vai trò</label>
+                            <select id="vaiTro" name="vaiTro" required>
+                                <option value="NHAN_VIEN">Nhân viên</option>
+                                <option value="THU_NGAN">Thu ngân</option>
+                                <option value="QUAN_LY">Quản lý</option>
+                            </select>
+                        </div>
+                        <button class="btn-save" type="submit">Tạo tài khoản</button>
+                    </form>
+                </section>
+                <section class="panel">
+                    <h2>Tài khoản hiện có</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Mã</th><th>Họ tên</th><th>Tên đăng nhập</th><th>Vai trò</th></tr></thead>
+                            <tbody>
+                            <tr th:each="account : ${danhSachTaiKhoan}">
+                                <td th:text="${account.maTk}"></td>
+                                <td th:text="${account.hoTen}"></td>
+                                <td th:text="${account.tenDangNhap}"></td>
+                                <td th:text="${account.vaiTro}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(danhSachTaiKhoan)}"><td colspan="4">Chưa có tài khoản.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.QuanLyNHHS.model.BanAn;
 import com.QuanLyNHHS.model.CTHoaDon;
@@ -173,6 +174,17 @@ public class HoaDonService {
         Map<Long, BigDecimal> danhSachMon
                 = kiemTraVaGopDanhSachMon(maMon, soLuong);
 
+        Map<Long, BigDecimal> daXacNhan = new LinkedHashMap<>();
+        for (CTHoaDon chiTiet : ctHoaDonRepository.findById_MaHd(hoaDon.getMaHd())) {
+            BigDecimal confirmed = chiTiet.getSoLuongDaXacNhan();
+            if (confirmed.signum() > 0) {
+                daXacNhan.put(chiTiet.getMaMon(), confirmed);
+                if (laNhanVien() && danhSachMon.getOrDefault(chiTiet.getMaMon(), BigDecimal.ZERO).compareTo(confirmed) < 0) {
+                    throw new IllegalStateException("Khong the giam hoac xoa mon da xac nhan");
+                }
+            }
+        }
+
         // Cập nhật thông tin hóa đơn
         // Giữ nguyên mã bàn hiện tại
         hoaDon.setMaKh(hoaDonMoi.getMaKh());
@@ -191,7 +203,7 @@ public class HoaDonService {
         ctHoaDonRepository.deleteById_MaHd(hoaDon.getMaHd());
 
         // Lưu lại danh sách món ăn mới
-        luuChiTietHoaDon(hoaDon.getMaHd(), danhSachMon);
+        luuChiTietHoaDon(hoaDon.getMaHd(), danhSachMon, daXacNhan);
 
         // Tính lại tổng tiền
         return tinhLaiTongTien(hoaDon.getMaHd());
@@ -213,6 +225,20 @@ public class HoaDonService {
 
         // Giải phóng bàn nếu không còn hóa đơn chưa thanh toán
         capNhatTrangThaiBanNeuKhongConHoaDonChuaThanhToan(maBan);
+    }
+
+    @Transactional
+    public void xacNhanMon(Long maHd) {
+        kiemTraChuaThanhToan(timTheoMa(maHd));
+        for (CTHoaDon chiTiet : ctHoaDonRepository.findById_MaHd(maHd)) {
+            chiTiet.setSoLuongDaXacNhan(chiTiet.getSoLuong());
+            ctHoaDonRepository.save(chiTiet);
+        }
+    }
+
+    private boolean laNhanVien() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_NHAN_VIEN".equals(authority.getAuthority()));
     }
 
     // Tính lại tổng tiền
@@ -328,6 +354,11 @@ public class HoaDonService {
     private void luuChiTietHoaDon(
             Long maHd,
             Map<Long, BigDecimal> danhSachMon) {
+        luuChiTietHoaDon(maHd, danhSachMon, Map.of());
+    }
+
+    private void luuChiTietHoaDon(Long maHd, Map<Long, BigDecimal> danhSachMon,
+            Map<Long, BigDecimal> daXacNhan) {
 
         for (Map.Entry<Long, BigDecimal> entry
                 : danhSachMon.entrySet()) {
@@ -354,6 +385,7 @@ public class HoaDonService {
                     new CTHoaDon.CTHoaDonId(maHd, idMon));
 
             chiTiet.setSoLuong(soLuongMon);
+            chiTiet.setSoLuongDaXacNhan(daXacNhan.getOrDefault(idMon, BigDecimal.ZERO));
             chiTiet.setDonGia(donGia);
             chiTiet.setThanhTien(thanhTien);
 

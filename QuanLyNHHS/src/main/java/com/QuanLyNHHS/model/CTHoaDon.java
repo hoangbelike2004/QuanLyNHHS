@@ -34,6 +34,12 @@ public class CTHoaDon {
     @Column(name = "SO_LUONG", precision = 10, scale = 2)
     private BigDecimal soLuong;
 
+    @Column(name = "SO_LUONG_DA_XAC_NHAN", precision = 10, scale = 2)
+    private BigDecimal soLuongDaXacNhan = BigDecimal.ZERO;
+
+    public BigDecimal getSoLuongDaXacNhan() { return soLuongDaXacNhan == null ? BigDecimal.ZERO : soLuongDaXacNhan; }
+    public void setSoLuongDaXacNhan(BigDecimal value) { this.soLuongDaXacNhan = value; }
+
     // donGia: đơn giá của một đơn vị.
     @Column(name = "DON_GIA", precision = 12, scale = 2)
     private BigDecimal donGia;

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,7 +28,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(/* authorize: đối tượng cấu hình điều kiện truy cập các URL. */ authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.FORWARD).permitAll()
                         .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/tai-khoan", "/tai-khoan/**").hasRole("QUAN_LY")
+                        .requestMatchers(HttpMethod.POST, "/hoa-don/thanh-toan/**").hasAnyRole("THU_NGAN", "QUAN_LY")
+                        .requestMatchers(HttpMethod.POST, "/hoa-don/xoa/**").hasRole("QUAN_LY")
+                        .requestMatchers(HttpMethod.POST, "/dat-ban/xac-nhan/**").hasAnyRole("THU_NGAN", "QUAN_LY")
+                        .requestMatchers("/bao-cao/**").hasAnyRole("THU_NGAN", "QUAN_LY")
+                        .requestMatchers("/hoa-don/them", "/hoa-don/them/**").hasAnyRole("THU_NGAN", "QUAN_LY")
+                        .requestMatchers("/hoa-don/**").hasAnyRole("NHAN_VIEN", "THU_NGAN", "QUAN_LY")
+                        .requestMatchers(HttpMethod.GET, "/").hasAnyRole("NHAN_VIEN", "THU_NGAN", "QUAN_LY")
+                        .requestMatchers(HttpMethod.GET, "/dat-ban").hasAnyRole("THU_NGAN", "QUAN_LY")
+                        .requestMatchers("/dat-ban/**").hasRole("QUAN_LY")
+                        .requestMatchers("/**").hasRole("QUAN_LY"))
                 .formLogin(/* form: đối tượng cấu hình form đăng nhập của Spring Security. */ form -> form
                         .loginPage("/login")
                         .usernameParameter("tenDangNhap")

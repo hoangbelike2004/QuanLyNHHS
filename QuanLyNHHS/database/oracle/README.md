@@ -90,7 +90,13 @@ SELECT TEN_DANG_NHAP, HO_TEN FROM TAI_KHOAN ORDER BY MA_TK;
 
 Nếu chưa thấy `nhhs_admin`, script chưa được chạy thành công trên schema này. Ứng dụng không tự nạp script khi khởi động; mật khẩu chỉ dùng được sau khi bản ghi đã được `COMMIT`.
 
-Mật khẩu trong `TAI_KHOAN` đã được băm bằng BCrypt độ khó 12, khớp `SecurityConfig`. Hiện tại ứng dụng cấp `ROLE_USER` cho mọi tài khoản và không có phân quyền riêng theo tên tài khoản. Đây là mật khẩu công khai trong repository để kiểm thử; hãy đổi hoặc xóa các tài khoản này trước khi dùng cơ sở dữ liệu cho mục đích khác.
+Mật khẩu trong `TAI_KHOAN` đã được băm bằng BCrypt độ khó 12, khớp `SecurityConfig`. Tài khoản dùng `VAI_TRO` với ba giá trị `QUAN_LY`, `THU_NGAN`, `NHAN_VIEN`. Đây là mật khẩu công khai trong repository để kiểm thử; hãy đổi hoặc xóa các tài khoản này trước khi dùng cơ sở dữ liệu cho mục đích khác.
+
+### Nâng cấp phân quyền
+
+Với cơ sở dữ liệu cũ, chạy `05_phan_quyen.sql` bằng tài khoản sở hữu schema **trước khi khởi động phiên bản ứng dụng này**. Script thêm vai trò và số lượng món đã xác nhận, đồng thời gán tài khoản hiện có vai trò `QUAN_LY` để tránh mất quyền truy cập. Sau đó cập nhật `TAI_KHOAN.VAI_TRO` cho từng người dùng thành `THU_NGAN` hoặc `NHAN_VIEN` phù hợp. Đăng xuất và đăng nhập lại để phiên nhận quyền mới.
+
+Thu ngân được lập/sửa hóa đơn chưa thanh toán, xác nhận thanh toán, xác nhận đặt bàn và xem báo cáo. Nhân viên được sửa hóa đơn chưa thanh toán và xác nhận món; số lượng món đã xác nhận không thể bị nhân viên giảm hoặc xóa. Quản lý có toàn quyền. Khi thêm tài khoản mới trực tiếp vào Oracle, cần lưu mật khẩu BCrypt và gán rõ một trong ba giá trị `VAI_TRO`.
 
 Script có một hóa đơn đã thanh toán để thử báo cáo doanh thu và một hóa đơn chưa thanh toán để thử thao tác thanh toán. Phiếu nhập và tồn kho được cập nhật cùng giao dịch để sửa/xóa phiếu nhập từ giao diện vẫn nhất quán.
 
@@ -102,7 +108,7 @@ Script có một hóa đơn đã thanh toán để thử báo cáo doanh thu và
 4. Chọn **Run Script (F5)** để chạy cả file. File dùng khối PL/SQL nên cần chạy cả `DECLARE … END;` và dấu `/` ở dòng riêng.
 5. Kiểm tra thông báo và kết quả SELECT cuối file, rồi tải lại các trang của ứng dụng. Thay đổi SQL đã COMMIT sẽ được đọc ở lần tải trang tiếp theo.
 
-Script thêm nhân viên, loại món, món ăn, bàn, khách hàng, đặt bàn, nhà cung cấp, nguyên liệu, phiếu nhập/chi tiết và hóa đơn/chi tiết. Không tạo tài khoản đăng nhập. Hệ thống không hỗ trợ tự đăng ký; quản trị viên cấp tài khoản trong bảng `TAI_KHOAN`. Tên đăng nhập lưu bằng chữ thường, không có khoảng trắng đầu/cuối; cột `MAT_KHAU` phải chứa mật khẩu đã băm BCrypt (độ khó 12), không lưu mật khẩu dạng rõ. Hiện chưa có màn hình quản trị cấp tài khoản trong ứng dụng.
+Script thêm nhân viên, loại món, món ăn, bàn, khách hàng, đặt bàn, nhà cung cấp, nguyên liệu, phiếu nhập/chi tiết và hóa đơn/chi tiết. Không tạo tài khoản đăng nhập. Hệ thống không hỗ trợ tự đăng ký; quản lý cấp tài khoản tại `/tai-khoan`. Tên đăng nhập được chuẩn hóa thành chữ thường; mật khẩu được băm BCrypt (độ khó 12) trước khi lưu vào `TAI_KHOAN`.
 
 **Mỗi lần chạy thành công sẽ thêm một bộ dữ liệu nữa.** Chỉ chạy một lần nếu không muốn lặp dữ liệu. Nếu một INSERT lỗi, khối PL/SQL ROLLBACK toàn bộ bộ dữ liệu của lần chạy đó. Sequence/identity vẫn có thể nhảy số sau ROLLBACK; đây không phải lỗi.
 

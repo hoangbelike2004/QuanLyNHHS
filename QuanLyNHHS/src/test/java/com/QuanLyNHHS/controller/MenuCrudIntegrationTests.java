@@ -89,7 +89,7 @@ class MenuCrudIntegrationTests {
         session = new MockHttpSession();
         // authentication: thông tin xác thực của request hiện tại; cần loại trừ người dùng ẩn danh.
         var authentication = UsernamePasswordAuthenticationToken.authenticated(
-                "nhanvien", "", List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                "quanly", "", List.of(new SimpleGrantedAuthority("ROLE_QUAN_LY")));
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                 new SecurityContextImpl(authentication));
         // result: kết quả trả về từ thao tác kiểm thử để đọc status, HTML hoặc flash.
@@ -97,6 +97,53 @@ class MenuCrudIntegrationTests {
         assertEquals(200, result.getResponse().getStatus());
         csrf = (CsrfToken) result.getRequest().getAttribute(CsrfToken.class.getName());
         assertNotNull(csrf);
+    }
+
+    @Test
+    void cashierAndEmployeeCannotUseManagerOrPaymentActions() throws Exception {
+        MockHttpSession employee = roleSession("ROLE_NHAN_VIEN");
+        MockHttpSession cashier = roleSession("ROLE_THU_NGAN");
+        var employeePage = mvc.perform(get("/hoa-don").session(employee)).andReturn();
+        assertEquals(404, employeePage.getResponse().getStatus());
+        CsrfToken employeeCsrf = (CsrfToken) employeePage.getRequest().getAttribute(CsrfToken.class.getName());
+        assertEquals(403, mvc.perform(get("/hoa-don/them").session(employee)).andReturn().getResponse().getStatus());
+        assertEquals(403, mvc.perform(post("/hoa-don/thanh-toan/1").session(employee)
+                .param(employeeCsrf.getParameterName(), employeeCsrf.getToken())).andReturn().getResponse().getStatus());
+        assertEquals(404, mvc.perform(get("/hoa-don/them").session(cashier)).andReturn().getResponse().getStatus());
+        assertEquals(403, mvc.perform(get("/nhan-vien").session(cashier)).andReturn().getResponse().getStatus());
+    }
+
+    private MockHttpSession roleSession(String role) {
+        MockHttpSession roleSession = new MockHttpSession();
+        var authentication = UsernamePasswordAuthenticationToken.authenticated(
+                "test", "", List.of(new SimpleGrantedAuthority(role)));
+        roleSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                new SecurityContextImpl(authentication));
+        return roleSession;
+    }
+
+    @Test
+    void managerCreatesAccountWithHashedPasswordAndValidRole() throws Exception {
+        var created = mvc.perform(post("/tai-khoan").session(session)
+                .param(csrf.getParameterName(), csrf.getToken())
+                .param("hoTen", "  Thu ngân thử  ")
+                .param("tenDangNhap", "  TEST_CASHIER  ")
+                .param("matKhau", "StrongPass@2026")
+                .param("vaiTro", "THU_NGAN")).andReturn();
+        assertEquals(302, created.getResponse().getStatus());
+        TaiKhoan account = accounts.findByTenDangNhap("test_cashier").orElseThrow();
+        assertEquals("Thu ngân thử", account.getHoTen());
+        assertEquals("THU_NGAN", account.getVaiTro());
+        assertTrue(passwordEncoder.matches("StrongPass@2026", account.getMatKhau()));
+        assertNotEquals("StrongPass@2026", account.getMatKhau());
+
+        mvc.perform(post("/tai-khoan").session(session)
+                .param(csrf.getParameterName(), csrf.getToken())
+                .param("hoTen", "Duplicate")
+                .param("tenDangNhap", "test_cashier")
+                .param("matKhau", "StrongPass@2026")
+                .param("vaiTro", "QUAN_LY")).andReturn();
+        assertEquals(1, accounts.count());
     }
 
     /**

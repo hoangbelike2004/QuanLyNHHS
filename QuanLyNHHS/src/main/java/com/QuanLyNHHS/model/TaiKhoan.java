@@ -28,6 +28,12 @@ public class TaiKhoan {
     @Column(name = "MAT_KHAU", nullable = false, length = 100)
     private String matKhau;
 
+    @Column(name = "VAI_TRO", length = 20)
+    private String vaiTro = "QUAN_LY";
+
+    public String getVaiTro() { return vaiTro; }
+    public void setVaiTro(String vaiTro) { this.vaiTro = vaiTro; }
+
     /**
      * Đọc mã tài khoản; không thay đổi dữ liệu.
      * @return giá trị thuộc tính được lấy hoặc giá trị chuyển đổi mô tả ở trên

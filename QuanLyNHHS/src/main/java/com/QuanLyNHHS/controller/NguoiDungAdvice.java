@@ -10,6 +10,25 @@ import com.QuanLyNHHS.service.TaiKhoanService;
  */
 @ControllerAdvice
 public class NguoiDungAdvice {
+    @ModelAttribute("laQuanLy")
+    public boolean laQuanLy(Authentication authentication) {
+        return coQuyen(authentication, "ROLE_QUAN_LY");
+    }
+
+    @ModelAttribute("laThuNgan")
+    public boolean laThuNgan(Authentication authentication) {
+        return coQuyen(authentication, "ROLE_THU_NGAN") || laQuanLy(authentication);
+    }
+
+    @ModelAttribute("laNhanVien")
+    public boolean laNhanVien(Authentication authentication) {
+        return coQuyen(authentication, "ROLE_NHAN_VIEN");
+    }
+
+    private boolean coQuyen(Authentication authentication, String quyen) {
+        return authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> quyen.equals(authority.getAuthority()));
+    }
     /**
      * Cung cấp thuộc tính tenNguoiDung dùng chung cho giao diện: ưu tiên họ tên từ principal, nếu không thì dùng tên đăng nhập.
      * @param authentication thông tin xác thực của request hiện tại; cần loại trừ người dùng ẩn danh

@@ -248,4 +248,15 @@ public class HoaDonController {
 
         return "redirect:/hoa-don/chi-tiet/" + maHd;
     }
+
+    @PostMapping("/xac-nhan-mon/{maHd}")
+    public String xacNhanMon(@PathVariable Long maHd, RedirectAttributes redirectAttributes) {
+        try {
+            hoaDonService.xacNhanMon(maHd);
+            redirectAttributes.addFlashAttribute("thongBao", "Da xac nhan mon an.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("loi", e.getMessage());
+        }
+        return "redirect:/hoa-don/chi-tiet/" + maHd;
+    }
 }
