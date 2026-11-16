@@ -12,8 +12,8 @@
     <nav th:fragment="nav" class="inventory-nav" aria-label="Quản lý kho">
         <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
         <a th:href="@{/phieu-nhap}">Phiếu nhập</a>
-        <a th:href="@{/nguyen-lieu}">Nguyên liệu &amp; Tồn kho</a>
-        <a th:href="@{/nha-cung-cap}">Nhà cung cấp</a>
+        <a th:if="${laQuanLyKho}" th:href="@{/nguyen-lieu}">Nguyên liệu &amp; Tồn kho</a>
+        <a th:if="${laQuanLyKho}" th:href="@{/nha-cung-cap}">Nhà cung cấp</a>
     </nav>
     <div th:fragment="messages">
       <p

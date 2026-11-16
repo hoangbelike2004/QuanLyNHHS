@@ -24,7 +24,7 @@ public class TaiKhoanService implements UserDetailsService {
     // repository: thành phần TaiKhoanRepository dùng đọc/ghi và truy vấn dữ liệu; Spring cung cấp đối tượng triển khai.
     private final TaiKhoanRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private static final Set<String> VAI_TRO_HOP_LE = Set.of("QUAN_LY", "THU_NGAN", "NHAN_VIEN");
+    private static final Set<String> VAI_TRO_HOP_LE = Set.of("ADMIN", "QUAN_LY_KHO", "KE_TOAN", "THU_NGAN");
 
     /**
      * Nhận các thành phần phụ thuộc qua constructor và gán vào thuộc tính this để các hàm dùng lại.
@@ -86,7 +86,7 @@ public class TaiKhoanService implements UserDetailsService {
     }
 
     /**
-     * Principal của Spring Security, kế thừa User và giữ thêm họ tên; hiện mọi tài khoản nhận ROLE_USER.
+     * Principal của Spring Security, kế thừa User và giữ thêm họ tên cùng vai trò ứng dụng.
      */
     public static final class NguoiDung extends User {
         // serialVersionUID: mã phiên bản phục vụ cơ chế tuần tự hóa của Java.
@@ -94,13 +94,18 @@ public class TaiKhoanService implements UserDetailsService {
         // hoTen: họ tên.
         private final String hoTen;
         /**
-         * Chuyển entity tài khoản thành principal Spring Security, cấp ROLE_USER và giữ họ tên để hiển thị.
+         * Chuyển entity tài khoản thành principal Spring Security, cấp vai trò và giữ họ tên để hiển thị.
          * @param account entity tài khoản đọc từ database hoặc được tạo để lưu tên đăng nhập và mật khẩu đã băm
          */
         public NguoiDung(TaiKhoan account) {
             super(account.getTenDangNhap(), account.getMatKhau(), List.of(new SimpleGrantedAuthority("ROLE_" +
-                    (account.getVaiTro() == null ? "QUAN_LY" : account.getVaiTro()))));
+                    chuanHoaVaiTro(account.getVaiTro()))));
             this.hoTen = account.getHoTen();
+        }
+        private static String chuanHoaVaiTro(String vaiTro) {
+            if (vaiTro == null || "QUAN_LY".equals(vaiTro)) return "ADMIN";
+            if ("NHAN_VIEN".equals(vaiTro)) return "THU_NGAN";
+            return vaiTro;
         }
         /**
          * Đọc họ tên; không thay đổi dữ liệu.

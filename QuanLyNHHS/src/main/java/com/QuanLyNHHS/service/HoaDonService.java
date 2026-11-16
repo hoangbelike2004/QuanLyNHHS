@@ -179,7 +179,7 @@ public class HoaDonService {
             BigDecimal confirmed = chiTiet.getSoLuongDaXacNhan();
             if (confirmed.signum() > 0) {
                 daXacNhan.put(chiTiet.getMaMon(), confirmed);
-                if (laNhanVien() && danhSachMon.getOrDefault(chiTiet.getMaMon(), BigDecimal.ZERO).compareTo(confirmed) < 0) {
+                if (laThuNgan() && danhSachMon.getOrDefault(chiTiet.getMaMon(), BigDecimal.ZERO).compareTo(confirmed) < 0) {
                     throw new IllegalStateException("Khong the giam hoac xoa mon da xac nhan");
                 }
             }
@@ -236,9 +236,9 @@ public class HoaDonService {
         }
     }
 
-    private boolean laNhanVien() {
+    private boolean laThuNgan() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-                .anyMatch(authority -> "ROLE_NHAN_VIEN".equals(authority.getAuthority()));
+                .anyMatch(authority -> "ROLE_THU_NGAN".equals(authority.getAuthority()));
     }
 
     // Tính lại tổng tiền

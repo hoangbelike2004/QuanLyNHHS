@@ -2,7 +2,7 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
   <head th:replace="~{kho/fragments :: head('Chi tiết phiếu nhập')}"></head>
   <body>
-    <div class="app-container" th:with="activeMenu='kho'">
+    <div class="app-container" th:with="activeMenu='phieunhap'">
       <div th:replace="~{layout/sidebar :: sidebar}"></div>
       <main class="main-wrapper">
         <div th:replace="~{layout/navbar :: navbar('Kho và nhập hàng', 'fa-solid fa-boxes-stacked')}"></div>
@@ -13,7 +13,7 @@
           <h1 th:text="'Phiếu nhập #' + ${phieu.maPn}"></h1>
           <div class="actions">
             <a th:href="@{/phieu-nhap}">Danh sách</a>
-            <a
+            <a th:if="${laQuanLyKho}"
               class="button"
               th:href="@{/phieu-nhap/{id}/sua(id=${phieu.maPn})}"
             >
@@ -76,7 +76,7 @@
             </tfoot>
           </table>
         </div>
-        <form
+        <form th:if="${laQuanLyKho}"
           class="delete-section"
           method="post"
           th:action="@{/phieu-nhap/{id}/xoa(id=${phieu.maPn})}"

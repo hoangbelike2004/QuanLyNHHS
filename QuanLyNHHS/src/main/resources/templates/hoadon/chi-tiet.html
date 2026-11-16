@@ -18,7 +18,7 @@
             <nav class="finance-nav" aria-label="Điều hướng hóa đơn và báo cáo">
                 <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
                 <a th:href="@{/hoa-don}" th:classappend="${activeMenu == 'hoadon'} ? 'selected' : ''">Hóa đơn</a>
-                <a th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
+                <a th:if="${laKeToan}" th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
             </nav>
 
             <div class="finance-content">
@@ -89,7 +89,7 @@
                     </table>
 
                     <div class="actions">
-                        <form th:if="${hoaDon.trangThai != 'Da thanh toan'}"
+                        <form th:if="${laThuNgan and hoaDon.trangThai != 'Da thanh toan'}"
                               th:action="@{/hoa-don/xac-nhan-mon/{id}(id=${hoaDon.maHd})}" method="post">
                             <button type="submit">Xác nhận món</button>
                         </form>

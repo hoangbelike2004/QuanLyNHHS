@@ -1,10 +1,13 @@
 {
   "slides": 12,
+  "presentation": "ThuyetTrinh_BTL_PTTKHDoiTuong_Nhom4_cap_nhat.pptx",
   "aspect_ratio": "16:9",
   "animations": 0,
-  "transitions": 0,
+  "transitions": 12,
   "speaker_notes": 12,
   "native_editable_shapes": true,
   "layout_issues": [],
-  "preview_pdf": "12 trang từ cùng bố cục nguồn; chưa render bằng Microsoft PowerPoint."
+  "preview_pdf": "Bản PDF và ảnh xem trước chưa được xuất lại sau khi sửa PowerPoint.",
+  "transition_type": "Fade, tốc độ nhanh, chuyển bằng nhấp chuột",
+  "layout_check": "Đã kiểm tra 314 shape nằm trong khung slide, ID không trùng; chưa render bằng PowerPoint trên máy này."
 }

@@ -34,58 +34,10 @@ GRANT DBA TO NHHS_APP;
 
 COMMIT;
 
--- ====================================================================
--- PHÂN QUYỀN THEO VAI TRÒ (USER, ROLE, PRIVILEGE) THEO ĐÚNG ẢNH 2
--- ====================================================================
-
--- 1. Tạo các Role theo thiết kế hệ thống
-CREATE ROLE ROLE_ADMIN;
-CREATE ROLE ROLE_QUAN_LY;
-CREATE ROLE ROLE_THU_NGAN;
-CREATE ROLE ROLE_PHUC_VU;
-CREATE ROLE ROLE_THU_KHO;
-CREATE ROLE ROLE_BAO_CAO;
-
--- 2. Gán quyền cơ bản đăng nhập cho các Role
-GRANT CREATE SESSION TO ROLE_ADMIN;
-GRANT CREATE SESSION TO ROLE_QUAN_LY;
-GRANT CREATE SESSION TO ROLE_THU_NGAN;
-GRANT CREATE SESSION TO ROLE_PHUC_VU;
-GRANT CREATE SESSION TO ROLE_THU_KHO;
-GRANT CREATE SESSION TO ROLE_BAO_CAO;
-
--- 3. Gán quyền thao tác dữ liệu trên các bảng (LOAI_MON, MON_AN, NHAN_VIEN)
--- ADMIN: Toàn quyền
-GRANT ALL PRIVILEGES TO ROLE_ADMIN;
-
--- QUAN_LY: Quản lý nhân viên, bàn ăn, thực đơn món ăn, thống kê
-GRANT SELECT, INSERT, UPDATE, DELETE ON NHHS_APP.LOAI_MON TO ROLE_QUAN_LY;
-GRANT SELECT, INSERT, UPDATE, DELETE ON NHHS_APP.MON_AN TO ROLE_QUAN_LY;
-GRANT SELECT, INSERT, UPDATE, DELETE ON NHHS_APP.NHAN_VIEN TO ROLE_QUAN_LY;
-
--- PHUC_VU: Xem thực đơn món ăn để phục vụ khách
-GRANT SELECT ON NHHS_APP.LOAI_MON TO ROLE_PHUC_VU;
-GRANT SELECT ON NHHS_APP.MON_AN TO ROLE_PHUC_VU;
-
--- BAO_CAO: Chỉ xem dữ liệu, không được thêm/sửa/xóa
-GRANT SELECT ON NHHS_APP.LOAI_MON TO ROLE_BAO_CAO;
-GRANT SELECT ON NHHS_APP.MON_AN TO ROLE_BAO_CAO;
-GRANT SELECT ON NHHS_APP.NHAN_VIEN TO ROLE_BAO_CAO;
-
--- 4. Tạo các tài khoản người dùng mẫu và gán Role (Ví dụ theo Ảnh 2)
-CREATE USER admin_user IDENTIFIED BY admin123;
-GRANT ROLE_ADMIN TO admin_user;
-
-CREATE USER quan_ly IDENTIFIED BY 123456;
-GRANT ROLE_QUAN_LY TO quan_ly;
-
-CREATE USER phuc_vu IDENTIFIED BY 123456;
-GRANT ROLE_PHUC_VU TO phuc_vu;
-
-CREATE USER bao_cao IDENTIFIED BY 123456;
-GRANT ROLE_BAO_CAO TO bao_cao;
-
-COMMIT;
+-- Ứng dụng dùng một kết nối Oracle NHHS_APP. Bốn vai trò ADMIN,
+-- QUAN_LY_KHO, KE_TOAN và THU_NGAN được lưu ở TAI_KHOAN.VAI_TRO
+-- và kiểm tra bởi Spring Security, không phải Oracle CREATE ROLE.
+-- Với cơ sở dữ liệu đã có tài khoản, chạy migrate_account_roles.sql.
 
 
 sqlplus /nolog
@@ -96,12 +48,13 @@ GRANT CREATE SESSION, CREATE TABLE, CREATE SEQUENCE TO NHHS_APP;
 ALTER USER NHHS_APP QUOTA UNLIMITED ON USERS;
 CONNECT NHHS_APP@//localhost:1521/FREEPDB1
 
-INSERT INTO TAI_KHOAN (MA_TK, HO_TEN, TEN_DANG_NHAP, MAT_KHAU)
+INSERT INTO TAI_KHOAN (MA_TK, HO_TEN, TEN_DANG_NHAP, MAT_KHAU, VAI_TRO)
 VALUES (
     SEQ_TAI_KHOAN.NEXTVAL,
     'Nguyễn Minh An',
     'nhhs_admin',
-    '$2a$12$Uajz78eNAQW/4qUsKNe.ieq22HHanirmZaiD6WMkUV2yK3QPLOvse'
+    '$2a$12$Uajz78eNAQW/4qUsKNe.ieq22HHanirmZaiD6WMkUV2yK3QPLOvse',
+    'ADMIN'
 );
 
 COMMIT;

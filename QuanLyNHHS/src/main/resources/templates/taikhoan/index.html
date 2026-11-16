@@ -39,9 +39,10 @@
                         <div class="form-group">
                             <label for="vaiTro">Vai trò</label>
                             <select id="vaiTro" name="vaiTro" required>
-                                <option value="NHAN_VIEN">Nhân viên</option>
+                                <option value="ADMIN">Admin</option>
+                                <option value="QUAN_LY_KHO">Quản lý kho</option>
+                                <option value="KE_TOAN">Kế toán</option>
                                 <option value="THU_NGAN">Thu ngân</option>
-                                <option value="QUAN_LY">Quản lý</option>
                             </select>
                         </div>
                         <button class="btn-save" type="submit">Tạo tài khoản</button>
@@ -57,7 +58,7 @@
                                 <td th:text="${account.maTk}"></td>
                                 <td th:text="${account.hoTen}"></td>
                                 <td th:text="${account.tenDangNhap}"></td>
-                                <td th:text="${account.vaiTro}"></td>
+                                <td th:text="${account.vaiTro == 'ADMIN' or account.vaiTro == 'QUAN_LY' or account.vaiTro == null ? 'Admin' : (account.vaiTro == 'QUAN_LY_KHO' ? 'Quản lý kho' : (account.vaiTro == 'KE_TOAN' ? 'Kế toán' : 'Thu ngân'))}"></td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(danhSachTaiKhoan)}"><td colspan="4">Chưa có tài khoản.</td></tr>
                             </tbody>

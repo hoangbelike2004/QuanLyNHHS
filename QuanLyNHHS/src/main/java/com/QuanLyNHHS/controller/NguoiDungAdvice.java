@@ -10,19 +10,24 @@ import com.QuanLyNHHS.service.TaiKhoanService;
  */
 @ControllerAdvice
 public class NguoiDungAdvice {
-    @ModelAttribute("laQuanLy")
-    public boolean laQuanLy(Authentication authentication) {
-        return coQuyen(authentication, "ROLE_QUAN_LY");
+    @ModelAttribute("laAdmin")
+    public boolean laAdmin(Authentication authentication) {
+        return coQuyen(authentication, "ROLE_ADMIN");
+    }
+
+    @ModelAttribute("laQuanLyKho")
+    public boolean laQuanLyKho(Authentication authentication) {
+        return coQuyen(authentication, "ROLE_QUAN_LY_KHO") || laAdmin(authentication);
+    }
+
+    @ModelAttribute("laKeToan")
+    public boolean laKeToan(Authentication authentication) {
+        return coQuyen(authentication, "ROLE_KE_TOAN") || laAdmin(authentication);
     }
 
     @ModelAttribute("laThuNgan")
     public boolean laThuNgan(Authentication authentication) {
-        return coQuyen(authentication, "ROLE_THU_NGAN") || laQuanLy(authentication);
-    }
-
-    @ModelAttribute("laNhanVien")
-    public boolean laNhanVien(Authentication authentication) {
-        return coQuyen(authentication, "ROLE_NHAN_VIEN");
+        return coQuyen(authentication, "ROLE_THU_NGAN") || laAdmin(authentication);
     }
 
     private boolean coQuyen(Authentication authentication, String quyen) {

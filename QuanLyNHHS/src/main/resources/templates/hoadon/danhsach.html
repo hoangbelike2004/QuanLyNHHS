@@ -20,7 +20,7 @@
             <nav class="finance-nav" aria-label="Điều hướng hóa đơn và báo cáo">
                 <a th:href="@{/}"><i class="fa-solid fa-house"></i> Trang chủ</a>
                 <a th:href="@{/hoa-don}" th:classappend="${activeMenu == 'hoadon'} ? 'selected' : ''">Hóa đơn</a>
-                <a th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
+                <a th:if="${laKeToan}" th:href="@{/bao-cao}" th:classappend="${activeMenu == 'baocao'} ? 'selected' : ''">Báo cáo</a>
             </nav>
 
     
@@ -31,7 +31,7 @@
             <div class="top">
                 <h2>Danh sách hóa đơn</h2>
 
-                <a class="btn green" th:if="${laThuNgan or laNhanVien}" th:href="@{/hoa-don/them}">
+                <a class="btn green" th:if="${laThuNgan}" th:href="@{/hoa-don/them}">
                     + Tạo hóa đơn
                 </a>
             </div>
@@ -124,7 +124,7 @@
                                     </a>
 
                                     <!-- Chỉ sửa hóa đơn chưa thanh toán -->
-                                    <a class="btn orange" th:if="${hd.trangThai == 'Chua thanh toan'}"
+                                    <a class="btn orange" th:if="${laThuNgan and hd.trangThai == 'Chua thanh toan'}"
                                         th:href="@{/hoa-don/sua/{id}(id=${hd.maHd})}">
                                         Sửa
                                     </a>
@@ -134,7 +134,7 @@
                                         th:href="@{/hoa-don/chi-tiet/{id}(id=${hd.maHd})}">
                                         Thanh toán
                                     </a>
-                                    <form th:if="${laQuanLy and hd.trangThai == 'Chua thanh toan'}"
+                                    <form th:if="${laAdmin and hd.trangThai == 'Chua thanh toan'}"
                                           th:action="@{/hoa-don/xoa/{id}(id=${hd.maHd})}"
                                           method="post"
                                           onsubmit="return confirm('Bạn có chắc muốn xóa hóa đơn chưa thanh toán này?')">

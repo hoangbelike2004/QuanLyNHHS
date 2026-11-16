@@ -29,7 +29,7 @@ public class TaiKhoan {
     private String matKhau;
 
     @Column(name = "VAI_TRO", length = 20)
-    private String vaiTro = "QUAN_LY";
+    private String vaiTro = "ADMIN";
 
     public String getVaiTro() { return vaiTro; }
     public void setVaiTro(String vaiTro) { this.vaiTro = vaiTro; }
