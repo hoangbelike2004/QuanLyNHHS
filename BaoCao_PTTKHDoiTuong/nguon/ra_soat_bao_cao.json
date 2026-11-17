@@ -1,0 +1,400 @@
+{
+  "editorial_changes": [
+    {
+      "before": "Nguồn và cách sử dụng",
+      "after": "Cơ sở thực hiện"
+    },
+    {
+      "before": "Thông tin còn để trống theo yêu cầu: giảng viên, lớp và mã sinh viên. Nhà hàng trong báo cáo là bối cảnh bài tập lớn, chưa gắn với một cơ sở đã khảo sát cụ thể.",
+      "after": null
+    },
+    {
+      "before": "Các nội dung ngoài phạm vi không được suy diễn từ ví dụ gợi ý trong tài liệu học phần thành chức năng đã có.",
+      "after": null
+    },
+    {
+      "before": "Cột đáp ứng là kết quả đọc mã nguồn, không phải xác nhận các luồng đã chạy thành công trên Oracle.",
+      "after": null
+    },
+    {
+      "before": "Ngoại lệ và hậu điều kiện đầy đủ ở trên là yêu cầu thiết kế. Các điểm còn thiếu được giữ nguyên trong phần đánh giá, không mô tả thành tính năng đã hoàn thành.",
+      "after": null
+    },
+    {
+      "before": "Không thay đổi mã nguồn hay cấu hình chạy của ứng dụng trong quá trình tạo báo cáo này.",
+      "after": null
+    },
+    {
+      "before": "Các trang thực tế dùng template Thymeleaf và layout chung tại templates/layout. Bảng trên là bản đồ giao diện đối chiếu mã, không phải ảnh chụp ứng dụng đang chạy. Không sử dụng ảnh dựng để làm bằng chứng rằng nghiệp vụ đã được kiểm thử.",
+      "after": "Giao diện sử dụng Thymeleaf và bố cục chung tại templates/layout. Bảng trên trình bày các trang chức năng và nội dung cần kiểm tra khi chạy thử."
+    },
+    {
+      "before": "Nếu cần bổ sung ảnh demo theo yêu cầu giảng viên, nên chụp sau khi chạy Oracle: một hóa đơn có chi tiết, lỗi sửa chứng từ đã thanh toán, tồn trước/sau khi sửa phiếu và kết quả từ chối form cũ. Ảnh phải đi kèm dữ liệu vào và giá trị đối chiếu; chỉ ảnh danh sách chưa chứng minh quy tắc nghiệp vụ.",
+      "after": "Các tình huống demo gồm: hóa đơn có chi tiết; từ chối sửa hóa đơn đã thanh toán; tồn kho trước và sau khi sửa phiếu nhập; từ chối lưu biểu mẫu đã lỗi phiên bản."
+    },
+    {
+      "before": "Nguồn cục bộ được dùng trực tiếp; không gán tên tác giả, số liệu khảo sát hoặc kết quả chạy cho tài liệu chưa xác minh.",
+      "after": null
+    },
+    {
+      "before": "Bảng thể hiện trách nhiệm phân công, không tự xác nhận tỷ lệ đóng góp hoặc quyền tác giả từng dòng code sau tích hợp. Các ô tiến độ trong file Excel vẫn là trạng thái kế hoạch; nhóm cần cập nhật đóng góp thực tế nếu giảng viên yêu cầu.",
+      "after": "Bảng trình bày trách nhiệm theo phân công của nhóm. Tiến độ và mức đóng góp thực tế được tổng hợp khi hoàn thành bài tập lớn."
+    },
+    {
+      "before": "Thông tin cần hoàn thiện trước khi nộp",
+      "after": "Thông tin nhóm và kết quả kiểm thử"
+    },
+    {
+      "before": "Điền tên giảng viên, lớp, mã sinh viên; xác nhận tên nhóm và các giả định nghiệp vụ. Đọc lại mô hình, thống nhất chính sách giá khi sửa đơn và các giới hạn đã ghi. Chạy các test Java/Oracle, ghi điều kiện môi trường, dữ liệu vào, kết quả thực tế; chỉ đổi trạng thái test sau khi có bằng chứng.",
+      "after": "Thông tin giảng viên, lớp và mã sinh viên được bổ sung theo thông tin chính thức của nhóm. Kết quả kiểm thử được ghi theo môi trường, dữ liệu đầu vào và kết quả thực tế tại mục 4.5."
+    },
+    {
+      "before": "Mục lục bản Word dùng liên kết và trường tham chiếu trang. Sau khi chỉnh sửa nội dung, chọn toàn bộ rồi cập nhật trường để số trang mục lục phản ánh bản mới; trên macOS có thể cần dùng tổ hợp phím Fn + F9 hoặc lệnh Update Field của Word.",
+      "after": null
+    },
+    {
+      "before": "Tài liệu được biên soạn có sử dụng ChatGPT/Codex để hỗ trợ đọc nguồn, xây dựng nội dung và mô hình; PlantUML để dựng sơ đồ; Python để tạo Word/PDF và kiểm tra cấu trúc. Nhóm cần tự rà soát, chạy thử, điều chỉnh và có khả năng giải thích sản phẩm theo quy định học phần. Không ghi nhận rằng các thành viên đã xác nhận hoặc chạy test khi chưa có dữ liệu thực tế.",
+      "after": "Công cụ hỗ trợ biên soạn gồm ChatGPT/Codex để đọc mã và xây dựng nội dung, PlantUML để dựng sơ đồ, Python để tạo và kiểm tra tài liệu."
+    },
+    {
+      "before": "Báo cáo được tạo thành bộ tệp mới; các tài liệu BTL.docx và BTL.pdf cũ được giữ nguyên.",
+      "after": null
+    },
+    {
+      "before": "PHỤ LỤC C CẬP NHẬT CÀI ĐẶT NGÀY 16 11 2026",
+      "after": "PHỤ LỤC C. CẬP NHẬT CÀI ĐẶT NGÀY 16/11/2026"
+    },
+    {
+      "before": "Vai trò là phân tích nghiệp vụ. Code hiện chưa giới hạn UC07 hoặc UC08 riêng cho quản lý.",
+      "after": null
+    }
+  ],
+  "lookup_entries": 63,
+  "page_number_format": "Văn bản thường có liên kết bookmark; không tự tính lại khi mở.",
+  "pdf_pages": 49,
+  "references": [
+    {
+      "label": "CHƯƠNG 1. BÀI TOÁN VÀ PHÂN TÍCH YÊU CẦU",
+      "bookmark": "NHHS_TOC_1",
+      "page": 5
+    },
+    {
+      "label": "1.1. Bài toán, mục tiêu và bối cảnh",
+      "bookmark": "NHHS_TOC_2",
+      "page": 5
+    },
+    {
+      "label": "1.2. Phạm vi và các giả định",
+      "bookmark": "NHHS_TOC_3",
+      "page": 6
+    },
+    {
+      "label": "1.3. Quy tắc nghiệp vụ",
+      "bookmark": "NHHS_TOC_4",
+      "page": 7
+    },
+    {
+      "label": "1.4. Tác nhân và mục tiêu người dùng",
+      "bookmark": "NHHS_TOC_5",
+      "page": 8
+    },
+    {
+      "label": "1.5. Biểu đồ Use Case tổng quát",
+      "bookmark": "NHHS_TOC_6",
+      "page": 9
+    },
+    {
+      "label": "1.6. Danh sách ca sử dụng",
+      "bookmark": "NHHS_TOC_7",
+      "page": 10
+    },
+    {
+      "label": "1.7. Đặc tả UC01 và UC02",
+      "bookmark": "NHHS_TOC_8",
+      "page": 11
+    },
+    {
+      "label": "1.8. Đặc tả UC03 – Tiếp nhận, xử lý đặt bàn",
+      "bookmark": "NHHS_TOC_9",
+      "page": 12
+    },
+    {
+      "label": "1.9. Đặc tả UC04 – Lập, điều chỉnh hóa đơn",
+      "bookmark": "NHHS_TOC_10",
+      "page": 13
+    },
+    {
+      "label": "1.10. Đặc tả UC05 – Ghi nhận thanh toán",
+      "bookmark": "NHHS_TOC_11",
+      "page": 14
+    },
+    {
+      "label": "1.11. Đặc tả UC06 – Lập, điều chỉnh phiếu nhập",
+      "bookmark": "NHHS_TOC_12",
+      "page": 15
+    },
+    {
+      "label": "1.12. Đặc tả UC07 và phạm vi các UC hỗ trợ",
+      "bookmark": "NHHS_TOC_13",
+      "page": 16
+    },
+    {
+      "label": "1.13. Yêu cầu phi chức năng và tiêu chí chấp nhận",
+      "bookmark": "NHHS_TOC_14",
+      "page": 17
+    },
+    {
+      "label": "CHƯƠNG 2. MÔ HÌNH PHÂN TÍCH",
+      "bookmark": "NHHS_TOC_15",
+      "page": 18
+    },
+    {
+      "label": "2.1. Tìm lớp khái niệm từ yêu cầu",
+      "bookmark": "NHHS_TOC_16",
+      "page": 18
+    },
+    {
+      "label": "2.2. Mô hình khái niệm bán hàng và đặt bàn",
+      "bookmark": "NHHS_TOC_17",
+      "page": 19
+    },
+    {
+      "label": "2.3. Mô hình khái niệm nhập kho",
+      "bookmark": "NHHS_TOC_18",
+      "page": 20
+    },
+    {
+      "label": "2.4. Bảng CRC và phân bổ trách nhiệm",
+      "bookmark": "NHHS_TOC_19",
+      "page": 21
+    },
+    {
+      "label": "2.5. SSD cho UC04 – Lập hóa đơn",
+      "bookmark": "NHHS_TOC_20",
+      "page": 22
+    },
+    {
+      "label": "2.6. Điểm mơ hồ và hợp đồng nghiệp vụ",
+      "bookmark": "NHHS_TOC_21",
+      "page": 23
+    },
+    {
+      "label": "CHƯƠNG 3. THIẾT KẾ HỆ THỐNG",
+      "bookmark": "NHHS_TOC_22",
+      "page": 24
+    },
+    {
+      "label": "3.1. Kiến trúc và hướng phụ thuộc",
+      "bookmark": "NHHS_TOC_23",
+      "page": 24
+    },
+    {
+      "label": "3.2. Sequence Diagram – Lập hóa đơn",
+      "bookmark": "NHHS_TOC_24",
+      "page": 25
+    },
+    {
+      "label": "3.3. Sequence Diagram – Ghi nhận thanh toán",
+      "bookmark": "NHHS_TOC_25",
+      "page": 26
+    },
+    {
+      "label": "3.4. Sequence Diagram – Điều chỉnh phiếu nhập",
+      "bookmark": "NHHS_TOC_26",
+      "page": 27
+    },
+    {
+      "label": "3.5. DCD của phân hệ hóa đơn",
+      "bookmark": "NHHS_TOC_27",
+      "page": 28
+    },
+    {
+      "label": "3.6. DCD của phân hệ nhập kho",
+      "bookmark": "NHHS_TOC_28",
+      "page": 29
+    },
+    {
+      "label": "3.7. State Machine của hóa đơn",
+      "bookmark": "NHHS_TOC_29",
+      "page": 30
+    },
+    {
+      "label": "3.8. State Machine đặt bàn và khoảng cách cài đặt",
+      "bookmark": "NHHS_TOC_30",
+      "page": 31
+    },
+    {
+      "label": "3.9. Giải thích quyết định thiết kế bằng GRASP/SOLID",
+      "bookmark": "NHHS_TOC_31",
+      "page": 32
+    },
+    {
+      "label": "3.10. ERD bán hàng, khách và đặt bàn",
+      "bookmark": "NHHS_TOC_32",
+      "page": 33
+    },
+    {
+      "label": "3.11. ERD nhập kho và bảng tài khoản bổ sung",
+      "bookmark": "NHHS_TOC_33",
+      "page": 34
+    },
+    {
+      "label": "3.12. Khóa, ánh xạ và ràng buộc dữ liệu",
+      "bookmark": "NHHS_TOC_34",
+      "page": 35
+    },
+    {
+      "label": "3.13. Thiết kế giao dịch và ví dụ tính toán",
+      "bookmark": "NHHS_TOC_35",
+      "page": 36
+    },
+    {
+      "label": "3.14. Ma trận truy vết và kiểm tra nhất quán",
+      "bookmark": "NHHS_TOC_36",
+      "page": 37
+    },
+    {
+      "label": "CHƯƠNG 4. CÀI ĐẶT VÀ KIỂM THỬ",
+      "bookmark": "NHHS_TOC_37",
+      "page": 38
+    },
+    {
+      "label": "4.1. Công nghệ và cấu trúc dự án",
+      "bookmark": "NHHS_TOC_38",
+      "page": 38
+    },
+    {
+      "label": "4.2. Minh chứng cài đặt UC04 và UC05",
+      "bookmark": "NHHS_TOC_39",
+      "page": 39
+    },
+    {
+      "label": "4.3. Minh chứng UC06 và xác thực tài khoản",
+      "bookmark": "NHHS_TOC_40",
+      "page": 40
+    },
+    {
+      "label": "4.4. Giao diện và điểm kiểm tra khi chạy demo",
+      "bookmark": "NHHS_TOC_41",
+      "page": 41
+    },
+    {
+      "label": "4.5. Phạm vi và kết quả kiểm chứng thực tế",
+      "bookmark": "NHHS_TOC_42",
+      "page": 42
+    },
+    {
+      "label": "4.6. Test case đặt bàn, hóa đơn và thanh toán",
+      "bookmark": "NHHS_TOC_43",
+      "page": 43
+    },
+    {
+      "label": "4.7. Test case kho, báo cáo và bảo mật",
+      "bookmark": "NHHS_TOC_44",
+      "page": 44
+    },
+    {
+      "label": "4.8. Giới hạn sản phẩm và hướng hoàn thiện",
+      "bookmark": "NHHS_TOC_45",
+      "page": 45
+    },
+    {
+      "label": "KẾT LUẬN VÀ TÀI LIỆU THAM KHẢO",
+      "bookmark": "NHHS_TOC_46",
+      "page": 46
+    },
+    {
+      "label": "PHỤ LỤC A. PHÂN CÔNG VÀ CHUẨN BỊ BẢO VỆ",
+      "bookmark": "NHHS_TOC_47",
+      "page": 47
+    },
+    {
+      "label": "PHỤ LỤC B. TỆP NGUỒN VÀ THÔNG TIN CẦN BỔ SUNG",
+      "bookmark": "NHHS_TOC_48",
+      "page": 48
+    },
+    {
+      "label": "PHỤ LỤC C. CẬP NHẬT CÀI ĐẶT NGÀY 16/11/2026",
+      "bookmark": "NHHS_TOC_49",
+      "page": 49
+    },
+    {
+      "label": "Hình 1.1. Use Case của hệ thống nội bộ",
+      "bookmark": "NHHS_FIG_1_1",
+      "page": 9
+    },
+    {
+      "label": "Hình 2.1. Các khái niệm đặt bàn và bán hàng",
+      "bookmark": "NHHS_FIG_2_1",
+      "page": 19
+    },
+    {
+      "label": "Hình 2.2. Các khái niệm nhập hàng và tồn nguyên liệu.",
+      "bookmark": "NHHS_FIG_2_2",
+      "page": 20
+    },
+    {
+      "label": "Hình 2.3. SSD của sự kiện lập hóa đơn.",
+      "bookmark": "NHHS_FIG_2_3",
+      "page": 22
+    },
+    {
+      "label": "Hình 3.1. Tổ chức lớp và luồng dữ liệu của ứng dụng.",
+      "bookmark": "NHHS_FIG_3_1",
+      "page": 24
+    },
+    {
+      "label": "Hình 3.2. Tương tác thực hiện UC04",
+      "bookmark": "NHHS_FIG_3_2",
+      "page": 25
+    },
+    {
+      "label": "Hình 3.3. Tương tác thực hiện UC05 và các nhánh từ chối.",
+      "bookmark": "NHHS_FIG_3_3",
+      "page": 26
+    },
+    {
+      "label": "Hình 3.4. Tương tác sửa phiếu thuộc UC06.",
+      "bookmark": "NHHS_FIG_3_4",
+      "page": 27
+    },
+    {
+      "label": "Hình 3.5. Lớp thiết kế tiêu biểu cho UC04 và UC05.",
+      "bookmark": "NHHS_FIG_3_5",
+      "page": 28
+    },
+    {
+      "label": "Hình 3.6. Lớp thiết kế tiêu biểu cho UC06.",
+      "bookmark": "NHHS_FIG_3_6",
+      "page": 29
+    },
+    {
+      "label": "Hình 3.7. Vòng đời hóa đơn theo các thao tác Service.",
+      "bookmark": "NHHS_FIG_3_7",
+      "page": 30
+    },
+    {
+      "label": "Hình 3.8. Vòng đời đặt bàn đề xuất",
+      "bookmark": "NHHS_FIG_3_8",
+      "page": 31
+    },
+    {
+      "label": "Hình 3.9. ERD logic bán hàng và đặt bàn",
+      "bookmark": "NHHS_FIG_3_9",
+      "page": 33
+    },
+    {
+      "label": "Hình 3.10. ERD kho, hồ sơ nhân viên và TAI_KHOAN.",
+      "bookmark": "NHHS_FIG_3_10",
+      "page": 34
+    }
+  ],
+  "last_page_number_updates": [
+    {
+      "label": "PHỤ LỤC C. CẬP NHẬT CÀI ĐẶT NGÀY 16/11/2026",
+      "before": 48,
+      "after": 49
+    }
+  ],
+  "render_engine": "PDF được đồng bộ trực tiếp; chưa render lại bằng Microsoft Word."
+}

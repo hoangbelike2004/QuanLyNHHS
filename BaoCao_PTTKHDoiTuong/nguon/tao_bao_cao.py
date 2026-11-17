@@ -5,7 +5,7 @@ from io import BytesIO
 
 from docx import Document
 from docx.shared import Cm, Pt, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_TAB_LEADER
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from reportlab.pdfgen import canvas
@@ -19,6 +19,21 @@ from reportlab.lib.utils import ImageReader
 from PIL import Image as PILImage
 
 from noi_dung import PAGES
+from hoan_thien_bao_cao import REMOVE_PREFIXES, REPLACEMENTS
+
+# Giữ các ghi chú kỹ thuật, lược ghi chú biên soạn đã được chuyển ra README.
+for page_data in PAGES:
+    cleaned = []
+    for block in page_data['blocks']:
+        value = block.get('text', '')
+        if value.startswith(REMOVE_PREFIXES):
+            continue
+        for prefix, replacement in REPLACEMENTS.items():
+            if value.startswith(prefix):
+                block = dict(block, text=replacement)
+                break
+        cleaned.append(block)
+    page_data['blocks'] = cleaned
 
 ROOT = Path(__file__).resolve().parent.parent
 NAME = 'BaoCao_BTL_PTTKHDoiTuong_Nhom4'
@@ -183,12 +198,14 @@ def set_run(run,size=13,bold=False,italic=False,color=None):
     for k in ['ascii','hAnsi','eastAsia','cs']:rf.set(qn('w:'+k),'Times New Roman')
 
 def field(par,command,cached=''):
-    run=par.add_run();start=OxmlElement('w:fldChar');start.set(qn('w:fldCharType'),'begin')
+    start=OxmlElement('w:fldChar');start.set(qn('w:fldCharType'),'begin')
     ins=OxmlElement('w:instrText');ins.set(qn('xml:space'),'preserve');ins.text=' '+command+' '
     sep=OxmlElement('w:fldChar');sep.set(qn('w:fldCharType'),'separate')
     t=OxmlElement('w:t');t.text=cached
     end=OxmlElement('w:fldChar');end.set(qn('w:fldCharType'),'end')
-    for x in [start,ins,sep,t,end]:run._r.append(x)
+    # Tách chỉ dẫn và kết quả thành các run để Word đọc/cập nhật nhất quán.
+    for x in [start,ins,sep,t,end]:
+        run=par.add_run();run._r.append(x);set_run(run,10.7)
     return run
 
 def add_bookmark(par,name,num):
@@ -268,8 +285,8 @@ def draw_docx(layout):
     set_run(header.add_run('PHÂN TÍCH VÀ THIẾT KẾ HƯỚNG ĐỐI TƯỢNG                          NHÓM 4'),9,color='526271')
     footer=sec.footer.paragraphs[0];footer.alignment=WD_ALIGN_PARAGRAPH.CENTER
     set_run(field(footer,'PAGE','2'),10)
-    # Tham chiếu cập nhật khi người dùng chỉnh Word; số trang trong PDF luôn cố định.
-    update=OxmlElement('w:updateFields');update.set(qn('w:val'),'true');doc.settings._element.append(update)
+    # Các số trang tra cứu là văn bản để Word không tự tính lại thành 0/lỗi.
+    update=OxmlElement('w:updateFields');update.set(qn('w:val'),'false');doc.settings._element.append(update)
     doc.core_properties.title='Báo cáo BTL Phân tích và thiết kế hướng đối tượng – Nhóm 4'
     doc.core_properties.author='Nhóm 4 – Khoa Công nghệ thông tin, Trường Đại học Giao thông Vận tải'
     doc.core_properties.subject='Hệ thống quản lý nhà hàng hải sản'
@@ -308,7 +325,9 @@ def draw_docx(layout):
                 entries=TOC if k=='toc' else [(label,nn,False) for label,nn in FIGURES]
                 for label,nn,bold in entries:
                     par=doc.add_paragraph();config_para(par,after=2,line=1.02)
-                    par.paragraph_format.tab_stops.add_tab_stop(Cm(15),WD_ALIGN_PARAGRAPH.RIGHT)
+                    par.paragraph_format.first_line_indent=Cm(0)
+                    par.paragraph_format.left_indent=Cm(0 if bold or k=='figures' else .32)
+                    par.paragraph_format.tab_stops.add_tab_stop(Cm(16),WD_TAB_ALIGNMENT.RIGHT,WD_TAB_LEADER.DOTS)
                     link=OxmlElement('w:hyperlink');link.set(qn('w:anchor'),'page'+str(nn))
                     rr=OxmlElement('w:r');rpr=OxmlElement('w:rPr')
                     fonts=OxmlElement('w:rFonts');fonts.set(qn('w:ascii'),'Times New Roman');fonts.set(qn('w:hAnsi'),'Times New Roman');rpr.append(fonts)
@@ -316,7 +335,7 @@ def draw_docx(layout):
                     if bold:rpr.append(OxmlElement('w:b'))
                     rr.append(rpr);tx=OxmlElement('w:t');tx.text=label;rr.append(tx);link.append(rr);par._p.append(link)
                     set_run(par.add_run('\t'),10.7*scale)
-                    set_run(field(par,f'PAGEREF page{nn} \\h',str(nn)),10.7*scale)
+                    set_run(par.add_run(str(nn)),10.7*scale)
     path=ROOT/(NAME+'.docx');doc.save(path)
     return path
 

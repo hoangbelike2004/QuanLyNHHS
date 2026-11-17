@@ -1,0 +1,38 @@
+[
+  {
+    "file": "BTL.docx",
+    "pdf_pages": 27,
+    "verified_page_references": 23,
+    "body_text_preserved": true,
+    "embedded_media_preserved": true,
+    "lookup_links_verified": true,
+    "fields_and_bookmarks": "OK",
+    "unchanged_pdf_body_pages": 26,
+    "pdf_visual_review_pages": [
+      2
+    ],
+    "word_pagination": "Chưa render lại toàn bộ Word trên máy hiện tại; số trang tham chiếu đối chiếu PDF hiện có."
+  },
+  {
+    "file": "BaoCao_PTTKHDoiTuong/BaoCao_BTL_PTTKHDoiTuong_Nhom4.docx",
+    "pdf_pages": 49,
+    "verified_page_references": 63,
+    "page_numbers": "Văn bản thường, không còn TOC/PAGEREF để trình đọc tính lại thành 0.",
+    "lookup_links_verified": true,
+    "embedded_media_preserved": true,
+    "embedded_diagrams": 14,
+    "editorial_changes_verified": 17,
+    "other_report_content_preserved": true,
+    "word_rendered": "PDF được đồng bộ trực tiếp; chưa render lại bằng Microsoft Word.",
+    "pdf_visual_review_pages": [
+      3,
+      4
+    ],
+    "additional_pdf_visual_review_pages": [
+      7,
+      41,
+      48,
+      49
+    ]
+  }
+]
