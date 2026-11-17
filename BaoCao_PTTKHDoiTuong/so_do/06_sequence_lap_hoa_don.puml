@@ -20,38 +20,43 @@ autonumber
 actor "Thu ngân" as A
 boundary "HoaDon\nController" as C
 control "HoaDon\nService" as S
+participant "BanAn\nRepository" as B
 participant "HoaDon\nRepository" as H
 participant "MonAn\nRepository" as M
 participant "CTHoaDon\nRepository" as D
 A -> C : POST /hoa-don/them
 C -> S : taoHoaDon(hd, ids, qty)
 activate S
-S -> S : kiểm tra đầu vào;\ngộp món trùng
-alt không hợp lệ
- S --> C : IllegalArgumentException
- C --> A : trả form / thông báo lỗi
-else hợp lệ
- group @Transactional
- S -> H : save(hd chưa thanh toán)
- H --> S : hd có maHd
- loop mỗi món sau gộp
-  S -> M : findById(maMon)
-  M --> S : món có đơn giá
-  S -> S : tạo CTHoaDon; lượng × giá
-  S -> D : save(chiTiet)
+group @Transactional
+ S -> B : findById(maBan)
+ B --> S : bàn ăn
+ S -> H : existsByMaBanAndTrangThai(maBan, "Chua thanh toan")
+ H --> S : boolean
+ S -> S : kiểm tra bàn "Trống",\nđầu vào & gộp món trùng
+ alt không hợp lệ
+  S --> C : IllegalArgumentException / IllegalStateException
+  C --> A : chuyển hướng form kèm lỗi
+ else hợp lệ
+  S -> H : save(hd chưa thanh toán)
+  H --> S : hd có maHd
+  loop mỗi món sau gộp
+   S -> M : findById(maMon)
+   M --> S : món có đơn giá
+   S -> S : tạo CTHoaDon (xác nhận = 0);\nlượng × giá
+   S -> D : save(chiTiet)
+  end
+  S -> B : save(bàn -> "Đang dùng")
+  S -> S : tinhLaiTongTien(maHd)
+  S -> D : tinhTongTienTheoHoaDon(maHd)
+  D --> S : tổng chi tiết
+  S -> H : save(hd với tổng sau giảm)
+  S --> C : HoaDon
+  C --> A : chuyển hướng chi tiết
  end
- S -> S : tinhLaiTongTien(maHd)
- S -> D : tinhTongTienTheoHoaDon(maHd)
- D --> S : tổng chi tiết
- S -> H : save(hd với tổng sau giảm)
- end
- S --> C : HoaDon
- C --> A : chuyển hướng chi tiết
 end
 deactivate S
 note over S,D
-Lỗi phát sinh trong giao dịch làm rollback.
-Không cập nhật trạng thái bàn trong luồng này.
+Lỗi phát sinh trong giao dịch làm rollback cả
+hóa đơn, chi tiết và trạng thái bàn.
 end note
-
 @enduml

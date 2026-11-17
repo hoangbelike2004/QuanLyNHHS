@@ -50,5 +50,4 @@ Mỗi phiếu thuộc một nhà cung cấp.
 Mỗi nguyên liệu chỉ xuất hiện một lần/phiếu.
 Sửa hoặc xóa phiếu phải điều chỉnh lại tồn.
 end note
-
 @enduml

@@ -46,6 +46,7 @@ class "Hóa đơn" as HD {
 }
 class "Dòng hóa đơn" as CT {
  số lượng
+ số lượng đã xác nhận
  đơn giá bán
  thành tiền
 }
@@ -71,5 +72,4 @@ note bottom of CT
 Đơn giá tại lúc ghi chứng từ
 khác giá hiện tại của món.
 end note
-
 @enduml

@@ -79,5 +79,4 @@ NhanVienNhapKhoRepository,
 EntityManager.
 Lược getter/setter thường dùng.
 end note
-
 @enduml

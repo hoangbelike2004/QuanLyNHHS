@@ -21,14 +21,19 @@ class HoaDonController <<boundary>> {
  +taoHoaDon(...): String
  +capNhatHoaDon(...): String
  +thanhToan(...): String
+ +xacNhanMon(...): String
+ +xoaHoaDon(...): String
 }
 class HoaDonService <<control>> {
  +taoHoaDon(...): HoaDon
  +capNhatHoaDon(...): HoaDon
  +thanhToan(maHd): HoaDon
+ +xacNhanMon(maHd): void
+ +xoaHoaDon(maHd): void
  +tinhLaiTongTien(maHd): HoaDon
  -kiemTraVaGopDanhSachMon(...)
  -luuChiTietHoaDon(...)
+ -capNhatTrangThaiBanNeuKhongConHoaDonChuaThanhToan(maBan)
 }
 class HoaDon <<entity>> {
  -maHd: Long
@@ -40,7 +45,9 @@ class HoaDon <<entity>> {
 }
 class CTHoaDon <<entity>> {
  -id: CTHoaDonId
+ -monAn: MonAn {read-only}
  -soLuong: BigDecimal
+ -soLuongDaXacNhan: BigDecimal
  -donGia: BigDecimal
  -thanhTien: BigDecimal
  +setId(id): void
@@ -51,8 +58,14 @@ class CTHoaDonId <<value object>> {
  +equals(obj): boolean
  +hashCode(): int
 }
+class BanAn <<entity>> {
+ -maBan: Long
+ -tenBan: String
+ -trangThai: String
+}
 interface HoaDonRepository {
  +findById(maHd): Optional
+ +existsByMaBanAndTrangThai(...): boolean
  +save(hd): HoaDon
 }
 interface CTHoaDonRepository {
@@ -63,17 +76,22 @@ interface CTHoaDonRepository {
 interface MonAnRepository {
  +findById(maMon): Optional
 }
+interface BanAnRepository {
+ +findById(maBan): Optional
+ +save(ban): BanAn
+}
 HoaDonController --> HoaDonService
 HoaDonService --> HoaDonRepository
 HoaDonService --> CTHoaDonRepository
 HoaDonService --> MonAnRepository
+HoaDonService --> BanAnRepository
 HoaDonRepository ..> HoaDon
 CTHoaDonRepository ..> CTHoaDon
+BanAnRepository ..> BanAn
 CTHoaDon *-- CTHoaDonId
 note bottom of HoaDon
 Quan hệ bàn, khách, nhân viên lưu bằng Long.
-Không có collection chi tiết trong entity HoaDon.
+CTHoaDon giữ thêm @ManyToOne MonAn (insertable/updatable = false).
 Các thao tác repository cơ bản kế thừa JpaRepository.
 end note
-
 @enduml

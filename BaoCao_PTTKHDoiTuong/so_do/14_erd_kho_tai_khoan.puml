@@ -70,6 +70,7 @@ entity TAI_KHOAN {
  HO_TEN : VARCHAR2(100)
  TEN_DANG_NHAP : VARCHAR2(30) <<UQ>>
  MAT_KHAU : VARCHAR2(100)
+ VAI_TRO : VARCHAR2(20)
 }
 NHA_CUNG_CAP ||--o{ PHIEU_NHAP
 NHAN_VIEN ||..o{ PHIEU_NHAP
@@ -77,8 +78,7 @@ PHIEU_NHAP ||--o{ CT_PHIEU_NHAP
 NGUYEN_LIEU ||--o{ CT_PHIEU_NHAP
 note bottom of TAI_KHOAN
 Bảng bổ sung ngoài 12 bảng nghiệp vụ.
-Chưa liên kết với NHAN_VIEN;
-chưa lưu vai trò riêng.
+Lưu VAI_TRO (ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN);
+chưa có FK trực tiếp tới NHAN_VIEN.
 end note
-
 @enduml

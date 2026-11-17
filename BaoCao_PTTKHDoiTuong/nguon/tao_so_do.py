@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -26,40 +27,42 @@ hide circle
 diagrams = {}
 diagrams['01_use_case'] = r'''left to right direction
 actor "Nhân viên nội bộ" as NV
+actor "Quản lý" as QL
+actor "Thủ kho" as TK
 actor "Phục vụ" as PV
 actor "Thu ngân" as TN
-actor "Thủ kho" as TK
-actor "Quản lý" as QL
-PV --|> NV
-TN --|> NV
-TK --|> NV
-QL --|> NV
+NV <|-- QL
+NV <|-- TK
+NV <|-- PV
+NV <|-- TN
 rectangle "HỆ THỐNG QUẢN LÝ NHÀ HÀNG HẢI SẢN" {
- usecase "UC01\nĐăng nhập / đăng xuất" as U1
+ usecase "UC11\nQuản lý tài khoản\nvà phân quyền" as U11
  usecase "UC02\nQuản lý thực đơn" as U2
- usecase "UC03\nTiếp nhận, xử lý đặt bàn" as U3
- usecase "UC04\nLập, điều chỉnh hóa đơn" as U4
- usecase "UC05\nGhi nhận thanh toán" as U5
- usecase "UC06\nLập, điều chỉnh phiếu nhập" as U6
  usecase "UC07\nXem báo cáo doanh thu" as U7
  usecase "UC08\nQuản lý hồ sơ nhân viên" as U8
+ usecase "UC06\nLập, điều chỉnh phiếu nhập" as U6
  usecase "UC09\nQuản lý danh mục kho" as U9
+ usecase "UC01\nĐăng nhập / đăng xuất" as U1
+ usecase "UC03\nTiếp nhận, xử lý đặt bàn" as U3
  usecase "UC10\nQuản lý khách hàng, bàn ăn" as U10
+ usecase "UC04\nLập, điều chỉnh hóa đơn" as U4
+ usecase "UC05\nGhi nhận thanh toán" as U5
 }
-NV -- U1
-PV -- U3
-PV -- U10
-TN -- U4
-TN -- U5
+QL -- U11
 QL -- U2
 QL -- U7
 QL -- U8
 TK -- U6
 TK -- U9
-note bottom of U1
-Vai trò theo nghiệp vụ.
-Code hiện tại dùng ROLE_USER chung;
-chưa hạn chế URL theo từng vai trò.
+NV -- U1
+PV -- U3
+PV -- U10
+TN -- U4
+TN -- U5
+note bottom of NV
+Actor biểu diễn vai trò nghiệp vụ.
+Cài đặt ánh xạ sang 4 vai trò tài khoản:
+ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN.
 end note
 '''
 diagrams['02_khai_niem_ban_hang'] = r'''left to right direction
@@ -92,6 +95,7 @@ class "Hóa đơn" as HD {
 }
 class "Dòng hóa đơn" as CT {
  số lượng
+ số lượng đã xác nhận
  đơn giá bán
  thành tiền
 }
@@ -195,38 +199,44 @@ diagrams['06_sequence_lap_hoa_don'] = r'''autonumber
 actor "Thu ngân" as A
 boundary "HoaDon\nController" as C
 control "HoaDon\nService" as S
+participant "BanAn\nRepository" as B
 participant "HoaDon\nRepository" as H
 participant "MonAn\nRepository" as M
 participant "CTHoaDon\nRepository" as D
 A -> C : POST /hoa-don/them
 C -> S : taoHoaDon(hd, ids, qty)
 activate S
-S -> S : kiểm tra đầu vào;\ngộp món trùng
-alt không hợp lệ
- S --> C : IllegalArgumentException
- C --> A : trả form / thông báo lỗi
-else hợp lệ
- group @Transactional
- S -> H : save(hd chưa thanh toán)
- H --> S : hd có maHd
- loop mỗi món sau gộp
-  S -> M : findById(maMon)
-  M --> S : món có đơn giá
-  S -> S : tạo CTHoaDon; lượng × giá
-  S -> D : save(chiTiet)
+group @Transactional
+ S -> B : findById(maBan)
+ B --> S : bàn ăn
+ S -> H : existsByMaBanAndTrangThai(maBan, "Chua thanh toan")
+ H --> S : boolean
+ S -> S : kiểm tra bàn "Trống",\nđầu vào & gộp món trùng
+ alt không hợp lệ
+  S --> C : IllegalArgumentException / IllegalStateException
+  C --> A : chuyển hướng form kèm lỗi
+ else hợp lệ
+  S -> H : save(hd chưa thanh toán)
+  H --> S : hd có maHd
+  loop mỗi món sau gộp
+   S -> M : findById(maMon)
+   M --> S : món có đơn giá
+   S -> S : tạo CTHoaDon (xác nhận = 0);\nlượng × giá
+   S -> D : save(chiTiet)
+  end
+  S -> B : save(bàn -> "Đang dùng")
+  S -> S : tinhLaiTongTien(maHd)
+  S -> D : tinhTongTienTheoHoaDon(maHd)
+  D --> S : tổng chi tiết
+  S -> H : save(hd với tổng sau giảm)
+  S --> C : HoaDon
+  C --> A : chuyển hướng chi tiết
  end
- S -> S : tinhLaiTongTien(maHd)
- S -> D : tinhTongTienTheoHoaDon(maHd)
- D --> S : tổng chi tiết
- S -> H : save(hd với tổng sau giảm)
- end
- S --> C : HoaDon
- C --> A : chuyển hướng chi tiết
 end
 deactivate S
 note over S,D
-Lỗi phát sinh trong giao dịch làm rollback.
-Không cập nhật trạng thái bàn trong luồng này.
+Lỗi phát sinh trong giao dịch làm rollback cả
+hóa đơn, chi tiết và trạng thái bàn.
 end note
 '''
 diagrams['07_sequence_thanh_toan'] = r'''autonumber
@@ -235,7 +245,8 @@ boundary "HoaDon\nController" as C
 control "HoaDon\nService" as S
 participant "HoaDon\nRepository" as H
 participant "CTHoaDon\nRepository" as D
-A -> C : POST thanh toán (maHd)
+participant "BanAn\nRepository" as B
+A -> C : POST /hoa-don/thanh-toan/{maHd}
 C -> S : thanhToan(maHd)
 group @Transactional
  S -> H : findById(maHd)
@@ -254,15 +265,17 @@ group @Transactional
    S -> H : save(hd với tổng tiền mới)
    S -> S : đặt Da thanh toan
    S -> H : save(hd)
+   S -> H : existsByMaBanAndTrangThai(maBan, "Chua thanh toan")
+   H --> S : false (hết hóa đơn mở)
+   S -> B : findById(maBan) & save("Trống")
    S --> C : HoaDon
   end
  end
 end
 C --> A : kết quả / thông báo
-note over S,H
-Chưa gọi BanAnService để giải phóng bàn.
-Kiểm tra trạng thái hiện chưa khóa chống
-hai yêu cầu thanh toán đồng thời.
+note over S,B
+Giải phóng bàn về Trống trong cùng giao dịch khi hết hóa đơn mở.
+Chưa có khóa chống hai yêu cầu thanh toán đồng thời.
 end note
 '''
 diagrams['08_sequence_sua_phieu_nhap'] = r'''autonumber
@@ -306,14 +319,19 @@ class HoaDonController <<boundary>> {
  +taoHoaDon(...): String
  +capNhatHoaDon(...): String
  +thanhToan(...): String
+ +xacNhanMon(...): String
+ +xoaHoaDon(...): String
 }
 class HoaDonService <<control>> {
  +taoHoaDon(...): HoaDon
  +capNhatHoaDon(...): HoaDon
  +thanhToan(maHd): HoaDon
+ +xacNhanMon(maHd): void
+ +xoaHoaDon(maHd): void
  +tinhLaiTongTien(maHd): HoaDon
  -kiemTraVaGopDanhSachMon(...)
  -luuChiTietHoaDon(...)
+ -capNhatTrangThaiBanNeuKhongConHoaDonChuaThanhToan(maBan)
 }
 class HoaDon <<entity>> {
  -maHd: Long
@@ -325,7 +343,9 @@ class HoaDon <<entity>> {
 }
 class CTHoaDon <<entity>> {
  -id: CTHoaDonId
+ -monAn: MonAn {read-only}
  -soLuong: BigDecimal
+ -soLuongDaXacNhan: BigDecimal
  -donGia: BigDecimal
  -thanhTien: BigDecimal
  +setId(id): void
@@ -336,8 +356,14 @@ class CTHoaDonId <<value object>> {
  +equals(obj): boolean
  +hashCode(): int
 }
+class BanAn <<entity>> {
+ -maBan: Long
+ -tenBan: String
+ -trangThai: String
+}
 interface HoaDonRepository {
  +findById(maHd): Optional
+ +existsByMaBanAndTrangThai(...): boolean
  +save(hd): HoaDon
 }
 interface CTHoaDonRepository {
@@ -348,16 +374,22 @@ interface CTHoaDonRepository {
 interface MonAnRepository {
  +findById(maMon): Optional
 }
+interface BanAnRepository {
+ +findById(maBan): Optional
+ +save(ban): BanAn
+}
 HoaDonController --> HoaDonService
 HoaDonService --> HoaDonRepository
 HoaDonService --> CTHoaDonRepository
 HoaDonService --> MonAnRepository
+HoaDonService --> BanAnRepository
 HoaDonRepository ..> HoaDon
 CTHoaDonRepository ..> CTHoaDon
+BanAnRepository ..> BanAn
 CTHoaDon *-- CTHoaDonId
 note bottom of HoaDon
 Quan hệ bàn, khách, nhân viên lưu bằng Long.
-Không có collection chi tiết trong entity HoaDon.
+CTHoaDon giữ thêm @ManyToOne MonAn (insertable/updatable = false).
 Các thao tác repository cơ bản kế thừa JpaRepository.
 end note
 '''
@@ -427,12 +459,13 @@ end note
 '''
 diagrams['11_trang_thai_hoa_don'] = r'''hide empty description
 state "Chưa thanh toán\nChua thanh toan" as C
+C : xacNhanMon() / chốt lượng đã xác nhận
 state "Đã thanh toán\nDa thanh toan" as D
 state "Đã xóa\n(không còn bản ghi)" as X
-[*] --> C : tạo hợp lệ
-C --> C : sửa thông tin / món hợp lệ\n/ tính lại tổng
-C --> D : thanhToan() [có chi tiết]\n/ tính lại tổng, ghi trạng thái
-C --> X : xoaHoaDon()\n/ xóa chi tiết rồi xóa hóa đơn
+[*] --> C : tạo hợp lệ\n/ đặt bàn Đang dùng
+C --> C : sửa thông tin / món hợp lệ\n[THU_NGAN không giảm dưới lượng đã xác nhận]\n/ tính lại tổng
+C --> D : thanhToan() [có chi tiết]\n/ tính lại tổng, ghi trạng thái,\ntrả bàn Trống (nếu hết đơn mở)
+C --> X : xoaHoaDon()\n/ xóa chi tiết, xóa hóa đơn,\ntrả bàn Trống (nếu hết đơn mở)
 X --> [*]
 note right of D
 Không cho sửa, xóa hoặc
@@ -499,9 +532,10 @@ entity HOA_DON {
 }
 entity CT_HOA_DON {
  * MA_HD : NUMBER <<PK, FK logic>>
- * MA_MON : NUMBER <<PK, FK logic>>
+ * MA_MON : NUMBER <<PK, FK>>
  --
  SO_LUONG : NUMBER(10,2)
+ SO_LUONG_DA_XAC_NHAN : NUMBER(10,2)
  DON_GIA : NUMBER(12,2)
  THANH_TIEN : NUMBER(14,2)
 }
@@ -537,7 +571,7 @@ KHACH_HANG |o..o{ HOA_DON
 BAN_AN ||..o{ HOA_DON
 NHAN_VIEN ||..o{ HOA_DON
 HOA_DON ||..o{ CT_HOA_DON
-MON_AN ||..o{ CT_HOA_DON
+MON_AN ||--o{ CT_HOA_DON
 LOAI_MON ||--o{ MON_AN
 '''
 diagrams['14_erd_kho_tai_khoan'] = r'''hide methods
@@ -594,6 +628,7 @@ entity TAI_KHOAN {
  HO_TEN : VARCHAR2(100)
  TEN_DANG_NHAP : VARCHAR2(30) <<UQ>>
  MAT_KHAU : VARCHAR2(100)
+ VAI_TRO : VARCHAR2(20)
 }
 NHA_CUNG_CAP ||--o{ PHIEU_NHAP
 NHAN_VIEN ||..o{ PHIEU_NHAP
@@ -601,18 +636,17 @@ PHIEU_NHAP ||--o{ CT_PHIEU_NHAP
 NGUYEN_LIEU ||--o{ CT_PHIEU_NHAP
 note bottom of TAI_KHOAN
 Bảng bổ sung ngoài 12 bảng nghiệp vụ.
-Chưa liên kết với NHAN_VIEN;
-chưa lưu vai trò riêng.
+Lưu VAI_TRO (ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN);
+chưa có FK trực tiếp tới NHAN_VIEN.
 end note
 '''
 
 if __name__ == '__main__':
     for name, body in diagrams.items():
         (OUT / (name + '.puml')).write_text(COMMON + body + '\n@enduml\n', encoding='utf-8')
-    java = '/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/java'
-    import os
-    java = os.environ.get('NHHS_REPORT_JAVA', java)
-    jar = os.environ.get('NHHS_PLANTUML_JAR', '/private/tmp/nhhs-plantuml.jar')
+    java = os.environ.get('NHHS_REPORT_JAVA', r'C:\Program Files\Java\jdk-27\bin\java.exe')
+    jar = os.environ.get('NHHS_PLANTUML_JAR', str(ROOT.parent / 'target' / 'report-build' / 'plantuml.jar'))
+    pumls = [str(OUT / (n + '.puml')) for n in diagrams]
     for fmt in ['-tsvg', '-tpng']:
-        subprocess.run([java, '-Djava.awt.headless=true', '-jar', jar, '-charset', 'UTF-8', fmt, str(OUT / '*.puml')], check=True)
+        subprocess.run([java, '-Djava.awt.headless=true', '-jar', jar, '-charset', 'UTF-8', fmt, *pumls], check=True)
     print('Đã dựng', len(diagrams), 'sơ đồ, mỗi sơ đồ có PUML, SVG, PNG.')

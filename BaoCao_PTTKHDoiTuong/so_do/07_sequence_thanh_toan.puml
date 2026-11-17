@@ -22,7 +22,8 @@ boundary "HoaDon\nController" as C
 control "HoaDon\nService" as S
 participant "HoaDon\nRepository" as H
 participant "CTHoaDon\nRepository" as D
-A -> C : POST thanh toán (maHd)
+participant "BanAn\nRepository" as B
+A -> C : POST /hoa-don/thanh-toan/{maHd}
 C -> S : thanhToan(maHd)
 group @Transactional
  S -> H : findById(maHd)
@@ -41,15 +42,16 @@ group @Transactional
    S -> H : save(hd với tổng tiền mới)
    S -> S : đặt Da thanh toan
    S -> H : save(hd)
+   S -> H : existsByMaBanAndTrangThai(maBan, "Chua thanh toan")
+   H --> S : false (hết hóa đơn mở)
+   S -> B : findById(maBan) & save("Trống")
    S --> C : HoaDon
   end
  end
 end
 C --> A : kết quả / thông báo
-note over S,H
-Chưa gọi BanAnService để giải phóng bàn.
-Kiểm tra trạng thái hiện chưa khóa chống
-hai yêu cầu thanh toán đồng thời.
+note over S,B
+Giải phóng bàn về Trống trong cùng giao dịch khi hết hóa đơn mở.
+Chưa có khóa chống hai yêu cầu thanh toán đồng thời.
 end note
-
 @enduml

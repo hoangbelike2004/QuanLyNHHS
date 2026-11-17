@@ -18,17 +18,17 @@ skinparam padding 5
 hide circle
 hide empty description
 state "Chưa thanh toán\nChua thanh toan" as C
+C : xacNhanMon() / chốt lượng đã xác nhận
 state "Đã thanh toán\nDa thanh toan" as D
 state "Đã xóa\n(không còn bản ghi)" as X
-[*] --> C : tạo hợp lệ
-C --> C : sửa thông tin / món hợp lệ\n/ tính lại tổng
-C --> D : thanhToan() [có chi tiết]\n/ tính lại tổng, ghi trạng thái
-C --> X : xoaHoaDon()\n/ xóa chi tiết rồi xóa hóa đơn
+[*] --> C : tạo hợp lệ\n/ đặt bàn Đang dùng
+C --> C : sửa thông tin / món hợp lệ\n[THU_NGAN không giảm dưới lượng đã xác nhận]\n/ tính lại tổng
+C --> D : thanhToan() [có chi tiết]\n/ tính lại tổng, ghi trạng thái,\ntrả bàn Trống (nếu hết đơn mở)
+C --> X : xoaHoaDon()\n/ xóa chi tiết, xóa hóa đơn,\ntrả bàn Trống (nếu hết đơn mở)
 X --> [*]
 note right of D
 Không cho sửa, xóa hoặc
 thanh toán lại bằng service.
 Không có hoàn tiền trong phạm vi.
 end note
-
 @enduml

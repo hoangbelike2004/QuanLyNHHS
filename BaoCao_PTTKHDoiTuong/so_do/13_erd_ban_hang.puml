@@ -57,9 +57,10 @@ entity HOA_DON {
 }
 entity CT_HOA_DON {
  * MA_HD : NUMBER <<PK, FK logic>>
- * MA_MON : NUMBER <<PK, FK logic>>
+ * MA_MON : NUMBER <<PK, FK>>
  --
  SO_LUONG : NUMBER(10,2)
+ SO_LUONG_DA_XAC_NHAN : NUMBER(10,2)
  DON_GIA : NUMBER(12,2)
  THANH_TIEN : NUMBER(14,2)
 }
@@ -95,7 +96,6 @@ KHACH_HANG |o..o{ HOA_DON
 BAN_AN ||..o{ HOA_DON
 NHAN_VIEN ||..o{ HOA_DON
 HOA_DON ||..o{ CT_HOA_DON
-MON_AN ||..o{ CT_HOA_DON
+MON_AN ||--o{ CT_HOA_DON
 LOAI_MON ||--o{ MON_AN
-
 @enduml

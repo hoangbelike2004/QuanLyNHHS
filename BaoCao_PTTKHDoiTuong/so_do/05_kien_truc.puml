@@ -38,5 +38,4 @@ R --> E : ánh xạ
 R --> DB : SQL / JDBC
 C --> V : Model + template
 V --> B : HTML
-
 @enduml

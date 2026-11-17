@@ -1,855 +1,773 @@
-# TRANG BÌA
-<!-- Trang dự kiến 1 -->
+# LỜI MỞ ĐẦU
 
-# LỜI MỞ ĐẦU VÀ CĂN CỨ THỰC HIỆN
-<!-- Trang dự kiến 2 -->
+Trong hoạt động hằng ngày, nhà hàng hải sản phải đồng thời xử lý nhiều nghiệp vụ liên kết chặt chẽ với nhau như tiếp nhận đặt bàn, quản lý tình trạng bàn ăn, cập nhật thực đơn theo thời giá, lập và điều chỉnh hóa đơn, ghi nhận thanh toán và nhập nguyên liệu từ nhà cung cấp. Nếu các thông tin này được ghi chép rời rạc hoặc thiếu ràng buộc, nhân viên rất dễ gặp sai sót khi đối chiếu bàn trống, đơn giá tại thời điểm bán hay số lượng tồn kho sau khi chỉnh sửa chứng từ.
 
-Nhà hàng hải sản tiếp nhận đặt bàn, phục vụ món ăn, lập hóa đơn và nhập nguyên liệu mỗi ngày. Khi dữ liệu bàn, khách hàng, thực đơn và chứng từ được ghi rời rạc, nhân viên khó đối chiếu trạng thái phục vụ, đơn giá và số lượng tồn. Đề tài “Hệ thống quản lý nhà hàng hải sản” được chọn để phân tích những quan hệ này và thiết kế một ứng dụng quản lý tập trung.
+Đề tài “Hệ thống quản lý nhà hàng hải sản” được nhóm 4 thực hiện nhằm vận dụng phương pháp Phân tích và thiết kế hướng đối tượng (OOAD) để đi từ bài toán nghiệp vụ thực tế đến mô hình phân tích, mô hình thiết kế, cài đặt ứng dụng web nội bộ bằng Java Spring Boot – Thymeleaf – Oracle và kiểm thử tính đúng đắn của các quy tắc trọng tâm. Ba nghiệp vụ được phân tích sâu gồm lập và điều chỉnh hóa đơn, ghi nhận thanh toán và lập hoặc điều chỉnh phiếu nhập kho; nghiệp vụ đặt bàn và phân quyền tài khoản được đối chiếu chi tiết để làm rõ vòng đời trạng thái cùng các giới hạn hiện tại.
 
-Báo cáo vận dụng phân tích và thiết kế hướng đối tượng để nối kết mục tiêu người dùng với khái niệm nghiệp vụ, trách nhiệm lớp và tương tác phần mềm. Ba nghiệp vụ được phân tích sâu là lập hóa đơn, ghi nhận thanh toán và điều chỉnh phiếu nhập. Đặt bàn được xem xét thêm để làm rõ vòng đời trạng thái và những giới hạn của sản phẩm hiện tại.
-
-## Nguồn và cách sử dụng
-
-| Nguồn | Vai trò trong báo cáo |
-| --- | --- |
-| Hướng dẫn thực hiện BTL – gửi SV.pdf | Căn cứ cấu trúc 4 chương; đặc tả UC, Conceptual Model, CRC, Sequence, DCD và lập luận thiết kế. |
-| PhanCong_Nhom4_QuanLyNhaHangHaiSan.xlsx | Căn cứ danh sách 4 thành viên và trách nhiệm module; không dùng mức tiến độ 0% để đánh giá code. |
-| Dự án QuanLyNHHS tại thời điểm 13/11/2026 | Căn cứ mô tả cài đặt, tên lớp/phương thức, trạng thái và giới hạn đã nhận diện. |
-| Ảnh lược đồ 12 bảng do nhóm cung cấp | Định hướng dữ liệu nghiệp vụ; đối chiếu với entity để phản ánh các cột và bảng bổ sung. |
-
-Các mô hình ở Chương 1–2 diễn đạt yêu cầu và ý nghĩa nghiệp vụ. Chương 3 chỉ rõ phần thiết kế phản ánh code và phần đề xuất cải thiện. Chương 4 phân biệt việc đọc mã nguồn, kiểm thử đã chạy và kịch bản chưa thực thi. Báo cáo không sử dụng số liệu khảo sát thực địa hoặc tự khẳng định kết quả vận hành trên Oracle.
-
-> Thông tin còn để trống theo yêu cầu: giảng viên, lớp và mã sinh viên. Nhà hàng trong báo cáo là bối cảnh bài tập lớn, chưa gắn với một cơ sở đã khảo sát cụ thể.
+Nội dung báo cáo được tổ chức thành 4 chương: Chương 1 trình bày bài toán, phạm vi, quy tắc nghiệp vụ và đặc tả các ca sử dụng; Chương 2 xây dựng mô hình phân tích gồm biểu đồ lớp khái niệm, bảng trách nhiệm CRC, biểu đồ tuần tự hệ thống (SSD) và hợp đồng thao tác; Chương 3 trình bày thiết kế kiến trúc, biểu đồ tuần tự thiết kế, biểu đồ lớp thiết kế (DCD), máy trạng thái và thiết kế cơ sở dữ liệu (ERD); Chương 4 trình bày kết quả cài đặt và kiểm thử thực nghiệm.
 
 # MỤC LỤC
-<!-- Trang dự kiến 3 -->
 
-# DANH MỤC HÌNH VÀ THUẬT NGỮ
-<!-- Trang dự kiến 4 -->
+# DANH MỤC HÌNH VẼ
 
-## Các thuật ngữ sử dụng
+# DANH MỤC BẢNG BIỂU
 
-| Ký hiệu | Ý nghĩa |
+# DANH MỤC TỪ VIẾT TẮT
+
+Bảng dưới đây tổng hợp các ký hiệu và thuật ngữ viết tắt được sử dụng thống nhất trong toàn bộ tài liệu và các sơ đồ mô hình hóa.
+
+*Bảng M.1. Danh mục thuật ngữ và từ viết tắt*
+
+| Ký hiệu / Từ viết tắt | Ý nghĩa đầy đủ |
 | --- | --- |
-| OOAD / UML | Phân tích và thiết kế hướng đối tượng / ngôn ngữ mô hình hóa thống nhất. |
-| Actor / UC | Vai trò tương tác với hệ thống / ca sử dụng phục vụ mục tiêu của vai trò. |
-| CRC / SSD / DCD | Lớp–trách nhiệm–cộng tác / biểu đồ tuần tự hệ thống / biểu đồ lớp thiết kế. |
-| BCE / DTO | Boundary–Control–Entity / đối tượng chuyển dữ liệu biểu mẫu. |
-| PK / FK / UQ | Khóa chính / khóa ngoại / ràng buộc duy nhất. |
-| NFR / JPA / CSRF | Yêu cầu phi chức năng / ánh xạ lưu trữ Java / giả mạo yêu cầu từ trang khác. |
+| OOAD | Object-Oriented Analysis and Design – Phân tích và thiết kế hướng đối tượng. |
+| UML | Unified Modeling Language – Ngôn ngữ mô hình hóa thống nhất. |
+| UC / Actor | Use Case (ca sử dụng) / Tác nhân tương tác với hệ thống. |
+| CRC | Class – Responsibility – Collaborator (Lớp – Trách nhiệm – Cộng tác). |
+| SSD / SD | System Sequence Diagram (Biểu đồ tuần tự hệ thống) / Sequence Diagram (Biểu đồ tuần tự thiết kế). |
+| DCD | Design Class Diagram – Biểu đồ lớp thiết kế. |
+| ERD | Entity-Relationship Diagram – Biểu đồ thực thể liên kết. |
+| BCE | Boundary – Control – Entity (Biên – Điều khiển – Thực thể). |
+| DTO | Data Transfer Object – Đối tượng truyền dữ liệu biểu mẫu. |
+| PK / FK / UQ | Primary Key (Khóa chính) / Foreign Key (Khóa ngoại) / Unique Constraint (Ràng buộc duy nhất). |
+| NFR / BR | Non-Functional Requirement (Yêu cầu phi chức năng) / Business Rule (Quy tắc nghiệp vụ). |
+| JPA / CSRF | Jakarta Persistence API / Cross-Site Request Forgery (Giả mạo yêu cầu liên trang). |
 
-# 1.1. Bài toán, mục tiêu và bối cảnh
-<!-- Trang dự kiến 5 -->
+# CHƯƠNG 1. BÀI TOÁN VÀ PHÂN TÍCH YÊU CẦU
 
-## CHƯƠNG 1. BÀI TOÁN VÀ PHÂN TÍCH YÊU CẦU
+## 1.1. Bài toán, mục tiêu và bối cảnh
 
-Một nhà hàng cần biết bàn nào còn trống, khách nào đã đặt bàn, món nào đang phục vụ và hóa đơn nào chưa được thanh toán. Khi nhập nguyên liệu, nhà hàng cần lưu nhà cung cấp, người lập phiếu, lượng nhập và giá nhập. Các giao dịch phải có thể tra cứu sau khi thực đơn hoặc thông tin danh mục thay đổi.
+### 1.1.1. Đặt vấn đề và bối cảnh nghiệp vụ
 
-## Vấn đề cần giải quyết
+Nhà hàng hải sản cần quản lý xuyên suốt từ khâu tiếp nhận đặt bàn của khách, theo dõi tình trạng sử dụng bàn ăn, quản lý danh mục loại món và món ăn, lập hóa đơn phục vụ, xác nhận món và thu tiền, đến quản lý nhà cung cấp, nguyên liệu và phiếu nhập kho. Thực tế kinh doanh hải sản có đặc thù tính giá bán theo nhiều đơn vị (kg, con, đĩa), giá món có thể biến động theo ngày, trong khi hóa đơn cũ đã lập và đã thanh toán vẫn phải giữ nguyên giá trị lịch sử để đối chiếu doanh thu.
 
-Nếu cùng một món được nhập nhiều lần vào hóa đơn, hệ thống phải xác định cộng dồn hay lưu các dòng riêng. Khi sửa một phiếu nhập đã làm tăng tồn kho, hệ thống phải biết lượng cũ để điều chỉnh phần chênh lệch. Khi hóa đơn đã thanh toán, việc sửa hoặc xóa tùy ý có thể làm sai báo cáo doanh thu. Những vấn đề này tạo ra quy tắc nghiệp vụ vượt ra ngoài thao tác thêm, sửa và xóa dữ liệu.
+Bài toán đặt ra các vấn đề nghiệp vụ vượt khỏi thao tác thêm, sửa, xóa dữ liệu thông thường: (1) Nếu cùng một món được gọi thêm nhiều lần trên một hóa đơn thì phải cộng dồn số lượng vào một dòng duy nhất thay vì tạo dòng trùng lặp, đồng thời phải kiểm soát phần số lượng đã xác nhận bếp để thu ngân không tự ý giảm hoặc xóa; (2) Khi sửa hoặc xóa một phiếu nhập đã làm tăng tồn kho, hệ thống phải tính lại phần chênh lệch (lượng mới trừ lượng cũ) và khóa chống ghi đè khi người dùng gửi biểu mẫu cũ; (3) Hóa đơn đã thanh toán phải được khóa tuyệt đối khỏi việc chỉnh sửa hoặc thanh toán lặp lại để bảo vệ số liệu báo cáo doanh thu.
 
-## Mục tiêu của đề tài
+### 1.1.2. Mục tiêu của đề tài
 
-| Mã | Mục tiêu | Cách đánh giá |
+*Bảng 1.1. Mục tiêu của đề tài và cách đánh giá*
+
+| Mã | Mục tiêu | Tiêu chí đánh giá |
 | --- | --- | --- |
-| MT01 | Quản lý khách, bàn và lượt đặt nhất quán | Phân biệt trạng thái lượt đặt với trạng thái bàn; nêu điều kiện chuyển. |
-| MT02 | Ghi nhận bán hàng và thanh toán chính xác | Có chi tiết với lượng, giá; tổng tiền xác định ở server; khóa sửa chứng từ đã thanh toán. |
-| MT03 | Quản lý nhập hàng gắn với tồn kho | Lập/sửa/xóa phiếu làm thay đổi tồn theo cùng giao dịch; xử lý form cũ. |
-| MT04 | Truy vết từ yêu cầu đến thiết kế | UC, CRC, Sequence, DCD và kiểm thử cùng tên gọi, điều kiện, trách nhiệm. |
+| MT01 | Quản lý khách hàng, bàn ăn và lượt đặt bàn nhất quán | Phân biệt rõ trạng thái lượt đặt (CHO_XAC_NHAN, DA_XAC_NHAN, DA_HUY, HOAN_THANH) với trạng thái bàn (Trống, Đã đặt, Đang dùng); quy định điều kiện chuyển trạng thái. |
+| MT02 | Ghi nhận bán hàng, xác nhận món và thanh toán chính xác | Hóa đơn có chi tiết gồm số lượng, số lượng đã xác nhận, đơn giá lấy từ máy chủ; tổng tiền tính tại server; khóa chứng từ sau thanh toán và giải phóng bàn phù hợp. |
+| MT03 | Quản lý nhập hàng gắn chặt với tồn kho | Lập, sửa, xóa phiếu nhập cập nhật tồn nguyên liệu trong cùng giao dịch; khóa bi quan và kiểm tra phiên bản chống xung đột form cũ. |
+| MT04 | Truy vết nhất quán từ phân tích đến cài đặt và kiểm thử | Use Case, mô hình khái niệm, CRC, Sequence Diagram, DCD, State Machine, mã nguồn Java Spring Boot và test case dùng chung tên gọi, quy tắc và điều kiện. |
 
-Sản phẩm tham chiếu là ứng dụng web nội bộ Java Spring Boot, Thymeleaf và Oracle. Việc có ứng dụng sẵn giúp kiểm tra tính khả thi của mô hình, nhưng không thay thế bước giải thích vì sao một lớp hoặc quan hệ xuất hiện trong thiết kế.
+## 1.2. Phạm vi và các giả định
 
-# 1.2. Phạm vi và các giả định
-<!-- Trang dự kiến 6 -->
+### 1.2.1. Phạm vi hệ thống
 
-| Trong phạm vi | Ngoài phạm vi phiên bản này |
+Hệ thống được xây dựng dưới dạng ứng dụng web quản lý nội bộ cho một cơ sở nhà hàng hải sản, sử dụng Java Spring Boot, Thymeleaf và cơ sở dữ liệu Oracle. Việc xác định rõ ranh giới phạm vi giúp mô hình tập trung vào các quy trình cốt lõi thay vì mở rộng dàn trải các phân hệ ngoài nhu cầu.
+
+*Bảng 1.2. Phạm vi thực hiện và nội dung ngoài phạm vi*
+
+| Trong phạm vi thực hiện | Ngoài phạm vi phiên bản hiện tại |
 | --- | --- |
-| Khách hàng, bàn ăn, đặt/xác nhận/hủy/hoàn thành lượt đặt. | Đặt bàn trực tuyến cho khách, sơ đồ ghép nhiều bàn, quản lý lịch theo từng khung giờ. |
-| Loại món, món ăn, đơn vị, giá, thông tin nhân viên. | Chấm công, tính lương tự động, điều phối bếp và tiến độ chế biến. |
-| Lập/sửa hóa đơn chưa thanh toán, giảm tiền trực tiếp, ghi nhận thanh toán. | Tách/gộp hóa đơn, thanh toán nhiều đợt, cổng ngân hàng, hoàn tiền, hóa đơn điện tử. |
-| Nhà cung cấp, nguyên liệu, nhập kho, điều chỉnh tồn theo chứng từ. | Xuất kho, kiểm kê, định lượng món–nguyên liệu, tự trừ tồn khi bán. |
-| Đăng nhập bằng tài khoản được cấp; xem báo cáo doanh thu. | Tự đăng ký tài khoản và phân quyền nghiệp vụ chi tiết đã hoàn thiện. |
+| Quản lý khách hàng, bàn ăn; tiếp nhận, xác nhận, hủy và hoàn thành lượt đặt bàn. | Khách hàng tự đặt bàn trực tuyến qua cổng công khai; sơ đồ ghép/tách nhiều bàn; đặt lịch chi tiết theo từng khung giờ. |
+| Quản lý loại món, món ăn (đơn vị, đơn giá, URL ảnh, mô tả, trạng thái) và hồ sơ nhân viên. | Tải tệp ảnh trực tiếp lên máy chủ; hệ thống chấm công và tính lương tự động theo ca làm việc. |
+| Lập/sửa hóa đơn chưa thanh toán, gộp món trùng, xác nhận món, giảm tiền trực tiếp, ghi nhận thanh toán và giải phóng bàn. | Tách hoặc gộp hóa đơn; thanh toán nhiều đợt; kết nối cổng thanh toán ngân hàng/QR; hoàn tiền và xuất hóa đơn điện tử. |
+| Quản lý nhà cung cấp, nguyên liệu, lập/sửa/xóa phiếu nhập và điều chỉnh tồn kho theo chênh lệch. | Phiếu xuất bếp, kiểm kê định kỳ, công thức định lượng món – nguyên liệu để tự động trừ tồn khi bán món. |
+| Đăng nhập bằng tài khoản được cấp; quản trị tài khoản và phân quyền 4 vai trò (ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN); xem báo cáo doanh thu. | Tự đăng ký tài khoản công khai; cơ chế khôi phục mật khẩu qua email; liên kết bắt buộc 1–1 giữa tài khoản đăng nhập và hồ sơ nhân sự. |
 
-## Các giả định sử dụng xuyên suốt
+### 1.2.2. Các giả định nghiệp vụ xuyên suốt
 
-| Mã | Giả định và hệ quả |
+*Bảng 1.3. Các giả định nghiệp vụ sử dụng xuyên suốt báo cáo*
+
+| Mã | Giả định và hệ quả thiết kế |
 | --- | --- |
-| G01 | Một cơ sở nhà hàng; tiền tệ VND. Lượng có thể là số thập phân vì hải sản có thể bán theo kg. |
-| G02 | Một hóa đơn gắn một bàn và một người lập; khách có thể vãng lai nên thông tin khách trên hóa đơn là tùy chọn. |
-| G03 | Giảm giá là số tiền trực tiếp. Tiền cọc của lượt đặt được lưu độc lập, chưa tự bù trừ vào hóa đơn. |
-| G04 | Đặt bàn hiện lưu ngày và giữ bàn theo trạng thái chung; chưa suy ra được tính khả dụng theo giờ hoặc theo ngày tương lai. |
-| G05 | Một phiếu nhập thuộc một nhà cung cấp; không lặp nguyên liệu trên cùng phiếu. Tồn đầu có thể được khai báo khi khởi tạo. |
-| G06 | Phục vụ, thu ngân, thủ kho và quản lý là vai trò nghiệp vụ. Website hiện chỉ xác thực tài khoản với ROLE_USER chung. |
+| G01 | Hệ thống phục vụ một cơ sở nhà hàng duy nhất; đơn vị tiền tệ là VNĐ. Số lượng món bán và nguyên liệu nhập hỗ trợ số thập phân (NUMBER(10,2)) vì hải sản thường cân theo kg. |
+| G02 | Mỗi hóa đơn gắn với một bàn ăn và một nhân viên lập chứng từ; khách hàng là tùy chọn (nullable) để phục vụ cả khách vãng lai không cần lưu hồ sơ. |
+| G03 | Giảm giá trên hóa đơn là số tiền giảm trừ trực tiếp, không phải tỷ lệ phần trăm. Tiền cọc đặt bàn được lưu độc lập trên phiếu đặt bàn, chưa tự động bù trừ vào hóa đơn khi thanh toán. |
+| G04 | Lượt đặt bàn hiện lưu theo ngày (LocalDate) và kiểm tra theo trạng thái toàn cục của bàn (“Trống” / “Đã đặt” / “Đang dùng”); chưa kiểm tra trùng lịch theo khung giờ cụ thể. |
+| G05 | Mỗi phiếu nhập thuộc một nhà cung cấp và một nhân viên lập; mỗi nguyên liệu chỉ xuất hiện tối đa một dòng trong cùng phiếu. Tồn kho ban đầu có thể khai báo khi tạo nguyên liệu. |
+| G06 | Phục vụ, Thu ngân, Thủ kho và Quản lý là các vai trò ở mức phân tích nghiệp vụ. Khi cài đặt phân quyền website, hệ thống ánh xạ sang 4 vai trò kỹ thuật trong TAI_KHOAN.VAI_TRO: ADMIN, THU_NGAN (đảm nhiệm cả nghiệp vụ phục vụ bàn và thu ngân), QUAN_LY_KHO và KE_TOAN. |
 
-> Các nội dung ngoài phạm vi không được suy diễn từ ví dụ gợi ý trong tài liệu học phần thành chức năng đã có.
+## 1.3. Quy tắc nghiệp vụ
 
-# 1.3. Quy tắc nghiệp vụ
-<!-- Trang dự kiến 7 -->
+Các quy tắc nghiệp vụ dưới đây chi phối tính toàn vẹn dữ liệu giữa các phân hệ. Cột mức đáp ứng phản ánh trung thực kết quả đối chiếu trực tiếp trên mã nguồn hiện tại.
 
-| Mã | Quy tắc | Mức đáp ứng khi đối chiếu code |
+*Bảng 1.4. Các quy tắc nghiệp vụ cốt lõi và mức đáp ứng trong mã nguồn*
+
+| Mã | Quy tắc nghiệp vụ | Mức đáp ứng khi đối chiếu mã nguồn |
 | --- | --- | --- |
-| BR01 | Chỉ tiếp nhận lượt đặt mới khi bàn trống; số khách phải phù hợp sức chứa. | Có kiểm tra bàn trống tại Controller; kiểm tra số khách/sức chứa và đồng thời cần bổ sung. |
-| BR02 | Hủy/hoàn thành đặt bàn trả bàn về trống; trạng thái kết thúc không được mở lại tùy ý. | Có cập nhật trạng thái; thiếu bảo vệ trạng thái nguồn. |
-| BR03 | Hóa đơn phải có bàn, người lập và ít nhất một món; số lượng dương. | HoaDonService kiểm tra trường bắt buộc, danh sách và lượng; kiểm tra tồn tại mọi mã cha chưa đồng đều. |
-| BR04 | Các dòng cùng món trên một hóa đơn được cộng dồn lượng. | Có gộp bằng Map trước khi lưu chi tiết. |
-| BR05 | Đơn giá do server lấy từ món; thành tiền = lượng × giá; tổng = max(0, tổng dòng − giảm giá). | Có xử lý bằng BigDecimal; giảm giá không âm. |
-| BR06 | Hóa đơn đã thanh toán không được sửa, xóa hoặc thanh toán lại. | Có kiểm tra theo trạng thái; chưa có khóa chống xử lý đồng thời. |
-| BR07 | Phiếu nhập không lặp nguyên liệu; số lượng dương, giá không âm. | Có kiểm tra DTO và Service. |
-| BR08 | Sửa phiếu điều chỉnh tồn theo lượng mới trừ lượng cũ; xóa phiếu hoàn lại lượng nhập. | Có giao dịch, khóa nguyên liệu và kiểm tra giới hạn tồn. |
-| BR09 | Mọi thay đổi của một nghiệp vụ chứng từ phải thành công hoặc rollback cùng nhau. | Có ở hóa đơn/phiếu nhập; tiếp nhận đặt bàn đang tách lưu lượt đặt và cập nhật bàn. |
-| BR10 | Form phiếu nhập cũ không được ghi đè phiên bản mới. | Có PHIEN_BAN, @Version và kiểm tra phiên bản. |
-| BR11 | Không xóa danh mục đang được chứng từ tham chiếu. | Có kiểm tra tại các service danh mục; cần xác nhận đầy đủ FK trên Oracle. |
-| BR12 | Doanh thu chỉ tính hóa đơn đã thanh toán trong khoảng ngày hợp lệ. | Có lọc doanh thu; bảng món bán chạy hiện tổng hợp toàn kỳ. |
-
-> Cột đáp ứng là kết quả đọc mã nguồn, không phải xác nhận các luồng đã chạy thành công trên Oracle.
-
-# 1.4. Tác nhân và mục tiêu người dùng
-<!-- Trang dự kiến 8 -->
-
-| Actor | Mục tiêu | UC liên quan |
-| --- | --- | --- |
-| Nhân viên nội bộ | Đăng nhập bằng tài khoản được cấp và kết thúc phiên khi hoàn thành công việc. | UC01; actor khái quát của các vai trò bên dưới. |
-| Phục vụ | Tiếp nhận thông tin khách, kiểm tra bàn và xử lý lượt đặt. | UC03, UC10. |
-| Thu ngân | Ghi các món sử dụng, điều chỉnh hóa đơn còn mở và ghi nhận thanh toán. | UC04, UC05. |
-| Thủ kho | Quản lý nhà cung cấp/nguyên liệu; nhập hàng và sửa chứng từ khi có sai sót. | UC06, UC09. |
-| Quản lý | Quản lý thực đơn, hồ sơ nhân viên và xem số liệu bán hàng. | UC02, UC07, UC08. |
-
-Khách hàng cung cấp nhu cầu đặt bàn cho nhân viên nhưng chưa trực tiếp thao tác website, nên không được vẽ thành actor trực tiếp của ứng dụng nội bộ này. Nhà cung cấp cũng là đối tượng lưu trữ thông tin, chưa có cổng giao tiếp riêng. Oracle là thành phần lưu trữ bên trong giải pháp, không phải actor nghiệp vụ.
-
-## Cách đọc quan hệ actor và Use Case
-
-Sự khái quát hóa actor cho biết các vai trò nhân viên đều có thể thực hiện mục tiêu đăng nhập. Các đường nối còn lại diễn đạt trách nhiệm sử dụng theo nghiệp vụ. Chúng không phải bằng chứng rằng ứng dụng đã cấu hình quyền truy cập tương ứng.
-
-UC01 được mô tả riêng. Đăng nhập thành công là tiền điều kiện của nghiệp vụ, vì vậy không thêm quan hệ include từ mọi UC tới đăng nhập. Thanh toán cũng là mục tiêu xảy ra sau khi đã có hóa đơn; không bắt buộc mọi lần tạo hóa đơn đều thực hiện thanh toán ngay.
-
-> Nếu hoàn thiện phân quyền, cần liên kết tài khoản với nhân viên/vai trò và bổ sung các quy tắc URL hoặc kiểm tra quyền ở phương thức. Thông tin chức vụ hiện chưa tạo ra quyền truy cập.
-
-# 1.5. Biểu đồ Use Case tổng quát
-<!-- Trang dự kiến 9 -->
-
-![Hình 1.1. Use Case của hệ thống nội bộ; vai trò theo nghiệp vụ.](../so_do/01_use_case.svg)
-
-Ranh giới hình chữ nhật là phạm vi ứng dụng. Mỗi UC biểu diễn một mục tiêu quản lý có kết quả quan sát được. Việc tách UC04 và UC05 giúp nêu rõ điều kiện khóa sửa hóa đơn sau thanh toán.
-
-> Chưa bổ sung actor ngân hàng, khách đặt bàn trực tuyến hoặc hệ thống bếp vì chưa có tích hợp tương ứng trong phạm vi.
-
-# 1.6. Danh sách ca sử dụng
-<!-- Trang dự kiến 10 -->
-
-| Mã | Tên và mục tiêu | Kết quả chính |
-| --- | --- | --- |
-| UC01 | Đăng nhập / đăng xuất | Xác thực tài khoản được cấp; tạo hoặc kết thúc phiên. |
-| UC02 | Quản lý thực đơn | Loại món và món ăn được lưu hợp lệ; bảo vệ món/loại đã được tham chiếu. |
-| UC03 | Tiếp nhận, xử lý đặt bàn | Lượt đặt được lưu; bàn được giữ hoặc trả trống khi xử lý. |
-| UC04 | Lập, điều chỉnh hóa đơn | Chứng từ chưa thanh toán có các dòng món, giá và tổng tiền do server xác định. |
-| UC05 | Ghi nhận thanh toán | Hóa đơn có món được đổi sang trạng thái đã thanh toán, không sửa/xóa qua service. |
-| UC06 | Lập, điều chỉnh phiếu nhập | Phiếu và chi tiết được lưu; tồn nguyên liệu thay đổi đúng chênh lệch. Bao gồm xóa để hủy tác động phiếu. |
-| UC07 | Xem báo cáo doanh thu | Hiển thị doanh thu theo ngày/tháng/khoảng ngày và thống kê bán hàng. |
-| UC08 | Quản lý hồ sơ nhân viên | Hồ sơ, chức vụ, liên hệ, lương, ca và trạng thái được quản lý. |
-| UC09 | Quản lý danh mục kho | Nhà cung cấp và nguyên liệu được tạo/cập nhật hợp lệ. |
-| UC10 | Quản lý khách hàng, bàn ăn | Hồ sơ khách, bàn và lịch sử đặt được tra cứu/cập nhật. |
-
-## Lựa chọn UC phân tích sâu
-
-UC03 có trạng thái và tài nguyên bàn dùng chung; UC04 có khóa ghép, giá lịch sử và tổng tiền; UC05 có điều kiện kết thúc chứng từ; UC06 có giao dịch nhiều bảng, chênh lệch tồn và xung đột phiên bản. Đây là các điểm quyết định tính đúng đắn của hệ thống. UC01 và UC07 được đặc tả để làm rõ bảo mật và cách hiểu số liệu báo cáo.
-
-UC02, UC08, UC09 và UC10 được trình bày ở mức mục tiêu/danh mục hỗ trợ, không cố tách mỗi nút thêm, sửa và xóa thành một UC độc lập.
-
-# 1.7. Đặc tả UC01 và UC02
-<!-- Trang dự kiến 11 -->
-
-## UC01 – Đăng nhập / đăng xuất
-
-| Thành phần | Đặc tả |
-| --- | --- |
-| Actor, mục tiêu | Nhân viên nội bộ; sử dụng ứng dụng bằng tài khoản được cấp. |
-| Tiền điều kiện | Có bản ghi TAI_KHOAN; mật khẩu lưu dưới dạng BCrypt; hệ thống truy cập được database. |
-| Luồng chính | 1. Mở /login. 2. Nhập tên và mật khẩu. 3. Hệ thống chuẩn hóa tên, tải tài khoản và đối chiếu mật khẩu. 4. Tạo phiên xác thực, chuyển về trang chủ. 5. Khi đăng xuất, hệ thống hủy phiên. |
-| Thay thế / ngoại lệ | Sai thông tin: trở lại /login?error. Chưa đăng nhập mà mở nghiệp vụ: chuyển tới login. Đã đăng nhập mở login: chuyển trang chủ. Không có luồng tự đăng ký. |
-| Hậu điều kiện | Thành công: phiên được xác thực. Thất bại: không có phiên được cấp từ lần đăng nhập sai. Đăng xuất: phiên bị hủy. |
-
-## UC02 – Quản lý thực đơn
-
-| Thành phần | Đặc tả rút gọn |
-| --- | --- |
-| Actor / tiền điều kiện | Quản lý theo nghiệp vụ; đã đăng nhập. |
-| Luồng chính | Xem danh mục; thêm hoặc chọn bản ghi để sửa; nhập các trường; kiểm tra loại món, tên, giá, định dạng ảnh và trạng thái; lưu; hiển thị danh sách mới. |
-| Thay thế / ngoại lệ | Dữ liệu sai: trả form cùng lỗi. Loại bị xóa trước khi lưu món: yêu cầu chọn lại. Xóa loại đang có món hoặc món đã nằm trong hóa đơn: từ chối và gợi ý đổi trạng thái. |
-| Hậu điều kiện | Dữ liệu hợp lệ được lưu; chứng từ cũ không bị cập nhật chỉ vì thay đổi giá trong danh mục. |
-
-> Căn cứ cài đặt: SecurityConfig, TaiKhoanService, AuthController; LoaiMonService, MonAnService và các Form tương ứng.
-
-# 1.8. Đặc tả UC03 – Tiếp nhận, xử lý đặt bàn
-<!-- Trang dự kiến 12 -->
-
-| Thành phần | Đặc tả |
-| --- | --- |
-| Actor / mục tiêu | Phục vụ; giữ một bàn cho nhu cầu của khách và theo dõi kết quả lượt đặt. |
-| Kích hoạt | Khách yêu cầu đặt bàn hoặc nhân viên xử lý một lượt đặt đã lưu. |
-| Tiền điều kiện | Nhân viên đã đăng nhập; có hồ sơ khách và bàn trong danh mục. |
-| Dữ liệu vào | Khách, bàn, ngày đặt, số người, tiền cọc nếu có. |
-| Luồng chính | 1. Mở biểu mẫu, chọn khách và bàn. 2. Nhập ngày, số khách, tiền cọc. 3. Hệ thống kiểm tra dữ liệu và bàn còn trống. 4. Lưu lượt đặt ở CHO_XAC_NHAN, giữ bàn. 5. Nhân viên xác nhận: chuyển DA_XAC_NHAN. 6. Khi phục vụ xong, hoàn thành lượt đặt và trả bàn trống. |
-| Luồng thay thế | 4a. Khách hủy trước khi hoàn thành: chuyển DA_HUY và trả bàn trống. 2a. Đổi thông tin: kiểm tra lại các ràng buộc khi lưu. |
-| Ngoại lệ | Bàn không tồn tại hoặc không trống: từ chối tiếp nhận. Số khách không dương/vượt sức chứa, tiền cọc âm, khách không tồn tại hoặc trạng thái kết thúc bị sửa lại: thiết kế yêu cầu từ chối. Hai nhân viên cùng giữ một bàn: thiết kế yêu cầu kiểm tra trong giao dịch có khóa. |
-| Hậu điều kiện | Thành công: lượt đặt và trạng thái bàn nhất quán. Thất bại: không giữ bàn hoặc lưu lượt đặt dở dang. |
-
-## Đối chiếu với cài đặt hiện có
-
-DatBanController kiểm tra trạng thái “Trống”, lưu lượt đặt rồi gọi BanAnService cập nhật bàn thành “Đã đặt”. Các thao tác xác nhận/hủy/hoàn thành có giao dịch trong DatBanService. Tuy nhiên luồng tiếp nhận chưa gộp hai bước ghi vào một giao dịch chung, chưa đủ kiểm tra sức chứa và chưa có khóa bảo vệ đặt đồng thời.
-
-> Ngoại lệ và hậu điều kiện đầy đủ ở trên là yêu cầu thiết kế. Các điểm còn thiếu được giữ nguyên trong phần đánh giá, không mô tả thành tính năng đã hoàn thành.
-
-# 1.9. Đặc tả UC04 – Lập, điều chỉnh hóa đơn
-<!-- Trang dự kiến 13 -->
-
-| Thành phần | Đặc tả |
-| --- | --- |
-| Actor / mục tiêu | Thu ngân; ghi các món khách sử dụng và xác định số tiền phải thanh toán. |
-| Tiền điều kiện | Đã đăng nhập; bàn, nhân viên, món tồn tại; hóa đơn được sửa phải chưa thanh toán. |
-| Dữ liệu vào | Mã bàn, người lập, khách nếu có; danh sách mã món và lượng; số tiền giảm giá. |
-| Luồng chính | 1. Mở biểu mẫu lập hóa đơn. 2. Chọn bàn, người lập và các món. 3. Nhập lượng và giảm giá. 4. Hệ thống kiểm tra danh sách/giảm giá, gộp các dòng cùng món. 5. Tạo hóa đơn chưa thanh toán. 6. Với từng món, lấy giá hiện tại từ dữ liệu server và tạo chi tiết. 7. Tính tổng chi tiết, trừ giảm giá, chặn tối thiểu 0 và lưu. 8. Hiển thị chi tiết hóa đơn. |
-| Luồng sửa | Chọn hóa đơn chưa thanh toán; thay thông tin và danh sách món; kiểm tra; thay các dòng chi tiết; tính lại tổng trong cùng giao dịch. |
-| Ngoại lệ | Danh sách rỗng/khác kích thước, mã món rỗng, lượng không dương, giảm giá âm, món không tồn tại hoặc chưa có giá: từ chối và rollback. Hóa đơn đã thanh toán: từ chối sửa. |
-| Hậu điều kiện | Có đúng một chi tiết cho mỗi món sau gộp. Lượng, giá và tổng tiền hợp lệ. Nếu lỗi trong giao dịch, không còn phần đầu hoặc chi tiết được lưu riêng lẻ. |
-
-Ví dụ: 1,5 kg tôm giá 320.000 đồng/kg và 2 đĩa nghêu giá 120.000 đồng/đĩa tạo tổng chi tiết 720.000 đồng. Giảm trực tiếp 20.000 đồng tạo tổng hóa đơn 700.000 đồng. Các giá trị là dữ liệu minh họa, không phải kết quả giao dịch đã chạy.
-
-> Khi sửa hóa đơn chưa thanh toán, code đang thay toàn bộ chi tiết và lấy lại giá món hiện tại. Cần thống nhất chính sách có giữ giá cũ cho các món đã gọi hay không; chưa thể tuyên bố luôn bảo toàn giá cũ trong tình huống sửa.
-
-# 1.10. Đặc tả UC05 – Ghi nhận thanh toán
-<!-- Trang dự kiến 14 -->
-
-| Thành phần | Đặc tả |
-| --- | --- |
-| Actor / mục tiêu | Thu ngân; xác nhận hóa đơn đã được thanh toán để kết thúc chứng từ bán hàng. |
-| Kích hoạt | Thu ngân chọn thao tác thanh toán trên hóa đơn. |
-| Tiền điều kiện | Đã đăng nhập; hóa đơn tồn tại, chưa thanh toán và có ít nhất một chi tiết. Thu ngân đã nhận/đối chiếu tiền bên ngoài ứng dụng. |
-| Luồng chính | 1. Chọn hóa đơn. 2. Gửi yêu cầu thanh toán có mã hóa đơn. 3. Hệ thống tải hóa đơn, kiểm tra trạng thái. 4. Đếm chi tiết để bảo đảm có món. 5. Tính lại tổng tiền từ chi tiết và giảm giá. 6. Đổi trạng thái thành Da thanh toan và lưu. 7. Hiển thị kết quả. |
-| Ngoại lệ E1 | Không tìm thấy hóa đơn: thông báo lỗi, không tạo bản ghi mới. |
-| Ngoại lệ E2 | Hóa đơn đã thanh toán: từ chối yêu cầu; không thực hiện lại nghiệp vụ. |
-| Ngoại lệ E3 | Không có món hoặc lưu thất bại: không đổi trạng thái; rollback khi lỗi trong giao dịch. |
-| Hậu điều kiện | Hóa đơn có trạng thái đã thanh toán; thao tác sửa/xóa qua HoaDonService bị từ chối; doanh thu có thể tổng hợp hóa đơn này. |
-
-## Giới hạn cần hiểu đúng
-
-Thanh toán ở đây là ghi nhận trạng thái trong ứng dụng, chưa có kết nối ngân hàng, thông tin số tiền khách đưa, tiền thừa hoặc biên nhận điện tử. Service hiện chưa gọi cập nhật trạng thái bàn. Vì vậy hậu điều kiện của UC05 hiện không bao gồm “bàn tự động trống”.
-
-Kiểm tra trạng thái trước khi lưu ngăn thao tác lặp tuần tự. Hai yêu cầu đồng thời vẫn có thể cùng đọc trạng thái cũ; thiết kế cần khóa hoặc kiểm soát phiên bản nếu muốn bảo đảm chỉ một yêu cầu hoàn tất. Việc có @Transactional chưa tự chứng minh đã giải quyết xung đột này.
-
-# 1.11. Đặc tả UC06 – Lập, điều chỉnh phiếu nhập
-<!-- Trang dự kiến 15 -->
-
-| Thành phần | Đặc tả |
-| --- | --- |
-| Actor / mục tiêu | Thủ kho; ghi nhận lượng nguyên liệu nhập và điều chỉnh tồn chính xác khi sửa sai chứng từ. |
-| Tiền điều kiện | Đã đăng nhập; nhà cung cấp, người nhập và nguyên liệu tồn tại. Nếu sửa/xóa, phiếu tồn tại và form mang phiên bản hiện tại. |
-| Dữ liệu vào | Nhà cung cấp, nhân viên, ngày nhập; các dòng nguyên liệu–lượng–giá; phiên bản khi sửa. |
-| Luồng chính | 1. Mở form và nhập thông tin. 2. Kiểm tra trường bắt buộc, lượng dương, giá không âm và không trùng nguyên liệu. 3. Khóa nhà cung cấp; nếu sửa thì khóa phiếu và kiểm tra phiên bản. 4. Khóa các nguyên liệu theo mã tăng dần. 5. Với mỗi nguyên liệu, lấy lượng cũ và lượng mới; tồn mới = tồn hiện tại + lượng mới − lượng cũ. 6. Kiểm tra tồn/giá trị tiền trong giới hạn; cập nhật phiếu, dòng và tổng tiền. 7. Lưu trong một giao dịch, hiển thị kết quả. |
-| Luồng xóa | Khóa phiếu và kiểm tra phiên bản; khóa nguyên liệu; trừ lại các lượng đã nhập; chỉ xóa nếu tồn sau điều chỉnh hợp lệ. |
-| Ngoại lệ | Form cũ; nhà cung cấp/nhân viên/nguyên liệu đã mất; dòng trùng; lượng/giá sai; nguyên liệu ngừng sử dụng mà bị nhập tăng; tồn âm/vượt ngưỡng hoặc tổng tiền quá lớn: từ chối toàn bộ giao dịch. |
-| Hậu điều kiện | Phiếu và chi tiết khớp tổng tiền; tồn đổi đúng chênh lệch. Thất bại: phiếu, chi tiết, tồn không bị cập nhật một phần. |
-
-> Tính tồn kho của luồng web thuộc PhieuNhapService. Procedure Oracle dùng cho quản trị SQL riêng; trigger hiện tính thành tiền và kiểm tra dòng, không cộng tồn thêm lần nữa.
-
-# 1.12. Đặc tả UC07 và phạm vi các UC hỗ trợ
-<!-- Trang dự kiến 16 -->
-
-## UC07 – Xem báo cáo doanh thu
-
-| Thành phần | Đặc tả |
-| --- | --- |
-| Actor / mục tiêu | Quản lý; xem số liệu doanh thu đã ghi nhận và thống kê món bán. |
-| Tiền điều kiện | Đã đăng nhập; có thể truy vấn hóa đơn và chi tiết. |
-| Luồng chính | 1. Mở /bao-cao. 2. Chọn ngày bắt đầu/kết thúc; mặc định từ đầu tháng đến hôm nay. 3. Kiểm tra ngày. 4. Cộng TONG_TIEN của hóa đơn Da thanh toan trong khoảng. 5. Hiển thị doanh thu khoảng ngày, hôm nay, tháng này và các thống kê kèm theo. |
-| Ngoại lệ | Ngày kết thúc trước ngày bắt đầu: báo lỗi. Không có hóa đơn thỏa điều kiện: doanh thu bằng 0. Lỗi truy vấn: hiển thị lỗi, không thay đổi chứng từ. |
-| Hậu điều kiện | Chỉ đọc dữ liệu; không sửa hóa đơn hoặc trạng thái thanh toán. |
-
-Khoảng ngày doanh thu dùng cận dưới bao gồm và cận trên không bao gồm ngày kết thúc cộng một ngày. Báo cáo hiện tính theo NGAY_LAP vì chưa có cột thời điểm thanh toán riêng. Bảng món bán chạy và tổng tiền theo hóa đơn đang lấy dữ liệu đã thanh toán toàn kỳ, không nhận khoảng ngày của bộ lọc doanh thu.
-
-## Các UC hỗ trợ
-
-| UC | Luồng tiêu biểu và điều kiện quan trọng |
-| --- | --- |
-| UC08 | Quản lý mở hồ sơ nhân viên, nhập/sửa liên hệ, chức vụ, lương, ca, trạng thái; kiểm tra dữ liệu rồi lưu. Từ chối xóa nhân viên đã có hóa đơn hoặc phiếu nhập. |
-| UC09 | Thủ kho mở danh mục nhà cung cấp/nguyên liệu; nhập, sửa, xem hoặc xóa khi hợp lệ. Các tham chiếu chứng từ và ràng buộc tồn phải được bảo vệ. |
-| UC10 | Phục vụ tìm khách, quản lý thông tin bàn/sức chứa và xem lịch sử đặt. Bản ghi được chứng từ/lượt đặt sử dụng cần được bảo vệ khi xóa. |
-
-> Vai trò là phân tích nghiệp vụ. Code hiện chưa giới hạn UC07 hoặc UC08 riêng cho quản lý.
-
-# 1.13. Yêu cầu phi chức năng và tiêu chí chấp nhận
-<!-- Trang dự kiến 17 -->
-
-| Mã | Yêu cầu / tiêu chí đề xuất | Cách kiểm chứng |
-| --- | --- | --- |
-| NFR01<br>Bảo mật | Trang nghiệp vụ yêu cầu đăng nhập; mật khẩu không lưu rõ; POST thay đổi dữ liệu yêu cầu CSRF hợp lệ. | Gửi yêu cầu chưa đăng nhập, sai mật khẩu và thiếu token; kiểm tra chỉ tồn tại chuỗi băm. |
-| NFR02<br>Toàn vẹn | Chứng từ nhiều bảng và tồn kho không bị cập nhật một phần khi lỗi. | Gây lỗi ở một dòng sau khi đã xử lý dòng trước, đối chiếu mọi bảng trước/sau. |
-| NFR03<br>Đồng thời | Sửa phiếu bằng form cũ bị từ chối; đặt bàn/thanh toán cần có cơ chế chống hai lần xử lý xung đột. | Hai phiên cùng sửa một phiếu; mở rộng kịch bản đặt cùng bàn và thanh toán cùng hóa đơn. |
-| NFR04<br>Dễ sử dụng | Giao diện tiếng Việt; tiền/ngày thống nhất; lỗi chỉ rõ trường, giữ dữ liệu khi form hỗ trợ. | Thử dữ liệu sai và thao tác bàn phím trên các form; ghi nhận nơi đang redirect làm mất dữ liệu. |
-| NFR05<br>Hiệu năng | Mục tiêu tham khảo: 95% yêu cầu danh sách dưới 2 giây với 10 người dùng và 10.000 chứng từ trên máy thử được mô tả. | Đo bằng kịch bản tải sau khi có môi trường; chưa có số đo đáp ứng trong lần lập báo cáo. |
-| NFR06<br>Bảo trì | Tách Controller–Service–Repository; thay đổi quy tắc tiền hoặc tồn tập trung tại nghiệp vụ. | Truy vết UC04/UC06 tới phương thức; không tính tổng tin cậy chỉ từ JavaScript. |
-| NFR07<br>Triển khai | Cấu hình Oracle qua biến môi trường; mô tả đúng phiên bản công cụ của dự án và dữ liệu kiểm thử. | Kiểm tra pom.xml và cấu hình; chạy trên JDK/phụ thuộc tương thích trước buổi bảo vệ. |
-
-Các ngưỡng hiệu năng là mục tiêu kiểm chứng do báo cáo đề xuất, không phải số liệu đo. Chưa có yêu cầu chính thức về tải hoặc khả dụng 24/7 nên không khẳng định hệ thống đạt mức vận hành thương mại.
-
-Đối với phạm vi bài tập, ưu tiên toàn vẹn chứng từ, xác thực và khả năng giải thích mô hình. Phân quyền chi tiết, xử lý đặt bàn đồng thời và thời điểm thanh toán là các cải thiện cần làm trước khi mở rộng sử dụng.
-
-# 2.1. Tìm lớp khái niệm từ yêu cầu
-<!-- Trang dự kiến 18 -->
-
-## CHƯƠNG 2. MÔ HÌNH PHÂN TÍCH
-
-Mô hình khái niệm tập trung vào các đối tượng mà người làm nghiệp vụ cần nhớ lâu dài: khách hàng, bàn ăn, lượt đặt, món ăn, loại món, nhân viên, hóa đơn, dòng hóa đơn, nhà cung cấp, nguyên liệu, phiếu nhập và dòng phiếu nhập. Mỗi khái niệm có dữ liệu và quan hệ xuất phát từ mục tiêu người dùng.
-
-| Khái niệm ứng viên | Quyết định và căn cứ |
-| --- | --- |
-| Lượt đặt bàn | Giữ riêng vì cùng khách/bàn có thể xuất hiện ở nhiều lần đặt; mỗi lần có ngày, số người, tiền cọc và trạng thái. |
-| Dòng hóa đơn | Giữ riêng vì quan hệ món–hóa đơn có số lượng, đơn giá bán và thành tiền. Không thể chỉ nối trực tiếp món với hóa đơn. |
-| Dòng phiếu nhập | Giữ riêng vì cùng nguyên liệu có thể nhập nhiều lần với giá và lượng khác nhau. |
-| Thanh toán | Ở phiên bản này chỉ là chuyển trạng thái hóa đơn, chưa có trả nhiều đợt/phương thức hoặc hoàn tiền; chưa tạo lớp giao dịch thanh toán riêng. |
-| Báo cáo | Là kết quả tính toán từ chứng từ; không lưu như một thực thể độc lập trong mô hình khái niệm. |
-| Đăng nhập, Controller, Repository | Thuộc tương tác hoặc thiết kế phần mềm; không đưa vào mô hình miền nhà hàng. Tài khoản xuất hiện ở thiết kế kỹ thuật. |
-| Món–nguyên liệu | Chưa có định lượng trong phạm vi; không vẽ quan hệ suy diễn và không tuyên bố có trừ tồn khi bán. |
-
-Không đặt các khóa kỹ thuật MA_HD, MA_MON hoặc annotation JPA vào mô hình khái niệm. Mã định danh, khóa ngoại và chiến lược sinh mã được bổ sung khi chuyển sang thiết kế lưu trữ. Tên và thuộc tính ở mô hình này dùng ngôn ngữ nghiệp vụ để người đọc hiểu ý nghĩa trước khi nhìn cấu trúc code.
-
-# 2.2. Mô hình khái niệm bán hàng và đặt bàn
-<!-- Trang dự kiến 19 -->
-
-![Hình 2.1. Các khái niệm đặt bàn và bán hàng; không phải ERD.](../so_do/02_khai_niem_ban_hang.svg)
-
-Một khách có thể có nhiều lượt đặt; mỗi lượt đặt chỉ một bàn. Một bàn có nhiều lượt đặt và hóa đơn qua thời gian. Đây là quan hệ lịch sử, không có nghĩa cùng một bàn được phục vụ nhiều hóa đơn đang mở một cách không kiểm soát.
-
-Hóa đơn có khách tùy chọn để hỗ trợ khách vãng lai; bàn và người lập là bắt buộc theo yêu cầu nghiệp vụ. Hóa đơn hợp lệ gồm ít nhất một dòng. Quan hệ hợp thành thể hiện dòng hóa đơn không có vòng đời nghiệp vụ độc lập với hóa đơn.
-
-Mỗi dòng tham chiếu một món và giữ đơn giá bán của chứng từ. Mỗi món thuộc đúng một loại; loại mới tạo có thể chưa có món. Mô hình không quy định rằng lớp Hóa đơn trong code nhất thiết phải chứa collection dòng; đó là quyết định ánh xạ ở thiết kế.
-
-# 2.3. Mô hình khái niệm nhập kho
-<!-- Trang dự kiến 20 -->
-
-![Hình 2.2. Các khái niệm nhập hàng và tồn nguyên liệu.](../so_do/03_khai_niem_nhap_kho.svg)
-
-Phiếu nhập ghi một lần tiếp nhận hàng từ một nhà cung cấp, do một nhân viên lập. Phiếu có ít nhất một dòng; một dòng thuộc đúng một phiếu và một nguyên liệu. Nhà cung cấp, nhân viên và nguyên liệu có thể tồn tại khi chưa có chứng từ.
-
-Hai thuộc tính cùng gọi “đơn giá” ở thực đơn và nhập kho có ý nghĩa khác nhau. Giá món là giá bán; giá trên dòng nhập là giá mua nguyên liệu của lần nhập. Không dùng giá nhập để tự suy ra giá bán vì chưa có công thức định lượng và chi phí trong phạm vi.
-
-## Bất biến nghiệp vụ cần giữ
-
-| Đối tượng | Bất biến |
-| --- | --- |
-| Dòng phiếu nhập | Lượng > 0; đơn giá ≥ 0; thành tiền được xác định theo lượng và đơn giá. |
-| Phiếu nhập | Không lặp nguyên liệu; tổng tiền bằng tổng các thành tiền sau làm tròn. |
-| Nguyên liệu | Tồn không âm; khi sửa/xóa phiếu phải phản ánh đúng tác động chênh lệch. |
-| Quan hệ phiếu–dòng | Dòng không đứng riêng; xóa phiếu kéo theo xử lý các dòng cùng tác động tồn. |
-
-# 2.4. Bảng CRC và phân bổ trách nhiệm
-<!-- Trang dự kiến 21 -->
-
-CRC dưới đây ở mức phân tích: diễn đạt đối tượng có thông tin gì và cần cộng tác với ai. Khi cài đặt theo mô hình Service, một phần trách nhiệm được hiện thực ở lớp nghiệp vụ thay vì đưa toàn bộ hành vi vào entity.
-
-| Lớp khái niệm | Trách nhiệm | Cộng tác |
-| --- | --- | --- |
-| Khách hàng | Giữ hồ sơ, liên hệ và lịch sử liên quan. | Lượt đặt, hóa đơn. |
-| Bàn ăn | Giữ sức chứa, khu vực, tình trạng sử dụng. | Lượt đặt, hóa đơn. |
-| Lượt đặt bàn | Ghi nhu cầu; biết trạng thái và kết quả đặt. | Khách hàng, bàn ăn. |
-| Loại món | Phân loại các món và trạng thái danh mục. | Món ăn. |
-| Món ăn | Cung cấp tên, đơn vị và giá hiện tại khi gọi món. | Loại món, dòng hóa đơn. |
-| Hóa đơn | Ghi chứng từ bán; tổng hợp số tiền và trạng thái thanh toán. | Dòng hóa đơn, bàn, nhân viên, khách tùy chọn. |
-| Dòng hóa đơn | Giữ lượng và giá của món trên chứng từ. | Hóa đơn, món ăn. |
-| Nhân viên | Cung cấp thông tin người lập và hồ sơ nhân sự. | Hóa đơn, phiếu nhập. |
-| Nhà cung cấp | Giữ thông tin đơn vị cung ứng. | Phiếu nhập. |
-| Phiếu nhập | Ghi lần nhập; tổng hợp giá trị và tác động nhập hàng. | Nhà cung cấp, nhân viên, dòng nhập. |
-| Dòng phiếu nhập | Giữ nguyên liệu, lượng, giá của lần nhập. | Phiếu nhập, nguyên liệu. |
-| Nguyên liệu | Giữ đơn vị và tồn; cung cấp dữ liệu kiểm tra điều chỉnh. | Dòng nhập. |
-
-## Chuyển trách nhiệm sang thiết kế
-
-HoaDonService phối hợp dữ liệu chứng từ và chi tiết để tính tiền; PhieuNhapService điều phối chênh lệch tồn và giao dịch. Repository chỉ cung cấp thao tác truy vấn/lưu. Controller tiếp nhận sự kiện HTTP và đưa kết quả lên giao diện. Cách chia này làm rõ nơi cần thay đổi khi quy tắc nghiệp vụ đổi.
-
-# 2.5. SSD cho UC04 – Lập hóa đơn
-<!-- Trang dự kiến 22 -->
-
-![Hình 2.3. SSD của sự kiện lập hóa đơn.](../so_do/04_ssd_lap_hoa_don.svg)
-
-Sự kiện chính mang các thông tin người dùng có quyền nhập: bàn, người lập, khách tùy chọn, mã món, lượng và giảm giá. Giá bán không được coi là dữ liệu tin cậy do trình duyệt quyết định. Hệ thống trả chứng từ có mã, chi tiết và tổng tiền hoặc trả thông báo không hợp lệ.
-
-Trong SSD, hệ thống được xem như hộp đen. Controller, Service và Repository chưa xuất hiện. Biểu đồ tuần tự thiết kế ở Hình 3.2 sẽ phân rã đúng sự kiện này thành các thông điệp giữa các đối tượng phần mềm.
-
-> Tên sự kiện trong SSD là ngôn ngữ phân tích. Phương thức triển khai tương ứng là HoaDonService.taoHoaDon(HoaDon, List<Long>, List<BigDecimal>).
-
-# 2.6. Điểm mơ hồ và hợp đồng nghiệp vụ
-<!-- Trang dự kiến 23 -->
-
-| Điểm cần quyết định | Cách xử lý trong báo cáo / hệ quả |
-| --- | --- |
-| Giá món thay đổi khi có hóa đơn cũ | Thay giá thực đơn không tự cập nhật chi tiết đã lưu. Riêng sửa toàn bộ hóa đơn chưa thanh toán đang lấy lại giá mới; ghi rõ và cần thống nhất chính sách. |
-| Tiền cọc có trừ khi thanh toán? | Chưa có liên kết lượt đặt–hóa đơn hoặc thao tác bù trừ. Báo cáo không cộng/trừ tiền cọc trong công thức thanh toán. |
-| Đặt bàn theo ngày hay theo giờ? | Entity dùng LocalDate; trạng thái bàn là toàn cục. Không khẳng định có lịch chống trùng theo khung giờ. |
-| Doanh thu theo ngày nào? | Theo NGAY_LAP và trạng thái đã thanh toán. Chưa có NGAY_THANH_TOAN để thống kê dòng tiền đúng thời điểm thu. |
-| Có tách bảng thanh toán? | Chưa cần với một trạng thái ghi nhận. Nếu có nhiều đợt hoặc hoàn tiền thì cần lớp/bảng giao dịch riêng. |
-| Tồn kho sau bán món? | Chưa có định lượng; tồn hiện phản ánh khởi tạo và nhập/điều chỉnh phiếu, chưa phải tồn đầy đủ của vận hành thực tế. |
-
-## Hợp đồng thao tác lập hóa đơn
-
-Tiền điều kiện: người dùng có phiên; danh mục hợp lệ; danh sách món không rỗng. Hậu điều kiện thành công: tạo Hóa đơn ở trạng thái chưa thanh toán; tạo một dòng cho mỗi món sau gộp; gán giá lấy từ server; tổng tiền bằng max(0, tổng dòng − giảm). Nếu lỗi trong giao dịch thì không ghi một phần chứng từ.
-
-## Hợp đồng thao tác sửa phiếu nhập
-
-Tiền điều kiện: phiếu tồn tại và phiên bản khớp. Hậu điều kiện: phần đầu/chi tiết phản ánh dữ liệu mới; mỗi tồn thay đổi đúng lượng mới − lượng cũ; phiên bản làm form cũ mất hiệu lực. Toàn bộ thay đổi phải cùng commit hoặc rollback.
-
-# 3.1. Kiến trúc và hướng phụ thuộc
-<!-- Trang dự kiến 24 -->
-
-## CHƯƠNG 3. THIẾT KẾ HỆ THỐNG
-
-![Hình 3.1. Tổ chức lớp và luồng dữ liệu của ứng dụng.](../so_do/05_kien_truc.svg)
-
-Boundary là trang/form và lớp Controller tiếp nhận HTTP; Control là các Service xử lý nghiệp vụ; Entity biểu diễn dữ liệu miền được lưu. Repository và cấu hình bảo mật là thành phần hỗ trợ kỹ thuật, không phải lớp khái niệm nhà hàng.
-
-Controller gọi Service, Service gọi các interface Repository và thao tác entity. Spring cung cấp đối tượng thực thi Repository. Các template nhận dữ liệu qua Model; chúng không trực tiếp truy vấn database. JavaScript phục vụ tương tác tìm kiếm/lọc, không thay thế kiểm tra server.
-
-Phương án này phù hợp quy mô nhóm 4 người và cách tổ chức mã sẵn có. Hạn chế là entity chủ yếu chứa dữ liệu, còn quy tắc tập trung ở Service; khi nghiệp vụ phức tạp hơn cần xem xét tách tính toán hoặc hành vi miền để tránh Service quá lớn.
-
-# 3.2. Sequence Diagram – Lập hóa đơn
-<!-- Trang dự kiến 25 -->
-
-![Hình 3.2. Tương tác thực hiện UC04; tên lớp theo code.](../so_do/06_sequence_lap_hoa_don.svg)
-
-Việc lưu phần đầu, tạo dòng và tính lại tổng nằm trong taoHoaDon có giao dịch. Giá được đọc tại MonAnRepository. Nếu một món không tồn tại sau khi đã xử lý món trước, ngoại lệ làm rollback toàn bộ giao dịch.
-
-> Biểu đồ lược các lời gọi getter/setter và lần tải lại hóa đơn bên trong tinhLaiTongTien; không lược các bước kiểm tra, tính tiền và ghi chứng từ.
-
-# 3.3. Sequence Diagram – Ghi nhận thanh toán
-<!-- Trang dự kiến 26 -->
-
-![Hình 3.3. Tương tác thực hiện UC05 và các nhánh từ chối.](../so_do/07_sequence_thanh_toan.svg)
-
-Hóa đơn là đối tượng được kết thúc ở UC05. Kiểm tra trạng thái và số dòng xảy ra trước khi đổi sang Da thanh toan. Không thêm đối tượng cổng thanh toán hoặc thông điệp giải phóng bàn vì code chưa có những bước này.
-
-> Cần bổ sung cơ chế khóa/phiên bản nếu yêu cầu chống hai lần thanh toán đồng thời; đây là khác biệt giữa bảo vệ trạng thái tuần tự và bảo vệ xung đột đồng thời.
-
-# 3.4. Sequence Diagram – Điều chỉnh phiếu nhập
-<!-- Trang dự kiến 27 -->
-
-![Hình 3.4. Tương tác sửa phiếu thuộc UC06.](../so_do/08_sequence_sua_phieu_nhap.svg)
-
-Phiếu được khóa và đối chiếu PHIEN_BAN. Nguyên liệu được khóa theo cùng thứ tự mã tăng dần để giảm nguy cơ deadlock; refresh lấy tồn mới sau khi có khóa. Phần chênh lệch là cơ sở điều chỉnh, giúp tránh cộng lại toàn bộ lượng nhập cũ.
-
-> Các Repository được gom thành một lifeline vai trò để biểu đồ dễ đọc. Tệp nguồn và ghi chú nêu các lớp thực tế; DCD ở Hình 3.6 làm rõ những phụ thuộc chính.
-
-# 3.5. DCD của phân hệ hóa đơn
-<!-- Trang dự kiến 28 -->
-
-![Hình 3.5. Lớp thiết kế tiêu biểu cho UC04 và UC05.](../so_do/09_dcd_hoa_don.svg)
-
-CTHoaDonId là đối tượng khóa ghép theo hai mã; equals/hashCode phải nhất quán. HoaDon đang lưu các mã liên quan bằng Long; CTHoaDon giữ khóa ghép thay cho tham chiếu đối tượng HoaDon/MonAn. Không vẽ collection chi tiết trong HoaDon vì entity hiện chưa có thuộc tính đó.
-
-> DCD chọn các thuộc tính/phương thức liên quan đến UC; các getter/setter thông thường được lược. Các phương thức Repository cơ bản là thao tác kế thừa từ JpaRepository.
-
-# 3.6. DCD của phân hệ nhập kho
-<!-- Trang dự kiến 29 -->
-
-![Hình 3.6. Lớp thiết kế tiêu biểu cho UC06.](../so_do/10_dcd_kho.svg)
-
-PhieuNhapForm tách dữ liệu nhập khỏi entity, có phiên bản và danh sách dòng. PhieuNhap quản lý collection CTPhieuNhap với cascade và orphanRemoval. Dòng tham chiếu nguyên liệu và phiếu; PhieuNhap tham chiếu nhà cung cấp, còn mã nhân viên vẫn lưu Long.
-
-> Bội số 1..* diễn đạt trạng thái chứng từ hợp lệ sau lưu. Một entity PhieuNhap mới khởi tạo có thể tạm có danh sách rỗng trước khi Service hoàn tất kiểm tra.
-
-# 3.7. State Machine của hóa đơn
-<!-- Trang dự kiến 30 -->
-
-![Hình 3.7. Vòng đời hóa đơn theo các thao tác Service.](../so_do/11_trang_thai_hoa_don.svg)
-
-| Sự kiện | Điều kiện / tác động |
-| --- | --- |
-| Tạo | Thông tin và danh sách hợp lệ; tạo trạng thái Chua thanh toan. |
-| Sửa | Chỉ khi chưa thanh toán; thay thông tin/chi tiết và tính lại tổng. |
-| Thanh toán | Chưa thanh toán và có chi tiết; tính lại tổng; chuyển Da thanh toan. |
-| Xóa | Chỉ khi chưa thanh toán; xóa dòng trước khi xóa phần đầu. |
-| Thao tác sau thanh toán | Service từ chối sửa/xóa/thanh toán lại. Chưa có luồng hoàn tiền. |
-
-“Đã xóa” biểu thị kết quả chấm dứt vòng đời bản ghi, không phải một chuỗi trạng thái lưu trong bảng. Sau thanh toán, hóa đơn vẫn tồn tại để tra cứu và tổng hợp; không biểu diễn việc xóa vật lý ở trạng thái này.
-
-Nếu sau này cần hoàn tiền, không nên đơn giản đổi hóa đơn đã thanh toán về chưa thanh toán vì làm mất ý nghĩa lịch sử. Khi đó cần một giao dịch điều chỉnh và quy tắc báo cáo riêng.
-
-# 3.8. State Machine đặt bàn và khoảng cách cài đặt
-<!-- Trang dự kiến 31 -->
-
-![Hình 3.8. Vòng đời đặt bàn đề xuất; cần bổ sung guard vào Service.](../so_do/12_trang_thai_dat_ban.svg)
-
-Mô hình đề xuất giữ DA_HUY và HOAN_THANH là trạng thái kết thúc. Một lượt đặt chỉ hoàn thành sau khi đã xác nhận; thao tác hủy áp dụng trước khi kết thúc. Guard cần được kiểm tra tại Service thay vì chỉ ẩn nút trên giao diện.
-
-| Khía cạnh | Hiện có | Thiết kế cần bổ sung |
-| --- | --- | --- |
-| Trạng thái nguồn | xacNhan/huyDatBan/hoanThanh gán trực tiếp. | Kiểm tra cặp trạng thái nguồn–sự kiện và từ chối bước không hợp lệ. |
-| Cập nhật bàn | Hủy/hoàn thành đặt bàn đưa bàn về Trống. | Kiểm tra các lượt đặt/các giao dịch còn hoạt động trước khi trả bàn. |
-| Tạo lượt đặt | Controller kiểm tra Trống rồi lưu và giữ bàn. | Chuyển sang một giao dịch Service và có cơ chế khóa chống giữ trùng. |
-
-> Không mô tả sơ đồ này là máy trạng thái đã được cài đặt đầy đủ. Đây là đề xuất nhằm đáp ứng BR01–BR02 và khắc phục các chuyển trạng thái chưa được bảo vệ.
-
-# 3.9. Giải thích quyết định thiết kế bằng GRASP/SOLID
-<!-- Trang dự kiến 32 -->
-
-| Nguyên tắc | Áp dụng cụ thể và hệ quả |
-| --- | --- |
-| Controller | HoaDonController nhận sự kiện lập/thanh toán, chuyển cho HoaDonService. HTTP và redirect nằm ở Controller; quy tắc tiền không rải vào template. |
-| Information Expert | Dữ liệu giá nằm ở MonAn; dữ liệu lượng/giá chứng từ ở CTHoaDon. Service tổng hợp qua Repository vì cách cài đặt hiện dùng entity dữ liệu và truy vấn tổng. Đây là sự phân bổ có chủ ý, không khẳng định entity đang có mọi hành vi. |
-| Creator | HoaDonService tạo phần đầu và dòng khi đã có danh sách hợp lệ; PhieuNhap quản lý vòng đời collection dòng. Lý do là chứng từ quyết định sự tồn tại và tính hợp lệ của các dòng. |
-| High Cohesion / SRP | MonAnService xử lý thực đơn; PhieuNhapService xử lý phiếu/tồn; BaoCaoService phục vụ tổng hợp. Thay đổi chính sách giảm giá tập trung ở hóa đơn thay vì ảnh hưởng CRUD nhân viên. |
-| Low Coupling / DIP | Service phụ thuộc interface Repository, không tự mở kết nối SQL cho từng thao tác. Repository có thể được cung cấp triển khai/test khác; entity và truy vấn JPA vẫn tạo phụ thuộc nền tảng cần thừa nhận. |
-| Tách dữ liệu đầu vào | DTO/Form tránh cho người dùng tùy ý ghi khóa hay tổng tiền ở các module đã dùng DTO. Module hóa đơn hiện bind Entity nên cần bổ sung DTO, xác thực trường và giảm phạm vi binding. |
-
-## Các phương án đã cân nhắc
-
-Đưa tính tiền vào Controller làm tăng phụ thuộc HTTP và khó tái sử dụng; tính ở trình duyệt có thể bị sửa dữ liệu gửi lên. Nhóm chọn Service cho quy tắc tiền. Với tồn kho, nếu cả Java và trigger cùng tăng tồn thì bị cộng hai lần; thiết kế hiện chỉ cho Service điều chỉnh tồn của luồng web.
-
-Chưa tạo Strategy giảm giá hoặc cây kế thừa các loại nhân viên vì phạm vi chưa có nhiều biến thể hành vi. Không thêm interface hoặc lớp con chỉ để liệt kê đủ SOLID; ưu tiên quyết định có tác động thực tế tới phạm vi này.
-
-# 3.10. ERD bán hàng, khách và đặt bàn
-<!-- Trang dự kiến 33 -->
-
-![Hình 3.9. ERD logic bán hàng và đặt bàn; kiểu dữ liệu là thiết kế tham chiếu.](../so_do/13_erd_ban_hang.svg)
-
-> Đường liền: quan hệ có ánh xạ đối tượng JPA. Đường chấm và nhãn FK logic: quan hệ nghiệp vụ được lưu bằng mã, chưa tự chứng minh có FK vật lý. Phải kiểm tra DDL Oracle thực tế. Kiểu NUMBER tổng quát cho mã không quy định lại độ rộng số Hibernate sinh.
-
-Hình thể hiện 8 bảng nghiệp vụ. 4 bảng kho ở trang sau tạo đủ 12 bảng theo ảnh tham khảo. Các cột ảnh/mô tả món và hồ sơ nhân viên mở rộng được lấy từ entity hiện tại.
-
-# 3.11. ERD nhập kho và bảng tài khoản bổ sung
-<!-- Trang dự kiến 34 -->
-
-![Hình 3.10. ERD kho, hồ sơ nhân viên và TAI_KHOAN.](../so_do/14_erd_kho_tai_khoan.svg)
-
-NHAN_VIEN là bảng dùng chung, được lặp ở hai hình để dễ đọc; không phải hai bảng khác nhau. TAI_KHOAN là bảng kỹ thuật bổ sung, tạo tổng cộng 13 entity. Tên đăng nhập có ràng buộc duy nhất và độ dài 30 theo entity; không có cột vai trò hoặc khóa ngoại tới nhân viên.
-
-> PHIEU_NHAP.MA_NV có FK trong script 01_inventory.sql nhưng chỉ là Long trong JPA. Nếu schema tạo bằng Hibernate thay vì script, cần xác nhận FK này. Các độ dài VARCHAR2 ở ERD là mức thiết kế; kiểm tra CHAR/BYTE semantics trong database khi triển khai.
-
-# 3.12. Khóa, ánh xạ và ràng buộc dữ liệu
-<!-- Trang dự kiến 35 -->
-
-| Bảng | Khóa / quan hệ chính | Cách lưu và kiểm tra |
-| --- | --- | --- |
-| KHACH_HANG | PK MA_KH | Identity; hồ sơ và điểm tích lũy. |
-| BAN_AN | PK MA_BAN | Identity; sức chứa, khu vực, trạng thái. |
-| DAT_BAN | PK MA_DAT; MA_KH, MA_BAN | Identity; ManyToOne tới khách và bàn. |
-| LOAI_MON | PK MA_LOAI | SEQ_LOAI_MON; bảo vệ xóa khi có món. |
-| MON_AN | PK MA_MON; MA_LOAI | SEQ_MON_AN; ManyToOne loại; giá BigDecimal. |
-| NHAN_VIEN | PK MA_NV | SEQ_NHAN_VIEN; bảo vệ xóa khi có chứng từ. |
-| HOA_DON | PK MA_HD; MA_BAN, MA_NV, MA_KH | Identity; mã cha Long; khách có thể trống. |
-| CT_HOA_DON | PK (MA_HD, MA_MON) | EmbeddedId; giá bán lưu trên chi tiết. |
-| NHA_CUNG_CAP | PK MA_NCC | SEQ_NHA_CUNG_CAP. |
-| NGUYEN_LIEU | PK MA_NL | SEQ_NGUYEN_LIEU; tồn NUMBER(10,2). |
-| PHIEU_NHAP | PK MA_PN; MA_NCC, MA_NV | SEQ_PHIEU_NHAP; có PHIEN_BAN; NCC là ManyToOne. |
-| CT_PHIEU_NHAP | PK (MA_PN, MA_NL) | EmbeddedId/MapsId; ManyToOne tới phiếu và nguyên liệu. |
-| TAI_KHOAN | PK MA_TK; UQ TEN_DANG_NHAP | SEQ_TAI_KHOAN; mật khẩu BCrypt. |
-
-Khóa ghép bảo đảm một món/nguyên liệu không lặp ở cùng chứng từ. Quan hệ nhiều–nhiều được chuyển thành bảng chi tiết vì có thuộc tính riêng. Controller, Service, DTO và báo cáo không trở thành bảng vì không đại diện dữ liệu bền vững độc lập.
-
-Đối với kho, script 01_inventory.sql có CHECK số lượng, giá, tồn và FK. Hibernate ddl-auto=update không thay thế việc kiểm tra đầy đủ CHECK, FK và quyền trên một schema đã tồn tại. Không chạy lại script tạo bảng kho trên schema đã có bảng nếu chưa lập kế hoạch chuyển đổi.
-
-# 3.13. Thiết kế giao dịch và ví dụ tính toán
-<!-- Trang dự kiến 36 -->
-
-## Tính tiền hóa đơn
-
-Thành tiền dòng i = số lượng i × đơn giá i. Tổng hóa đơn = max(0, Σ thành tiền dòng − giảm giá). Tiền dùng BigDecimal để biểu diễn thập phân. Tại kho, thành tiền được làm tròn 2 chữ số theo HALF_UP; cần kiểm tra khả năng lưu đúng precision/scale của các cột tiền.
-
-| Tình huống minh họa | Kết quả mong đợi |
-| --- | --- |
-| Tôm 1,5 × 320.000; nghêu 2 × 120.000; giảm 20.000 | Tổng dòng 720.000; phải thu 700.000 đồng. |
-| Cùng món tôm nhập 0,5 kg và 1 kg | Gộp thành 1,5 kg trước khi tạo khóa (MA_HD, MA_MON). |
-| Tổng dòng 720.000; giảm 800.000 | Code hiện cho tổng 0; cần thống nhất có chấp nhận mức giảm vượt tổng hay từ chối. |
-| Đổi giá món sau khi hóa đơn đã thanh toán | Chi tiết đã lưu không tự cập nhật theo giá danh mục mới. |
-
-## Điều chỉnh tồn theo chênh lệch
-
-| Bước minh họa | Tồn trước | Tác động | Tồn sau |
+| BR01 | Chỉ tiếp nhận lượt đặt bàn mới khi bàn ở trạng thái “Trống”; số khách không vượt quá sức chứa bàn. | DatBanController đã kiểm tra bàn “Trống” trước khi lưu và đổi bàn sang “Đã đặt”; cần bổ sung kiểm tra số người so với sức chứa và khóa đồng thời. |
+| BR02 | Hủy hoặc hoàn thành lượt đặt bàn trả bàn về “Trống”; trạng thái kết thúc không được mở lại tùy ý. | DatBanService.huyDatBan/hoanThanh cập nhật trạng thái bàn về “Trống”; cần bổ sung guard kiểm tra trạng thái nguồn hợp lệ. |
+| BR03 | Hóa đơn mới chỉ được tạo trên bàn “Trống” và chưa có hóa đơn mở; phải có người lập, ít nhất một món và số lượng dương. | HoaDonService.taoHoaDon kiểm tra bàn “Trống”, kiểm tra chưa có hóa đơn “Chua thanh toan”, kiểm tra danh sách/lượng và tự chuyển bàn sang “Đang dùng”. |
+| BR04 | Các dòng cùng món trong một hóa đơn được cộng dồn số lượng; lượng món đã xác nhận phải được bảo vệ. | HoaDonService gộp bằng LinkedHashMap; phương thức xacNhanMon() chốt SO_LUONG_DA_XAC_NHAN và chặn ROLE_THU_NGAN giảm hoặc xóa dưới mức đã xác nhận. |
+| BR05 | Đơn giá bán do server lấy từ danh mục MON_AN tại thời điểm ghi; thành tiền = số lượng × đơn giá; tổng hóa đơn = max(0, tổng chi tiết − giảm giá). | Xử lý hoàn toàn ở HoaDonService bằng BigDecimal; giảm giá âm bị từ chối. |
+| BR06 | Hóa đơn đã thanh toán không được sửa, xóa hoặc thanh toán lại; thanh toán hoặc xóa hóa đơn trả bàn về “Trống” nếu hết hóa đơn mở. | HoaDonService kiểm tra trạng thái “Da thanh toan” và gọi capNhatTrangThaiBanNeuKhongConHoaDonChuaThanhToan() trong @Transactional; cần bổ sung khóa chống thanh toán đồng thời. |
+| BR07 | Phiếu nhập không được lặp nguyên liệu; số lượng nhập > 0 và đơn giá nhập ≥ 0. | Kiểm tra hai tầng bằng Jakarta Validation ở PhieuNhapForm/DongNhapForm và kiểm tra trùng mã trong PhieuNhapService. |
+| BR08 | Sửa phiếu nhập điều chỉnh tồn theo chênh lệch (mới − cũ); xóa phiếu hoàn lại lượng đã nhập; từ chối nếu tồn âm hoặc vượt ngưỡng. | PhieuNhapService khóa nguyên liệu theo thứ tự mã tăng dần, kiểm tra nguyên liệu ngừng hoạt động và kiểm tra giới hạn tồn NUMBER(10,2). |
+| BR09 | Thao tác chứng từ nhiều bảng phải thành công trọn vẹn hoặc rollback toàn bộ khi có lỗi. | HoaDonService và PhieuNhapService dùng @Transactional; luồng tiếp nhận đặt bàn ở DatBanController hiện lưu tách bước với BanAnService. |
+| BR10 | Biểu mẫu sửa/xóa phiếu nhập cũ không được ghi đè phiên bản mới hơn đã lưu. | PhieuNhap có cột PHIEN_BAN (@Version); Service kiểm tra khớp phiên bản và khóa PESSIMISTIC_FORCE_INCREMENT. |
+| BR11 | Không cho phép xóa loại món đang có món, món đã nằm trong hóa đơn hoặc nhân viên đã lập chứng từ. | LoaiMonService, MonAnService và NhanVienService kiểm tra tham chiếu trước khi xóa và gợi ý đổi trạng thái. |
+| BR12 | Doanh thu chỉ cộng TONG_TIEN của hóa đơn “Da thanh toan” trong khoảng ngày hợp lệ (ngày kết thúc ≥ ngày bắt đầu). | BaoCaoService kiểm tra khoảng ngày và lọc theo trạng thái “Da thanh toan”; thống kê món bán chạy hiện tổng hợp toàn kỳ. |
+
+## 1.4. Tác nhân và mục tiêu người dùng
+
+Ở giai đoạn phân tích yêu cầu, hệ thống xác định một tác nhân khái quát là Nhân viên nội bộ cùng bốn vai trò tác nhân nghiệp vụ chuyên biệt. Khách hàng và nhà cung cấp là các đối tượng được quản lý thông tin gián tiếp thông qua nhân viên, chưa có cổng đăng nhập trực tiếp nên không xuất hiện làm tác nhân trên biểu đồ Use Case nội bộ.
+
+*Bảng 1.5. Tác nhân nghiệp vụ, mục tiêu và ánh xạ sang vai trò cài đặt*
+
+| Tác nhân | Mục tiêu nghiệp vụ | UC liên quan | Ánh xạ vai trò tài khoản |
 | --- | --- | --- | --- |
-| Tồn đầu trước phiếu | 10 kg | — | 10 kg |
-| Lập phiếu nhập 5 kg | 10 kg | +5 kg | 15 kg |
-| Sửa lượng phiếu từ 5 thành 3 kg | 15 kg | 3 − 5 = −2 kg | 13 kg |
-| Xóa phiếu đang ghi 3 kg | 13 kg | −3 kg | 10 kg |
+| Nhân viên nội bộ | Đăng nhập bằng tài khoản được cấp và đăng xuất an toàn khi kết thúc ca. | UC01 | Lớp cha chung cho cả 4 vai trò (ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN). |
+| Phục vụ | Tra cứu khách hàng, kiểm tra bàn trống và tiếp nhận/xử lý lượt đặt bàn. | UC03, UC10 | Gộp chung trong quyền THU_NGAN trên ứng dụng web. |
+| Thu ngân | Lập hóa đơn, thêm/xác nhận món, điều chỉnh hóa đơn mở và ghi nhận thanh toán. | UC04, UC05 | Vai trò THU_NGAN (tương thích ngược các tài khoản cũ ghi NHAN_VIEN). |
+| Thủ kho | Quản lý danh mục nhà cung cấp, nguyên liệu và lập/sửa/xóa phiếu nhập kho. | UC06, UC09 | Vai trò QUAN_LY_KHO. |
+| Quản lý | Quản lý thực đơn, nhân sự, tài khoản/phân quyền và theo dõi báo cáo doanh thu. | UC02, UC07, UC08, UC11 | Vai trò ADMIN toàn quyền (riêng UC07 xem báo cáo mở thêm cho KE_TOAN). |
 
-Khóa phiếu/nguyên liệu ngăn cập nhật dựa trên dữ liệu vừa bị thay đổi. Phiên bản giúp phát hiện người dùng gửi form cũ. Hai cơ chế có vai trò bổ sung: một cơ chế bảo vệ lúc ghi, một cơ chế phát hiện nội dung mà người dùng đang xem đã lỗi thời.
+### 1.4.1. Quan hệ tác nhân – ca sử dụng và cơ chế phân quyền thực tế
 
-> Các con số trên là ví dụ thiết kế để xây dựng test, chưa phải log chạy giao dịch trên database.
+Quan hệ tổng quát hóa giữa các tác nhân chuyên biệt và Nhân viên nội bộ biểu thị rằng mọi vai trò đều thực hiện được UC01 (Đăng nhập / đăng xuất). Vì đăng nhập là tiền điều kiện chung cho các nghiệp vụ nội bộ, biểu đồ Use Case không vẽ đường <<include>> lặp lại từ mọi ca sử dụng về UC01. Tương tự, việc lập hóa đơn (UC04) và thanh toán (UC05) được tách thành hai ca sử dụng độc lập vì hóa đơn phục vụ tại bàn có thể kéo dài và chỉnh sửa nhiều lần trước khi thu ngân thực hiện thanh toán.
 
-# 3.14. Ma trận truy vết và kiểm tra nhất quán
-<!-- Trang dự kiến 37 -->
+Về mặt cài đặt bảo mật, SecurityConfig kiểm soát quyền truy cập URL dựa trên cột VAI_TRO trong bảng TAI_KHOAN với bốn giá trị hợp lệ: ADMIN, THU_NGAN, QUAN_LY_KHO và KE_TOAN. Trong lớp TaiKhoanService.NguoiDung, giá trị cũ QUAN_LY được tự động quy đổi thành ADMIN và NHAN_VIEN được quy đổi thành THU_NGAN để tương thích dữ liệu cũ. Thông tin chức vụ trong bảng NHAN_VIEN chỉ phục vụ hồ sơ nhân sự, chưa liên kết khóa ngoại trực tiếp với TAI_KHOAN.
 
-| Yêu cầu | Mô hình phân tích | Thiết kế / code | Kiểm chứng |
-| --- | --- | --- | --- |
-| UC03; BR01–02 | Bàn, lượt đặt, khách; CRC bàn/lượt đặt. | State Hình 3.8; DatBanController/Service. | TC01–TC03; cần bổ sung guard và khóa. |
-| UC04; BR03–05 | Hóa đơn, dòng, món; SSD Hình 2.3. | Sequence 3.2; DCD 3.5; taoHoaDon/capNhatHoaDon. | TC04–TC07; đối chiếu bảng đầu–dòng và công thức. |
-| UC05; BR06 | Vòng đời hóa đơn. | Sequence 3.3; State 3.7; thanhToan. | TC08–TC10; kiểm tra lỗi và đồng thời. |
-| UC06; BR07–10 | Phiếu, dòng nhập, nguyên liệu; CRC kho. | Sequence 3.4; DCD 3.6; PhieuNhapService. | TC11–TC16; tồn, rollback, form cũ. |
-| UC02/08; BR11 | Món, loại, nhân viên với chứng từ. | Service danh mục và FK khi có. | Bộ Java có test bảo vệ xóa; cần chạy lại. |
-| UC07; BR12 | Hóa đơn đã thanh toán là dữ liệu nguồn. | BaoCaoService và truy vấn tổng hợp. | TC17–TC18; phân biệt lọc doanh thu/toàn kỳ. |
-| UC01; NFR01 | Actor nhân viên; tiền điều kiện phiên. | SecurityConfig, TaiKhoanService. | TC19–TC20; có mã test Java, chưa chạy lại. |
+## 1.5. Biểu đồ Use Case tổng quát
 
-## Các điểm đã đối chiếu giữa mô hình và code
+Hình 1.1 mô tả ranh giới ứng dụng quản lý nội bộ cùng 11 ca sử dụng phục vụ các tác nhân nghiệp vụ. Đường biên hình chữ nhật thể hiện phạm vi xử lý của phần mềm.
 
-Tên UC04 và UC05 tương ứng hai mục tiêu và hai phương thức nghiệp vụ khác nhau; không gộp tạo đơn với thanh toán. Khóa chi tiết gồm hai mã đúng với quyết định gộp món. DCD kho có phiên bản phù hợp với nhánh form cũ ở Sequence. Mô hình đặt bàn được gắn nhãn đề xuất vì chưa có guard tương ứng đầy đủ trong code.
+![Hình 1.1. Biểu đồ Use Case tổng quát của hệ thống quản lý nhà hàng hải sản](../so_do/01_use_case.svg)
 
-Trước khi nộp, nhóm cần kiểm tra mọi thay đổi tên lớp, trạng thái hoặc chính sách giá có được cập nhật đồng thời trong UC, sơ đồ, mã nguồn và test case. Việc một sơ đồ đẹp không bù cho mâu thuẫn giữa tiền điều kiện và thông điệp thực thi.
+Biểu đồ không bổ sung tác nhân Khách đặt bàn trực tuyến, Ngân hàng hay Hệ thống bếp vì các tích hợp này không nằm trong phạm vi thiết kế của phiên bản hiện tại.
 
-# 4.1. Công nghệ và cấu trúc dự án
-<!-- Trang dự kiến 38 -->
+## 1.6. Danh sách ca sử dụng
 
-## CHƯƠNG 4. CÀI ĐẶT VÀ KIỂM THỬ
+*Bảng 1.6. Danh sách 11 ca sử dụng của hệ thống*
 
-| Thành phần | Bằng chứng trong dự án |
+| Mã UC | Tên ca sử dụng | Kết quả nghiệp vụ chính |
+| --- | --- | --- |
+| UC01 | Đăng nhập / đăng xuất | Xác thực tài khoản được cấp bằng BCrypt, tạo phiên làm việc theo vai trò hoặc hủy phiên khi đăng xuất. |
+| UC02 | Quản lý thực đơn | Thêm, sửa, tìm kiếm, lọc loại món và món ăn; chặn xóa loại đang có món hoặc món đã phát sinh hóa đơn. |
+| UC03 | Tiếp nhận, xử lý đặt bàn | Tạo lượt đặt cho bàn trống, xác nhận, hủy hoặc hoàn thành; đồng bộ trạng thái bàn ăn. |
+| UC04 | Lập, điều chỉnh hóa đơn | Tạo hoặc sửa hóa đơn chưa thanh toán, gộp món trùng, chốt món đã xác nhận và tính tổng tiền tại server. |
+| UC05 | Ghi nhận thanh toán | Kiểm tra hóa đơn có món và chưa thanh toán, tính lại tổng, chuyển sang Da thanh toan và giải phóng bàn. |
+| UC06 | Lập, điều chỉnh phiếu nhập | Tạo, sửa, xóa phiếu nhập và chi tiết; cập nhật tồn kho theo chênh lệch trong cùng giao dịch có khóa phiên bản. |
+| UC07 | Xem báo cáo doanh thu | Tổng hợp doanh thu hóa đơn đã thanh toán theo khoảng ngày, hôm nay, tháng hiện tại và thống kê món bán chạy. |
+| UC08 | Quản lý hồ sơ nhân viên | Thêm, sửa, lọc hồ sơ nhân sự, chức vụ, ca làm, mức lương; bảo vệ nhân viên đã lập chứng từ khi xóa. |
+| UC09 | Quản lý danh mục kho | Thêm, sửa, xóa nhà cung cấp và nguyên liệu; bảo vệ dữ liệu đang được phiếu nhập tham chiếu. |
+| UC10 | Quản lý khách hàng, bàn ăn | Tra cứu, thêm, sửa, xóa hồ sơ khách hàng và danh mục bàn ăn (số chỗ, khu vực, trạng thái). |
+| UC11 | Quản lý tài khoản, phân quyền | Quản trị viên (ADMIN) xem danh sách và cấp tài khoản đăng nhập mới với một trong 4 vai trò chuẩn. |
+
+### 1.6.1. Lý do lựa chọn các ca sử dụng phân tích sâu
+
+Nhóm tập trung phân tích và thiết kế chi tiết các ca sử dụng có quy tắc nghiệp vụ phức tạp và ảnh hưởng trực tiếp đến tính đúng đắn dữ liệu: UC03 (vòng đời trạng thái đặt bàn và giữ bàn), UC04 (khóa ghép, đơn giá lịch sử, xác nhận món và tính tổng tiền), UC05 (điều kiện khóa chứng từ và giải phóng bàn) và UC06 (giao dịch đa bảng, điều chỉnh tồn kho theo chênh lệch và xử lý xung đột phiên bản). Các ca sử dụng UC01, UC07 và UC11 được đặc tả để làm rõ cơ chế bảo mật và cách tổng hợp số liệu; các ca sử dụng danh mục UC02, UC08, UC09, UC10 được trình bày ở mức tóm tắt kèm ràng buộc bảo vệ xóa.
+
+## 1.7. Đặc tả các ca sử dụng tiêu biểu
+
+### 1.7.1. UC01 – Đăng nhập / đăng xuất và UC11 – Quản lý tài khoản
+
+*Bảng 1.7. Đặc tả ca sử dụng UC01 – Đăng nhập / đăng xuất*
+
+| Thành phần | Nội dung đặc tả |
 | --- | --- |
-| Java / Spring Boot | pom.xml đang khai báo java.version=27 và Spring Boot parent 4.1.1. Đây là giá trị cấu hình trong repo, không phải xác nhận môi trường hiện chạy được. |
-| Web / giao diện | Spring Web MVC, Thymeleaf; HTML/CSS/JavaScript trong src/main/resources. |
-| Nghiệp vụ / lưu trữ | Service giao dịch; Spring Data JPA; JDBC cho repository nhân viên dùng ở nhập kho. |
-| Database | Oracle JDBC ojdbc17; DB_URL, DB_USERNAME, DB_PASSWORD trong application.properties. |
-| Bảo mật / kiểm tra form | Spring Security; BCrypt độ khó 12; Jakarta Validation và DTO. |
-| Kiểm thử | JUnit/Spring test và H2 theo profile test; Node test cho bộ lọc JavaScript. |
+| Tác nhân, mục tiêu | Nhân viên nội bộ (thuộc một trong 4 vai trò); xác thực để sử dụng chức năng theo quyền được cấp. |
+| Tiền điều kiện | Tồn tại bản ghi trong TAI_KHOAN với mật khẩu đã băm BCrypt (độ khó 12); kết nối cơ sở dữ liệu hoạt động. |
+| Luồng chính | 1. Người dùng mở /login. 2. Nhập tên đăng nhập (tenDangNhap) và mật khẩu (matKhau). 3. Hệ thống chuẩn hóa tên đăng nhập, tải tài khoản và đối chiếu BCrypt. 4. Tạo phiên xác thực kèm quyền ROLE_* và chuyển về trang chủ (/). 5. Khi đăng xuất (/logout), hủy phiên và xóa cookie JSESSIONID. |
+| Thay thế / ngoại lệ | Sai thông tin đăng nhập: chuyển /login?error và không cấp phiên. Chưa đăng nhập truy cập URL nghiệp vụ: chuyển tới /login. Đã đăng nhập truy cập /login: chuyển về trang chủ. Truy cập URL vượt quyền vai trò: trả HTTP 403. Không hỗ trợ tự đăng ký (/register). |
+| Hậu điều kiện | Thành công: phiên làm việc gắn đúng vai trò được thiết lập. Thất bại: không có phiên mới; đăng xuất: phiên cũ mất hiệu lực. |
+
+*Bảng 1.8. Đặc tả rút gọn UC11 – Quản lý tài khoản và phân quyền*
+
+| Thành phần | Nội dung đặc tả |
+| --- | --- |
+| Tác nhân / tiền điều kiện | Quản lý (ADMIN); đã đăng nhập tại /tai-khoan. |
+| Luồng chính | Xem danh sách tài khoản hiện có; nhập họ tên (1–100 ký tự), tên đăng nhập ([a-z0-9_], 3–30 ký tự), mật khẩu (8–72 byte UTF-8) và vai trò (ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN); hệ thống băm mật khẩu bằng BCrypt và lưu vào TAI_KHOAN. |
+| Ngoại lệ / hậu điều kiện | Trùng tên đăng nhập, sai định dạng hoặc vai trò không hợp lệ: từ chối lưu và hiển thị thông báo lỗi. Thành công: tài khoản mới sẵn sàng đăng nhập ngay. |
+
+### 1.7.2. UC02 – Quản lý thực đơn
+
+*Bảng 1.9. Đặc tả rút gọn UC02 – Quản lý thực đơn*
+
+| Thành phần | Nội dung đặc tả |
+| --- | --- |
+| Tác nhân / tiền điều kiện | Quản lý (ADMIN); đã đăng nhập (SecurityConfig giới hạn /loai-mon/** và /mon-an/** cho ROLE_ADMIN). |
+| Luồng chính | Xem danh sách loại món (kèm số lượng món đếm bằng GROUP BY) hoặc danh sách món ăn dạng thẻ/bảng; nhập hoặc cập nhật tên, loại món, đơn vị, đơn giá, URL ảnh (HTTP/HTTPS), mô tả và trạng thái; kiểm tra @Valid qua LoaiMonForm/MonAnForm và lưu. |
+| Thay thế / ngoại lệ | Dữ liệu sai định dạng hoặc mã loại không tồn tại: trả lại biểu mẫu kèm thông báo lỗi và giữ lại dữ liệu đã nhập. Xóa loại đang có món hoặc món đã nằm trong CT_HOA_DON: từ chối xóa để bảo toàn lịch sử chứng từ. |
+| Hậu điều kiện | Danh mục thực đơn được cập nhật; thay đổi giá món trong danh mục không tự sửa đơn giá của các hóa đơn đã lập trước đó. |
+
+### 1.7.3. UC03 – Tiếp nhận, xử lý đặt bàn
+
+*Bảng 1.10. Đặc tả ca sử dụng UC03 – Tiếp nhận, xử lý đặt bàn*
+
+| Thành phần | Nội dung đặc tả |
+| --- | --- |
+| Tác nhân / mục tiêu | Phục vụ (cài đặt dưới vai trò THU_NGAN hoặc ADMIN); giữ bàn cho khách và theo dõi kết quả lượt đặt. |
+| Tiền điều kiện | Đã đăng nhập; tồn tại hồ sơ khách hàng và bàn ăn trong danh mục. |
+| Dữ liệu vào | Mã khách hàng, mã bàn ăn, ngày đặt (LocalDate), số người, tiền đặt cọc (nếu có). |
+| Luồng chính | 1. Mở /dat-ban/them (chỉ nạp các bàn đang ở trạng thái “Trống”). 2. Chọn khách hàng, bàn, nhập ngày, số người và tiền cọc. 3. Hệ thống kiểm tra bàn tồn tại và đang “Trống”. 4. Lưu lượt đặt ở trạng thái CHO_XAC_NHAN và chuyển bàn sang “Đã đặt”. 5. Khi khách xác nhận: chuyển lượt đặt sang DA_XAC_NHAN. 6. Khi hoàn thành phục vụ: chuyển sang HOAN_THANH và trả bàn về “Trống”. |
+| Luồng thay thế & ngoại lệ | Hủy đặt bàn: chuyển sang DA_HUY và trả bàn về “Trống”. Bàn không tồn tại hoặc không ở trạng thái “Trống”: từ chối tiếp nhận và giữ nguyên trạng thái. Thiết kế mục tiêu còn yêu cầu bổ sung kiểm tra số người ≤ sức chứa bàn, guard kiểm tra trạng thái nguồn và khóa chống đặt trùng đồng thời. |
+| Hậu điều kiện | Lượt đặt và trạng thái bàn được đồng bộ; ở luồng thất bại không phát sinh lượt đặt mới. |
+
+### 1.7.4. UC04 – Lập, điều chỉnh hóa đơn
+
+*Bảng 1.11. Đặc tả ca sử dụng UC04 – Lập, điều chỉnh hóa đơn*
+
+| Thành phần | Nội dung đặc tả |
+| --- | --- |
+| Tác nhân / mục tiêu | Thu ngân (THU_NGAN hoặc ADMIN); ghi nhận các món sử dụng tại bàn, xác nhận món và xác định tổng tiền phải thu. |
+| Tiền điều kiện | Đã đăng nhập; khi tạo mới bàn phải tồn tại, đang “Trống” và chưa có hóa đơn mở; khi sửa thì hóa đơn phải chưa thanh toán. |
+| Dữ liệu vào | Mã bàn, mã nhân viên lập, mã khách hàng (tùy chọn), danh sách mã món và số lượng tương ứng, số tiền giảm giá. |
+| Luồng chính (Tạo mới) | 1. Mở /hoa-don/them, chọn bàn trống, nhân viên, các món, số lượng và giảm giá. 2. Server kiểm tra đầu vào (danh sách khác rỗng, khớp kích thước, số lượng > 0, giảm giá ≥ 0) và gộp các dòng trùng mã món bằng cộng số lượng. 3. Kiểm tra bàn “Trống” và chưa có hóa đơn “Chua thanh toan”. 4. Tạo HOA_DON trạng thái “Chua thanh toan”. 5. Với từng món, lấy DON_GIA hiện tại từ MON_AN, tạo CT_HOA_DON (soLuongDaXacNhan = 0, thanhTien = soLuong × donGia). 6. Đổi trạng thái bàn sang “Đang dùng”. 7. Tính tổng tiền = max(0, tổng chi tiết − giảm giá) và lưu. |
+| Luồng thay thế (Sửa & Xác nhận món) | 4a. Xác nhận món (POST /hoa-don/xac-nhan-mon/{maHd}): chốt soLuongDaXacNhan = soLuong cho từng dòng chi tiết. 4b. Sửa hóa đơn chưa thanh toán: giữ nguyên mã bàn, kiểm tra nếu vai trò THU_NGAN giảm hoặc xóa dưới mức soLuongDaXacNhan thì từ chối; nếu hợp lệ thì thay chi tiết, giữ lại mức đã xác nhận và tính lại tổng tiền (riêng ADMIN được phép giảm/xóa). |
+| Ngoại lệ & hậu điều kiện | Món không tồn tại/chưa có giá, số lượng ≤ 0, giảm giá âm, bàn không trống hoặc THU_NGAN giảm món đã xác nhận: ném ngoại lệ và rollback toàn bộ giao dịch @Transactional. Thành công: hóa đơn có đúng một dòng cho mỗi món sau gộp và bàn ở trạng thái “Đang dùng”. |
+
+Ví dụ minh họa: hóa đơn gọi 1,5 kg tôm giá 320.000 đ/kg (480.000 đ) và 2 đĩa nghêu giá 120.000 đ/đĩa (240.000 đ) có tổng chi tiết 720.000 đ; áp dụng giảm giá trực tiếp 20.000 đ cho tổng hóa đơn 700.000 đ.
+
+### 1.7.5. UC05 – Ghi nhận thanh toán
+
+*Bảng 1.12. Đặc tả ca sử dụng UC05 – Ghi nhận thanh toán*
+
+| Thành phần | Nội dung đặc tả |
+| --- | --- |
+| Tác nhân / mục tiêu | Thu ngân (THU_NGAN hoặc ADMIN); xác nhận hóa đơn đã hoàn tất thu tiền và giải phóng bàn phục vụ. |
+| Tiền điều kiện | Đã đăng nhập; hóa đơn tồn tại, ở trạng thái “Chua thanh toan” và có ít nhất 1 dòng chi tiết; thu ngân đã đối chiếu thanh toán với khách. |
+| Luồng chính | 1. Thu ngân chọn hóa đơn và gửi POST /hoa-don/thanh-toan/{maHd}. 2. Service tải hóa đơn, kiểm tra chưa thanh toán và số dòng chi tiết > 0. 3. Tính lại tổng tiền từ chi tiết và giảm giá. 4. Cập nhật trạng thái hóa đơn thành “Da thanh toan” và lưu. 5. Kiểm tra nếu bàn không còn hóa đơn “Chua thanh toan” nào khác thì đổi trạng thái BAN_AN về “Trống”. |
+| Ngoại lệ | E1: Không tìm thấy mã hóa đơn -> báo lỗi. E2: Hóa đơn đã “Da thanh toan” -> từ chối thanh toán lại. E3: Hóa đơn chưa có món ăn (0 dòng) -> từ chối và rollback. |
+| Hậu điều kiện & giới hạn | Hóa đơn chuyển sang “Da thanh toan”, bị khóa sửa/xóa tại HoaDonService, được tính vào doanh thu báo cáo và bàn trở về “Trống”. Giới hạn hiện tại: chưa hỗ trợ cổng thanh toán điện tử, tiền thừa, in hóa đơn PDF và chưa có khóa chống hai yêu cầu thanh toán gửi song song. |
+
+### 1.7.6. UC06 – Lập, điều chỉnh phiếu nhập
+
+*Bảng 1.13. Đặc tả ca sử dụng UC06 – Lập, điều chỉnh phiếu nhập*
+
+| Thành phần | Nội dung đặc tả |
+| --- | --- |
+| Tác nhân / mục tiêu | Thủ kho (QUAN_LY_KHO hoặc ADMIN); lập phiếu nhập hàng, điều chỉnh tồn kho chính xác khi sửa hoặc xóa phiếu sai. |
+| Tiền điều kiện | Đã đăng nhập; nhà cung cấp, nhân viên nhập kho và các nguyên liệu tồn tại. Nếu sửa/xóa, phiếu tồn tại và form mang phienBan khớp với database. |
+| Luồng chính (Lập / Sửa) | 1. Nhập nhà cung cấp, nhân viên, ngày nhập và các dòng (nguyên liệu, số lượng > 0, đơn giá ≥ 0). 2. Kiểm tra @Valid ở DTO và kiểm tra không trùng nguyên liệu trên cùng phiếu. 3. Nếu sửa: khóa phiếu (findForUpdate), kiểm tra khớp PHIEN_BAN và khóa tăng phiên bản (PESSIMISTIC_FORCE_INCREMENT). 4. Khóa nhà cung cấp và khóa tất cả nguyên liệu liên quan (cả cũ lẫn mới) theo thứ tự mã tăng dần để tránh deadlock. 5. Với từng nguyên liệu, cập nhật tồn mới = tồn hiện tại + (lượng mới − lượng cũ), kiểm tra không âm và không vượt NUMBER(10,2). 6. Tính tổng phiếu và lưu đồng bộ trong một @Transactional. |
+| Luồng xóa & ngoại lệ | Xóa phiếu: khóa phiếu, đối chiếu phiên bản, khóa nguyên liệu theo thứ tự tăng dần, trừ lại toàn bộ lượng đã nhập rồi xóa phiếu/chi tiết. Ngoại lệ (form cũ, trùng nguyên liệu, nguyên liệu ngừng sử dụng bị nhập tăng, tồn âm hoặc vượt ngưỡng): ném ngoại lệ và rollback toàn bộ giao dịch. |
+| Hậu điều kiện | Phiếu nhập, chi tiết nhập và số lượng tồn nguyên liệu nhất quán; lỗi phát sinh không làm thay đổi tồn kho một phần. |
+
+### 1.7.7. UC07 – Xem báo cáo doanh thu và các ca sử dụng hỗ trợ
+
+*Bảng 1.14. Đặc tả ca sử dụng UC07 – Xem báo cáo doanh thu*
+
+| Thành phần | Nội dung đặc tả |
+| --- | --- |
+| Tác nhân / quyền truy cập | Quản lý / Kế toán (SecurityConfig giới hạn /bao-cao/** cho ROLE_ADMIN và ROLE_KE_TOAN). |
+| Luồng chính & quy tắc | Mở /bao-cao, chọn tuNgay – denNgay (mặc định từ đầu tháng đến hôm nay). Service kiểm tra denNgay ≥ tuNgay, cộng TONG_TIEN của hóa đơn “Da thanh toan” có ngày lập thuộc [tuNgay, denNgay + 1 ngày); đồng thời hiển thị doanh thu hôm nay, tháng này, tổng số đơn đã thanh toán, danh sách món bán chạy và tổng chi tiết theo hóa đơn. |
+| Ngoại lệ & hậu điều kiện | Ngày kết thúc trước ngày bắt đầu: hiển thị thông báo lỗi. Không có hóa đơn trong khoảng: trả doanh thu bằng 0. Thao tác chỉ đọc, không sửa chứng từ. Lưu ý bảng món bán chạy hiện tổng hợp toàn kỳ đã thanh toán thay vì lọc theo tuNgay – denNgay. |
+
+*Bảng 1.15. Tóm tắt các ca sử dụng danh mục hỗ trợ (UC08, UC09, UC10)*
+
+| Mã UC | Quyền truy cập web | Luồng nghiệp vụ và ràng buộc bảo vệ |
+| --- | --- | --- |
+| UC08 | ADMIN (/nhan-vien/**) | Quản lý hồ sơ nhân viên (họ tên, giới tính, SĐT, email, chức vụ, ca làm, lương, ngày vào làm, trạng thái); kiểm tra NhanVienForm; từ chối xóa nhân viên đã lập hóa đơn hoặc phiếu nhập. |
+| UC09 | QUAN_LY_KHO, ADMIN (/nha-cung-cap/**, /nguyen-lieu/**) | Quản lý thông tin nhà cung cấp và danh mục nguyên liệu; kiểm tra NhaCungCapForm/NguyenLieuForm; chặn xóa bản ghi đã có trong phiếu nhập. |
+| UC10 | THU_NGAN, ADMIN (/khach-hang/**, GET /ban-an) | Tra cứu, thêm/sửa hồ sơ khách hàng và điểm tích lũy; xem tình trạng bàn ăn (riêng thêm/sửa/xóa bàn ăn chỉ dành cho ADMIN). |
+
+## 1.8. Yêu cầu phi chức năng và tiêu chí chấp nhận
+
+*Bảng 1.16. Các yêu cầu phi chức năng và phương thức kiểm chứng*
+
+| Mã / Nhóm | Yêu cầu phi chức năng | Cách kiểm chứng tương ứng |
+| --- | --- | --- |
+| NFR01 Bảo mật | Mọi trang nghiệp vụ yêu cầu đăng nhập; phân quyền chặt theo 4 vai trò ở SecurityConfig; mật khẩu băm BCrypt (độ khó 12); POST yêu cầu CSRF token. | Gửi request chưa đăng nhập, sai mật khẩu, thiếu CSRF hoặc sai vai trò để xác nhận mã HTTP 302/403. |
+| NFR02 Toàn vẹn dữ liệu | Giao dịch chứng từ nhiều bảng (hóa đơn, phiếu nhập) và tồn kho không được ghi dở dang khi phát sinh lỗi. | Gây lỗi ở dòng chi tiết thứ hai sau dòng đầu hợp lệ; đối chiếu số lượng bản ghi và tồn kho trước/sau. |
+| NFR03 Xử lý đồng thời | Cập nhật phiếu nhập dùng khóa bi quan và @Version chống ghi đè form cũ; hạn chế deadlock bằng khóa tăng dần. | Gửi hai phiên sửa cùng một phiếu nhập với cùng phienBan; phiên thứ hai phải bị từ chối. |
+| NFR04 Dễ sử dụng | Giao diện tiếng Việt thống nhất, lọc tìm nhanh bằng JavaScript; báo lỗi rõ trường sai và giữ dữ liệu nhập trên các form DTO. | Thử nhập giá âm, sai định dạng email/ngày trên MonAnForm, NhanVienForm và PhieuNhapForm. |
+| NFR05 Hiệu năng | Ngưỡng mục tiêu tham khảo: 95% yêu cầu truy vấn danh sách phản hồi dưới 2 giây với 10 người dùng đồng thời ở quy mô bài tập. | Đo thực tế bằng kịch bản tải trên môi trường triển khai (chưa đo tải chính thức trong phạm vi báo cáo). |
+| NFR06 Khả năng bảo trì | Phân tách Controller – Service – Repository – DTO – Entity; quy tắc tính tiền và tồn kho tập trung ở tầng Service. | Truy vết trực tiếp thay đổi công thức giảm giá hoặc chênh lệch tồn tại HoaDonService và PhieuNhapService. |
+| NFR07 Khả năng triển khai | Cấu hình Oracle linh hoạt qua biến môi trường DB_URL, DB_USERNAME, DB_PASSWORD; tách profile test H2 độc lập. | Chạy bộ kiểm thử với profile test trên JDK 27 và kết nối Oracle FREEPDB1 khi khởi động ứng dụng. |
+
+# CHƯƠNG 2. MÔ HÌNH PHÂN TÍCH
+
+## 2.1. Tìm lớp khái niệm từ yêu cầu
+
+Từ mô tả bài toán và đặc tả ca sử dụng ở Chương 1, nhóm thực hiện phân tích danh từ kết hợp đánh giá vòng đời, dữ liệu và ý nghĩa nghiệp vụ để lọc ra 12 lớp khái niệm miền nhà hàng: Khách hàng, Bàn ăn, Lượt đặt bàn, Loại món, Món ăn, Nhân viên, Hóa đơn, Dòng hóa đơn, Nhà cung cấp, Nguyên liệu, Phiếu nhập và Dòng phiếu nhập.
+
+*Bảng 2.1. Quyết định lựa chọn và loại trừ các khái niệm ứng viên*
+
+| Khái niệm ứng viên | Quyết định và căn cứ phân tích |
+| --- | --- |
+| Lượt đặt bàn | Giữ làm lớp riêng vì một khách và một bàn có thể phát sinh nhiều lượt đặt theo thời gian, mỗi lượt mang ngày đặt, số khách, tiền cọc và trạng thái riêng. |
+| Dòng hóa đơn | Giữ làm lớp kết hợp riêng vì quan hệ nhiều–nhiều giữa Hóa đơn và Món ăn chứa các thuộc tính nghiệp vụ bắt buộc: số lượng, số lượng đã xác nhận, đơn giá tại thời điểm bán và thành tiền. |
+| Dòng phiếu nhập | Giữ làm lớp kết hợp riêng vì cùng một nguyên liệu có thể nhập nhiều lần với số lượng và đơn giá nhập khác nhau. |
+| Thanh toán | Ở phiên bản hiện tại chỉ là sự kiện chuyển trạng thái của Hóa đơn (chưa chia nhiều đợt trả hay nhiều phương thức) nên chưa tách thành lớp Thanh toán độc lập. |
+| Báo cáo doanh thu | Là kết quả tổng hợp tính toán từ dữ liệu chứng từ đã lưu, không phải đối tượng nghiệp vụ lưu trữ lâu dài nên không đưa vào mô hình khái niệm. |
+| Tài khoản, Controller, Repository | Thuộc tầng kỹ thuật bảo mật và triển khai phần mềm; chỉ xuất hiện từ Chương 3 (thiết kế hệ thống), không đặt vào mô hình khái niệm miền nhà hàng. |
+| Định lượng món – nguyên liệu | Nằm ngoài phạm vi phiên bản này; không tự thêm lớp suy diễn nhằm tránh mâu thuẫn với quy tắc tồn kho hiện có. |
+
+Mô hình khái niệm chỉ biểu diễn tên đối tượng, thuộc tính mang ý nghĩa nghiệp vụ và bội số quan hệ; chưa đưa các khóa kỹ thuật (MA_HD, MA_MON), kiểu dữ liệu Oracle hay annotation JPA vào giai đoạn này.
+
+## 2.2. Mô hình khái niệm bán hàng và đặt bàn
+
+![Hình 2.1. Mô hình khái niệm phân hệ đặt bàn và bán hàng](../so_do/02_khai_niem_ban_hang.svg)
+
+Trên Hình 2.1, một Khách hàng có thể thực hiện nhiều Lượt đặt bàn (0..*), trong khi mỗi Lượt đặt bàn chỉ gắn với một Khách hàng và một Bàn ăn. Tương tự, một Bàn ăn có thể gắn với nhiều Hóa đơn theo lịch sử phục vụ (1 – 0..*), còn tại một thời điểm hoạt động quy tắc BR03 chỉ cho phép tối đa một hóa đơn chưa thanh toán mở trên bàn đó. Quan hệ giữa Khách hàng và Hóa đơn có bội số 0..1 ở phía Khách hàng để hỗ trợ khách vãng lai.
+
+Hóa đơn hợp thành (composition) từ một đến nhiều Dòng hóa đơn (1 *-- 1..*), thể hiện rằng dòng chi tiết không có vòng đời nghiệp vụ tách rời khỏi hóa đơn. Thuộc tính đơn giá bán trên Dòng hóa đơn lưu giá tại thời điểm lập chứng từ, độc lập với thuộc tính giá hiện tại trên Món ăn; thuộc tính số lượng đã xác nhận ghi nhận phần món đã chốt để bảo vệ khỏi việc thu ngân giảm nhầm.
+
+## 2.3. Mô hình khái niệm nhập kho
+
+![Hình 2.2. Mô hình khái niệm phân hệ nhập hàng và tồn nguyên liệu](../so_do/03_khai_niem_nhap_kho.svg)
+
+Phiếu nhập ghi nhận một lần nhập hàng từ đúng một Nhà cung cấp, do một Nhân viên lập và chứa ít nhất một Dòng phiếu nhập. Cần phân biệt rõ thuộc tính “đơn giá” giữa hai phân hệ: giá trên Món ăn là giá bán cho thực khách, còn đơn giá trên Dòng phiếu nhập là giá mua nguyên liệu theo từng lần nhập. Hai giá trị này không liên hệ tự động với nhau do chưa có bảng định lượng món – nguyên liệu.
+
+### 2.3.1. Các bất biến nghiệp vụ cần bảo đảm
+
+*Bảng 2.2. Bất biến nghiệp vụ của phân hệ nhập kho*
+
+| Đối tượng | Bất biến cần giữ vững |
+| --- | --- |
+| Dòng phiếu nhập | Số lượng nhập > 0; đơn giá nhập ≥ 0; thành tiền = số lượng × đơn giá (làm tròn 2 chữ số thập phân). |
+| Phiếu nhập | Không chứa hai dòng trùng cùng một nguyên liệu; tổng tiền bằng tổng thành tiền các dòng thuộc phiếu. |
+| Nguyên liệu | Số lượng tồn ≥ 0 tại mọi thời điểm sau giao dịch; khi sửa hoặc xóa phiếu nhập phải phản ánh đúng phần chênh lệch tồn. |
+| Quan hệ phiếu – dòng | Dòng phiếu nhập không tồn tại độc lập; xóa phiếu nhập kéo theo xóa các dòng chi tiết và hoàn trả lượng tồn tương ứng. |
+
+## 2.4. Bảng CRC và phân bổ trách nhiệm
+
+Bảng CRC (Class – Responsibility – Collaborator) phân bổ trách nhiệm nắm giữ thông tin và cộng tác giữa các lớp khái niệm trước khi ánh xạ sang tầng xử lý phần mềm.
+
+*Bảng 2.3. Bảng CRC các lớp khái niệm nghiệp vụ*
+
+| Lớp khái niệm | Trách nhiệm chính | Lớp cộng tác |
+| --- | --- | --- |
+| Khách hàng | Lưu thông tin liên hệ và điểm tích lũy. | Lượt đặt bàn, Hóa đơn. |
+| Bàn ăn | Lưu tên bàn, sức chứa, khu vực và tình trạng phục vụ. | Lượt đặt bàn, Hóa đơn. |
+| Lượt đặt bàn | Ghi nhận nhu cầu đặt trước, số khách, tiền cọc và trạng thái lượt đặt. | Khách hàng, Bàn ăn. |
+| Loại món | Phân loại nhóm món ăn và trạng thái kinh doanh của nhóm. | Món ăn. |
+| Món ăn | Lưu tên, đơn vị tính, giá bán hiện tại và trạng thái phục vụ. | Loại món, Dòng hóa đơn. |
+| Hóa đơn | Ghi nhận chứng từ bán hàng, giảm giá, tổng tiền và trạng thái thanh toán. | Dòng hóa đơn, Bàn ăn, Nhân viên, Khách hàng. |
+| Dòng hóa đơn | Lưu số lượng, lượng đã xác nhận, đơn giá bán lịch sử và thành tiền. | Hóa đơn, Món ăn. |
+| Nhân viên | Cung cấp thông tin hồ sơ nhân sự và người lập chứng từ. | Hóa đơn, Phiếu nhập. |
+| Nhà cung cấp | Lưu thông tin liên hệ đơn vị cung ứng nguyên liệu. | Phiếu nhập. |
+| Phiếu nhập | Ghi nhận lần nhập hàng, ngày nhập và tổng giá trị nhập. | Nhà cung cấp, Nhân viên, Dòng phiếu nhập. |
+| Dòng phiếu nhập | Lưu nguyên liệu, lượng nhập, giá nhập và thành tiền dòng. | Phiếu nhập, Nguyên liệu. |
+| Nguyên liệu | Lưu đơn vị tính, số lượng tồn hiện có và trạng thái sử dụng. | Dòng phiếu nhập. |
+
+### 2.4.1. Chuyển giao trách nhiệm từ phân tích sang thiết kế
+
+Khi chuyển sang kiến trúc Spring Boot, dữ liệu bền vững do các Entity nắm giữ, còn quy tắc phối hợp đa đối tượng và kiểm soát giao dịch được đặt tại tầng Service (HoaDonService, PhieuNhapService, DatBanService). Tầng Controller chỉ tiếp nhận yêu cầu HTTP và điều hướng giao diện, còn Repository chịu trách nhiệm đọc/ghi cơ sở dữ liệu.
+
+## 2.5. Biểu đồ tuần tự hệ thống (SSD) cho UC04 – Lập hóa đơn
+
+Biểu đồ tuần tự hệ thống (SSD) mô tả ranh giới tương tác giữa tác nhân Thu ngân và toàn bộ Hệ thống như một hộp đen, trước khi phân rã vào các lớp phần mềm ở Chương 3.
+
+![Hình 2.3. Biểu đồ tuần tự hệ thống (SSD) cho sự kiện lập hóa đơn](../so_do/04_ssd_lap_hoa_don.svg)
+
+Tác nhân gửi yêu cầu kèm mã bàn, người lập, khách (tùy chọn), danh sách món – số lượng và giảm giá. Hệ thống tự xác định đơn giá bán, gộp dòng trùng, giữ bàn đang dùng và trả về kết quả chứng từ hợp lệ hoặc thông báo từ chối nếu dữ liệu vi phạm bất biến. Trong cài đặt thực tế, sự kiện lậpHóaĐơn(...) tương ứng với phương thức HoaDonService.taoHoaDon(HoaDon, List<Long>, List<BigDecimal>).
+
+## 2.6. Điểm mơ hồ và hợp đồng nghiệp vụ
+
+*Bảng 2.4. Xử lý các điểm mơ hồ từ đề bài nghiệp vụ*
+
+| Điểm cần làm rõ | Quyết định thiết kế và ảnh hưởng |
+| --- | --- |
+| Thay đổi giá món khi đã có hóa đơn cũ | Đổi giá ở MON_AN không tự cập nhật hóa đơn đã lập. Tuy nhiên, khi sửa hóa đơn chưa thanh toán, HoaDonService đang tải lại giá hiện tại cho toàn bộ chi tiết; nhóm ghi nhận điểm này để cân nhắc chính sách giữ giá cũ nếu mở rộng. |
+| Tiền đặt cọc có trừ vào hóa đơn không? | Chưa có khóa ngoại liên kết trực tiếp giữa DAT_BAN và HOA_DON nên tiền cọc chỉ ghi nhận trên phiếu đặt bàn, chưa tự bù trừ khi thanh toán hóa đơn. |
+| Đặt bàn theo ngày hay theo khung giờ? | DAT_BAN.NGAY_DAT dùng LocalDate và kiểm tra trạng thái bàn toàn cục; chưa hỗ trợ kiểm tra trùng lịch theo khung giờ trong ngày. |
+| Doanh thu tính theo ngày lập hay ngày thanh toán? | Bảng HOA_DON hiện dùng NGAY_LAP và lọc trạng thái “Da thanh toan”; chưa có cột thời điểm thanh toán tách riêng. |
+| Tồn kho có tự trừ khi bán món không? | Chưa có bảng định lượng món ăn – nguyên liệu nên tồn kho phản ánh lượng khai báo và nhập kho qua PhieuNhapService. |
+
+### 2.6.1. Hợp đồng thao tác lập hóa đơn (taoHoaDon)
+
+Tiền điều kiện: người dùng đã đăng nhập với vai trò hợp lệ; bàn tồn tại, đang “Trống” và chưa có hóa đơn mở; nhân viên lập có giá trị; danh sách món khác rỗng, mỗi số lượng > 0 và giảm giá ≥ 0. Hậu điều kiện: tạo một HoaDon trạng thái “Chua thanh toan”, tạo một CTHoaDon cho mỗi mã món sau khi gộp với soLuongDaXacNhan = 0 và đơn giá lấy từ server, chuyển trạng thái BanAn sang “Đang dùng”, tính tongTien = max(0, tổng chi tiết − giảm giá). Nếu xảy ra ngoại lệ thì rollback toàn bộ thay đổi.
+
+### 2.6.2. Hợp đồng thao tác sửa phiếu nhập (PhieuNhapService.save)
+
+Tiền điều kiện: phiếu nhập tồn tại, phienBan trên biểu mẫu khớp với DB, nhà cung cấp và nhân viên tồn tại, chi tiết không trùng mã nguyên liệu. Hậu điều kiện: cập nhật phiếu và chi tiết mới, điều chỉnh tồn kho từng nguyên liệu theo chênh lệch (mới − cũ) mà vẫn bảo đảm tồn nằm trong [0; 99.999.999,99], tăng PHIEN_BAN để vô hiệu hóa form cũ. Toàn bộ thao tác thực hiện nguyên tử trong một giao dịch.
+
+# CHƯƠNG 3. THIẾT KẾ HỆ THỐNG
+
+## 3.1. Kiến trúc và hướng phụ thuộc
+
+Hệ thống áp dụng kiến trúc phân tầng kết hợp tư duy Boundary – Control – Entity (BCE) trên nền tảng Spring Boot MVC. Hướng phụ thuộc đi một chiều từ ngoài vào trong, giúp tách biệt rõ tầng giao tiếp HTTP, tầng điều phối nghiệp vụ và tầng truy xuất lưu trữ.
+
+![Hình 3.1. Tổ chức lớp và luồng xử lý dữ liệu của ứng dụng](../so_do/05_kien_truc.svg)
+
+Thành phần Boundary gồm giao diện Thymeleaf và các lớp Controller tiếp nhận HTTP GET/POST, kiểm tra @Valid trên DTO/Form và chuyển tiếp xuống Service. Thành phần Control gồm các lớp Service quản lý quy tắc nghiệp vụ và giao dịch @Transactional. Thành phần Entity ánh xạ dữ liệu bền vững sang Oracle thông qua Spring Data JPA (riêng NhanVienNhapKhoRepository sử dụng JdbcTemplate để chỉ đọc bảng NHAN_VIEN dùng chung cho phân hệ kho). Spring Security nằm ở lớp biên ngoài để chặn truy cập chưa xác thực, kiểm tra 4 vai trò theo URL và bảo vệ CSRF.
+
+## 3.2. Sequence Diagram – Lập hóa đơn (UC04)
+
+![Hình 3.2. Biểu đồ tuần tự thiết kế thực hiện UC04 – Lập hóa đơn](../so_do/06_sequence_lap_hoa_don.svg)
+
+Khi nhận POST /hoa-don/them, HoaDonService mở giao dịch @Transactional, đọc BanAn từ BanAnRepository, kiểm tra bàn phải ở trạng thái “Trống” và chưa có hóa đơn mở qua HoaDonRepository.existsByMaBanAndTrangThai. Tiếp theo, service gộp các mã món trùng, lưu phần đầu HoaDon, lặp tạo từng CTHoaDon (soLuongDaXacNhan = 0) theo giá từ MonAnRepository, chuyển trạng thái bàn sang “Đang dùng” và gọi tinhLaiTongTien(maHd). Bất kỳ lỗi nào phát sinh (chẳng hạn một mã món không tồn tại) đều làm rollback cả hóa đơn, chi tiết và trạng thái bàn.
+
+## 3.3. Sequence Diagram – Ghi nhận thanh toán (UC05)
+
+![Hình 3.3. Biểu đồ tuần tự thiết kế thực hiện UC05 – Ghi nhận thanh toán](../so_do/07_sequence_thanh_toan.svg)
+
+Trong phương thức thanhToan(maHd), HoaDonService kiểm tra hai điều kiện tiên quyết trước khi kết thúc chứng từ: hóa đơn chưa ở trạng thái “Da thanh toan” và số dòng chi tiết đếm bằng countById_MaHd > 0. Sau khi tính lại tổng tiền và lưu trạng thái “Da thanh toan”, service gọi capNhatTrangThaiBanNeuKhongConHoaDonChuaThanhToan(maBan) để kiểm tra và cập nhật bàn về “Trống” thông qua BanAnRepository ngay trong cùng giao dịch. Phương thức hiện kiểm tra tuần tự bằng đọc trạng thái; nếu muốn chống hai yêu cầu thanh toán gửi đồng thời, cần bổ sung khóa bi quan hoặc trường phiên bản.
+
+## 3.4. Sequence Diagram – Điều chỉnh phiếu nhập (UC06)
+
+![Hình 3.4. Biểu đồ tuần tự thiết kế thực hiện UC06 – Sửa phiếu nhập](../so_do/08_sequence_sua_phieu_nhap.svg)
+
+Để tránh sai lệch tồn kho khi nhiều người cùng sửa phiếu hoặc khi form đã lỗi thời, PhieuNhapService dùng findForUpdate(id) để khóa dòng phiếu, đối chiếu PHIEN_BAN với giá trị form gửi lên và gọi EntityManager.lock(..., PESSIMISTIC_FORCE_INCREMENT) nhằm bảo đảm tăng phiên bản ngay cả khi chỉ sửa các dòng con. Các nguyên liệu thuộc cả chi tiết cũ và chi tiết mới được tập hợp và khóa theo thứ tự mã tăng dần (TreeSet) kèm refresh(..., PESSIMISTIC_WRITE) để lấy tồn kho mới nhất trước khi cộng phần chênh lệch (mới − cũ).
+
+## 3.5. Biểu đồ lớp thiết kế (DCD) phân hệ hóa đơn
+
+![Hình 3.5. Biểu đồ lớp thiết kế (DCD) phân hệ hóa đơn](../so_do/09_dcd_hoa_don.svg)
+
+CTHoaDon sử dụng khóa ghép EmbeddedId (CTHoaDonId gồm maHd và maMon, ghi đè equals/hashCode nhất quán) cùng thuộc tính soLuongDaXacNhan và liên kết @ManyToOne MonAn dạng chỉ đọc (insertable = false, updatable = false). HoaDon hiện lưu các mã liên kết (maBan, maNv, maKh) bằng Long và không giữ collection chi tiết bên trong entity. HoaDonService phụ thuộc các interface HoaDonRepository, CTHoaDonRepository, MonAnRepository và BanAnRepository để xử lý toàn bộ vòng đời tạo, sửa, xác nhận món, xóa và thanh toán hóa đơn.
+
+## 3.6. Biểu đồ lớp thiết kế (DCD) phân hệ nhập kho
+
+![Hình 3.6. Biểu đồ lớp thiết kế (DCD) phân hệ nhập kho](../so_do/10_dcd_kho.svg)
+
+Khác với phân hệ hóa đơn đang bind trực tiếp entity ở Controller, phân hệ nhập kho tách riêng DTO PhieuNhapForm (chứa phienBan và danh sách DongNhapForm) để giới hạn dữ liệu đầu vào bằng WebDataBinder. Entity PhieuNhap giữ tập chi tiết CTPhieuNhap với cascade = ALL và orphanRemoval = true, tham chiếu @ManyToOne tới NhaCungCap, sử dụng @Version trên trường phienBan và lưu mã nhân viên bằng Long để tránh phụ thuộc chéo trực tiếp vào entity NhanVien của module khác.
+
+## 3.7. State Machine của hóa đơn
+
+![Hình 3.7. Biểu đồ máy trạng thái vòng đời hóa đơn](../so_do/11_trang_thai_hoa_don.svg)
+
+*Bảng 3.1. Bảng chuyển trạng thái và điều kiện bảo vệ của HoaDon*
+
+| Sự kiện / Thao tác | Điều kiện bảo vệ và tác động trạng thái |
+| --- | --- |
+| taoHoaDon() | Bàn phải đang “Trống”, chưa có hóa đơn mở và danh sách món hợp lệ; tạo hóa đơn trạng thái “Chua thanh toan” và chuyển bàn sang “Đang dùng”. |
+| xacNhanMon() | Áp dụng khi hóa đơn “Chua thanh toan”; chốt soLuongDaXacNhan bằng số lượng hiện tại trên từng dòng chi tiết. |
+| capNhatHoaDon() | Chỉ thực hiện khi “Chua thanh toan”; nếu vai trò là THU_NGAN thì không được giảm hoặc xóa dưới mức soLuongDaXacNhan; tính lại tổng tiền. |
+| thanhToan() | Yêu cầu trạng thái “Chua thanh toan” và countById_MaHd > 0; chuyển sang “Da thanh toan” và trả bàn về “Trống” nếu hết đơn mở. |
+| xoaHoaDon() | Chỉ thực hiện khi “Chua thanh toan”; xóa toàn bộ chi tiết trước khi xóa hóa đơn và trả bàn về “Trống” nếu hết đơn mở. |
+| Thao tác sau thanh toán | Mọi lệnh sửa, xóa, xác nhận món hoặc thanh toán lại trên hóa đơn “Da thanh toan” đều ném IllegalStateException. |
+
+## 3.8. State Machine đặt bàn và khoảng cách cài đặt
+
+![Hình 3.8. Biểu đồ máy trạng thái đặt bàn đề xuất](../so_do/12_trang_thai_dat_ban.svg)
+
+Hình 3.8 mô tả máy trạng thái mục tiêu cho vòng đời đặt bàn nhằm đáp ứng đầy đủ BR01–BR02, trong đó DA_HUY và HOAN_THANH là hai trạng thái kết thúc và một lượt đặt chỉ được phép hoàn thành sau khi đã chuyển qua DA_XAC_NHAN.
+
+*Bảng 3.2. Đối chiếu cài đặt đặt bàn hiện tại với mô hình đề xuất*
+
+| Khía cạnh | Cài đặt hiện tại trong mã nguồn | Khoảng cách cần bổ sung theo đề xuất |
+| --- | --- | --- |
+| Chuyển trạng thái nguồn | DatBanService.xacNhan, huyDatBan, hoanThanh gán thẳng trạng thái mới nếu tìm thấy mã đặt. | Bổ sung kiểm tra trạng thái nguồn (ví dụ cấm xác nhận hoặc hoàn thành lại lượt đã hủy/đã hoàn thành). |
+| Trả trạng thái bàn ăn | Hủy hoặc hoàn thành đặt bàn đặt thẳng trạng thái bàn về “Trống”. | Kiểm tra bàn có đang phát sinh hóa đơn chưa thanh toán hoặc lượt đặt khác đang hiệu lực trước khi trả “Trống”. |
+| Giao dịch tiếp nhận | DatBanController kiểm tra bàn “Trống”, lưu DatBan rồi gọi BanAnService đổi sang “Đã đặt”. | Gộp hai thao tác lưu vào một phương thức @Transactional tại DatBanService, thêm kiểm tra sức chứa và khóa bàn chống đặt trùng. |
+
+## 3.9. Giải thích quyết định thiết kế bằng GRASP và SOLID
+
+*Bảng 3.3. Lập luận quyết định thiết kế dựa trên GRASP và SOLID*
+
+| Nguyên tắc | Áp dụng cụ thể và hệ quả thiết kế |
+| --- | --- |
+| Controller (GRASP) | Tách HoaDonController và PhieuNhapController làm điểm tiếp nhận HTTP; toàn bộ công thức tính tiền, xác nhận món và tồn kho đặt ở tầng Service để tránh rải logic nghiệp vụ ra giao diện Thymeleaf hoặc JavaScript. |
+| Information Expert (GRASP) | MonAn giữ đơn giá bán hiện tại, CTHoaDon giữ đơn giá lịch sử và lượng đã xác nhận, NguyenLieu giữ tồn hiện có. Do kiến trúc theo hướng Service, các Service truy vấn qua Repository và thực hiện tính toán tập trung. |
+| Creator (GRASP) | HoaDonService chịu trách nhiệm khởi tạo HoaDon và các dòng CTHoaDon khi đầu vào hợp lệ; thực thể PhieuNhap quản lý vòng đời tập con CTPhieuNhap bằng cascade và orphanRemoval. |
+| High Cohesion & SRP | Mỗi phân hệ có Service và Repository riêng (LoaiMonService, MonAnService, HoaDonService, PhieuNhapService, BaoCaoService, TaiKhoanService) giúp thay đổi chính sách hóa đơn không ảnh hưởng tới quản lý nhân sự hay kho. |
+| Low Coupling & DIP | Service phụ thuộc vào các interface Repository của Spring Data JPA và NhanVienNhapKhoRepository (chỉ đọc JDBC) thay vì mở kết nối SQL thủ công hay phụ thuộc chặt giữa các module ngang cấp. |
+| Bảo vệ ranh giới đầu vào | Các module danh mục, nhân sự và kho sử dụng DTO/Form kèm @Valid và setAllowedFields(). Module hóa đơn hiện nhận @ModelAttribute HoaDon nên được đề xuất nâng cấp sang DTO riêng trong phiên bản tới. |
+
+### 3.9.1. Các phương án thiết kế đã cân nhắc
+
+Thứ nhất, với tồn kho khi nhập hàng, mã SQL trong database/oracle/02_routines.sql có chứa procedure quản trị riêng và trigger TRG_CTPN_THANH_TIEN chỉ tính thành tiền dòng chứ không tự cộng tồn; việc cộng/trừ tồn của luồng web được tập trung hoàn toàn tại PhieuNhapService để tránh lỗi cộng tồn hai lần và bảo đảm đồng bộ khóa/phiên bản. Thứ hai, nhóm không tự ý tạo các mẫu Strategy hay cây kế thừa phức tạp cho chính sách giảm giá hoặc phân loại nhân viên vì bài toán hiện tại chỉ có một kiểu giảm giá trực tiếp; thiết kế giữ sự tinh gọn nhưng vẫn dễ mở rộng khi phát sinh biến thể mới.
+
+## 3.10. Thiết kế dữ liệu (ERD) phân hệ bán hàng, khách hàng và đặt bàn
+
+![Hình 3.9. Lược đồ ERD logic phân hệ bán hàng, khách hàng và đặt bàn](../so_do/13_erd_ban_hang.svg)
+
+Hình 3.9 biểu diễn 8 bảng nghiệp vụ thuộc phân hệ khách hàng, đặt bàn, thực đơn và bán hàng. Đường nối nét liền biểu thị các quan hệ có ánh xạ đối tượng JPA (@ManyToOne trên DAT_BAN, MON_AN và ánh xạ chỉ đọc @ManyToOne MonAn trên CT_HOA_DON); đường nét đứt kèm nhãn FK logic biểu thị quan hệ tham chiếu lưu bằng mã Long trên entity (như MA_BAN, MA_NV, MA_KH của HOA_DON và MA_HD của CT_HOA_DON). Khi triển khai trên Oracle thật, cần đối chiếu DDL thực tế để bảo đảm đủ khóa ngoại vật lý cho các cột FK logic.
+
+## 3.11. Thiết kế dữ liệu (ERD) phân hệ kho và bảng tài khoản
+
+![Hình 3.10. Lược đồ ERD phân hệ kho, hồ sơ nhân viên và bảng TAI_KHOAN](../so_do/14_erd_kho_tai_khoan.svg)
+
+Hình 3.10 bổ sung 4 bảng phân hệ kho (NHA_CUNG_CAP, PHIEU_NHAP, CT_PHIEU_NHAP, NGUYEN_LIEU) cùng bảng TAI_KHOAN để hoàn thiện toàn bộ 13 bảng trong cơ sở dữ liệu. Bảng NHAN_VIEN được hiển thị lại để thể hiện liên kết lập phiếu nhập (PHIEU_NHAP.MA_NV có ràng buộc FK trong script 01_inventory.sql nhưng lưu bằng Long trên entity Java). Bảng TAI_KHOAN có ràng buộc duy nhất UK_TAI_KHOAN_TEN_DANG_NHAP trên TEN_DANG_NHAP và cột VAI_TRO VARCHAR2(20) lưu một trong 4 vai trò phân quyền của hệ thống.
+
+## 3.12. Khóa, ánh xạ và ràng buộc dữ liệu
+
+*Bảng 3.4. Tổng hợp khóa chính, quan hệ và chiến lược ánh xạ 13 bảng dữ liệu*
+
+| Tên bảng | Khóa chính & khóa tham chiếu | Chiến lược ánh xạ JPA và ràng buộc chính |
+| --- | --- | --- |
+| KHACH_HANG | PK: MA_KH | Identity; DIEM_TICH_LUY mặc định 0. |
+| BAN_AN | PK: MA_BAN | Identity; TEN_BAN, SO_CHO, KHU_VUC, TRANG_THAI. |
+| DAT_BAN | PK: MA_DAT; FK: MA_KH, MA_BAN | Identity; @ManyToOne tới KhachHang và BanAn (@NotFound IGNORE). |
+| LOAI_MON | PK: MA_LOAI | Sequence SEQ_LOAI_MON; bảo vệ xóa khi còn món. |
+| MON_AN | PK: MA_MON; FK: MA_LOAI | Sequence SEQ_MON_AN; @ManyToOne LoaiMon (NOT NULL); DON_GIA NUMBER(12,2). |
+| NHAN_VIEN | PK: MA_NV | Sequence SEQ_NHAN_VIEN; bảo vệ xóa khi có hóa đơn hoặc phiếu nhập. |
+| HOA_DON | PK: MA_HD; MA_BAN, MA_NV, MA_KH | Identity; các mã cha lưu bằng Long; MA_KH cho phép NULL. |
+| CT_HOA_DON | PK ghép: (MA_HD, MA_MON) | @EmbeddedId CTHoaDonId; @ManyToOne MonAn (chỉ đọc); có SO_LUONG_DA_XAC_NHAN NUMBER(10,2). |
+| NHA_CUNG_CAP | PK: MA_NCC | Sequence SEQ_NHA_CUNG_CAP; bảo vệ xóa khi có phiếu nhập. |
+| NGUYEN_LIEU | PK: MA_NL | Sequence SEQ_NGUYEN_LIEU; SO_LUONG_TON NUMBER(10,2); CHECK >= 0 ở script SQL. |
+| PHIEU_NHAP | PK: MA_PN; FK: MA_NCC; MA_NV | Sequence SEQ_PHIEU_NHAP; @ManyToOne NhaCungCap; @Version PHIEN_BAN; @OneToMany chiTiet. |
+| CT_PHIEU_NHAP | PK ghép: (MA_PN, MA_NL) | @EmbeddedId + @MapsId với PhieuNhap và NguyenLieu. |
+| TAI_KHOAN | PK: MA_TK; UQ: TEN_DANG_NHAP | Sequence SEQ_TAI_KHOAN; MAT_KHAU lưu BCrypt; VAI_TRO VARCHAR2(20). |
+
+Việc dùng khóa ghép trên CT_HOA_DON và CT_PHIEU_NHAP giúp ngăn chặn ở tầng dữ liệu tình trạng một món hoặc một nguyên liệu xuất hiện hai dòng trùng lặp trong cùng một chứng từ. Đối với Oracle thực tế, script 01_inventory.sql đã định nghĩa đầy đủ các ràng buộc CHECK và khóa ngoại cho nhóm bảng kho; không nên phụ thuộc hoàn toàn vào hibernate.ddl-auto=update để sinh ràng buộc toàn vẹn mà cần chạy script DDL chuẩn khi triển khai.
+
+## 3.13. Thiết kế giao dịch và ví dụ tính toán
+
+### 3.13.1. Tính tiền hóa đơn
+
+Công thức tính ở HoaDonService bảo đảm thành tiền từng dòng = số lượng × đơn giá và tổng hóa đơn = max(0, tổng thành tiền các dòng − giảm giá), toàn bộ dùng kiểu BigDecimal để tránh sai số dấu phẩy động.
+
+*Bảng 3.5. Các tình huống minh họa tính toán hóa đơn*
+
+| Tình huống đầu vào | Kết quả xử lý của HoaDonService |
+| --- | --- |
+| 1,5 kg Tôm (320.000 đ/kg) + 2 đĩa Nghêu (120.000 đ/đĩa); giảm 20.000 đ | Tổng chi tiết 720.000 đ; tổng phải thu 700.000 đ; bàn sang Đang dùng. |
+| Nhập trùng món Tôm với 2 dòng: 0,5 kg và 1,0 kg | Gộp qua Map thành 1 dòng (MA_HD, MA_MON) có số lượng 1,50 kg. |
+| Tổng chi tiết 720.000 đ; nhập giảm giá 800.000 đ | Code hiện chặn âm nên đưa TONG_TIEN về 0 đ (cần thống nhất thêm quy tắc nếu muốn từ chối mức giảm vượt tổng). |
+| Đổi giá món trong thực đơn sau khi hóa đơn đã thanh toán | CT_HOA_DON giữ nguyên đơn giá lịch sử tại thời điểm lập/cập nhật trước thanh toán. |
+
+### 3.13.2. Điều chỉnh tồn kho theo chênh lệch
+
+*Bảng 3.6. Minh họa cơ chế điều chỉnh tồn theo chênh lệch ở PhieuNhapService*
+
+| Thao tác trên chứng từ | Tồn trước | Biến động (delta) | Tồn sau |
+| --- | --- | --- | --- |
+| Khởi tạo nguyên liệu ban đầu | 10,00 kg | — | 10,00 kg |
+| Lập phiếu nhập mới 5,00 kg | 10,00 kg | +5,00 kg | 15,00 kg |
+| Sửa phiếu từ 5,00 kg xuống 3,00 kg | 15,00 kg | 3,00 − 5,00 = −2,00 kg | 13,00 kg |
+| Xóa phiếu đang ghi 3,00 kg | 13,00 kg | −3,00 kg | 10,00 kg |
+
+## 3.14. Ma trận truy vết và kiểm tra nhất quán
+
+Ma trận truy vết bảo đảm mọi yêu cầu chức năng và quy tắc nghiệp vụ ở Chương 1 đều liên kết xuyên suốt đến mô hình phân tích (Chương 2), thiết kế cài đặt (Chương 3) và các ca kiểm thử (Chương 4).
+
+*Bảng 3.7. Ma trận truy vết từ yêu cầu đến thiết kế và kiểm thử*
+
+| Yêu cầu / BR | Mô hình phân tích | Thiết kế / Thành phần cài đặt | Kiểm chứng (H2 & JS) |
+| --- | --- | --- | --- |
+| UC01, UC11; NFR01 | Nhân viên nội bộ, phân tích quyền. | SecurityConfig, TaiKhoanService, TaiKhoanController, AuthController. | TC19–TC20; đạt trong MenuCrudIntegrationTests. |
+| UC02, UC08; BR11 | Loại món, Món ăn, Nhân viên. | LoaiMonService, MonAnService, NhanVienService, DTO Form. | Đạt đầy đủ CRUD, validation, bảo vệ xóa (MenuCrudIntegrationTests). |
+| UC03; BR01–02 | Khách hàng, Bàn ăn, Lượt đặt bàn. | State Machine Hình 3.8; DatBanController, DatBanService. | TC01–TC02 đạt; TC03 ghi nhận thiếu khóa đồng thời. |
+| UC04; BR03–05 | Hóa đơn, Dòng hóa đơn; SSD Hình 2.3. | SD Hình 3.2; DCD Hình 3.5; HoaDonService (taoHoaDon, capNhatHoaDon, xacNhanMon). | TC04–TC07 đạt trong BusinessRulesIntegrationTests. |
+| UC05; BR06 | Vòng đời Hóa đơn & Bàn ăn. | SD Hình 3.3; State Hình 3.7; HoaDonService.thanhToan, xoaHoaDon. | TC08–TC09 đạt; TC10 ghi nhận thiếu khóa đồng thời. |
+| UC06, UC09; BR07–10 | Phiếu nhập, Dòng nhập, Nguyên liệu. | SD Hình 3.4; DCD Hình 3.6; PhieuNhapService, PhieuNhapForm. | TC11–TC16 đạt trong BusinessRulesIntegrationTests. |
+| UC07; BR12 | Tổng hợp từ Hóa đơn đã thanh toán. | BaoCaoService, BaoCaoController, CTHoaDonRepository. | TC17–TC18 đạt trong BusinessRulesIntegrationTests. |
+
+### 3.14.1. Tổng hợp đối chiếu nhất quán giữa mô hình và mã nguồn
+
+Tất cả 14 sơ đồ UML và tên lớp/phương thức trong tài liệu đã được rà soát đồng bộ với mã nguồn: vai trò phân quyền phản ánh đúng 4 vai trò (ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN); luồng lập và thanh toán hóa đơn thể hiện đầy đủ việc giữ bàn “Đang dùng” và trả bàn “Trống”; thực thể CTHoaDon và bảng CT_HOA_DON thể hiện cột SO_LUONG_DA_XAC_NHAN cùng thao tác xacNhanMon. Riêng State Machine đặt bàn được gắn nhãn đề xuất cho phần guard trạng thái nguồn và khóa đồng thời chưa có trong DatBanService.
+
+# CHƯƠNG 4. CÀI ĐẶT VÀ KIỂM THỬ
+
+## 4.1. Công nghệ và cấu trúc dự án
+
+*Bảng 4.1. Công nghệ và công cụ sử dụng trong dự án QuanLyNHHS*
+
+| Thành phần | Thông số xác minh trong mã nguồn (pom.xml & cấu hình) |
+| --- | --- |
+| Ngôn ngữ & Framework | Java JDK 27 (java.version=27); Spring Boot 4.1.1 (spring-boot-starter-parent). |
+| Giao diện Web | Spring Web MVC, Thymeleaf; giao diện tĩnh HTML/CSS/JavaScript (main.js) trong src/main/resources. |
+| Tầng nghiệp vụ & Dữ liệu | Spring Transaction (@Transactional); Spring Data JPA / Hibernate ORM 7.4.5; JdbcTemplate ở NhanVienNhapKhoRepository. |
+| Cơ sở dữ liệu | Oracle JDBC ojdbc17 kết nối mặc định localhost:1521/FREEPDB1 (hỗ trợ biến môi trường DB_URL, DB_USERNAME, DB_PASSWORD). |
+| Bảo mật & Validation | Spring Security; BCryptPasswordEncoder (strength = 12); Jakarta Bean Validation và DataBinder. |
+| Kiểm thử tự động | JUnit 5 + Spring Boot Test + MockMvc + H2 (MODE=Oracle, profile test); Node.js built-in test runner cho JavaScript. |
+
+Cấu trúc thư mục mã nguồn của dự án QuanLyNHHS được tổ chức chuẩn theo phân tầng Maven và Spring Boot:
 
 ```java
 QuanLyNHHS/
   src/main/java/com/QuanLyNHHS/
-    controller/  service/  repository/
-    model/       dto/      config/
+    config/       (SecurityConfig)
+    controller/   (Auth, BanAn, BaoCao, DatBan, HoaDon, Home, KhachHang, Kho, LoaiMon, MonAn, ...)
+    dto/          (DongNhapForm, PhieuNhapForm, LoaiMonForm, MonAnForm, NhanVienForm, ...)
+    model/        (13 Entity: BanAn, CTHoaDon, CTPhieuNhap, DatBan, HoaDon, KhachHang, ..., TaiKhoan)
+    repository/   (13 JpaRepository + NhanVienNhapKhoRepository)
+    service/      (BanAn, BaoCao, DatBan, HoaDon, KhachHang, LoaiMon, MonAn, NguyenLieu, ...)
   src/main/resources/
-    templates/   static/   application.properties
-  src/test/java/   src/test/js/
-  database/oracle/
-    01_inventory.sql   02_routines.sql
-    03_insert_data.sql 04_du_lieu_kiem_thu.sql
+    templates/ & static/ & application.properties & oracle_setup_user.sql
+  src/test/java/  (MenuCrudIntegrationTests, BusinessRulesIntegrationTests, DatabasePagesTests, ...)
+  src/test/js/    (menu-filters.test.cjs)
+  database/oracle/ (01_inventory.sql, 02_routines.sql, 03_insert_data.sql, 04_du_lieu_kiem_thu.sql, 05_phan_quyen.sql)
 ```
 
-Cấu hình hiện dùng ddl-auto=update và kết nối Oracle mặc định ở localhost, service FREEPDB1. Báo cáo không sao chép mật khẩu database hoặc thông tin bí mật vào nội dung. Khi chạy demo phải chuẩn bị service/schema đúng và bộ công cụ Java tương thích với pom.xml.
+## 4.2. Minh chứng cài đặt UC04 và UC05
 
-> Không thay đổi mã nguồn hay cấu hình chạy của ứng dụng trong quá trình tạo báo cáo này.
-
-# 4.2. Minh chứng cài đặt UC04 và UC05
-<!-- Trang dự kiến 39 -->
-
-HoaDonController nhận POST /hoa-don/them và gọi taoHoaDon(hoaDon, maMon, soLuong). Service kiểm tra danh sách, gộp mã món, lưu hóa đơn chưa thanh toán rồi tạo các dòng với giá lấy từ MonAnRepository. Các đoạn dưới trích logic có trong code, lược chú thích và tên biến phụ để tập trung vào quyết định thiết kế.
+Trong phân hệ hóa đơn, HoaDonService chịu trách nhiệm thực thi các quy tắc nghiệp vụ cốt lõi: bảo vệ số lượng món đã xác nhận trước quyền THU_NGAN khi cập nhật hóa đơn và thực hiện thanh toán đồng thời giải phóng bàn ăn trong một giao dịch nguyên tử.
 
 ```java
-BigDecimal thanhTien = donGia.multiply(soLuongMon);
-CTHoaDon chiTiet = new CTHoaDon();
-chiTiet.setId(new CTHoaDon.CTHoaDonId(maHd, idMon));
-chiTiet.setSoLuong(soLuongMon);
-chiTiet.setDonGia(donGia);
-chiTiet.setThanhTien(thanhTien);
-ctHoaDonRepository.save(chiTiet);
+// Trích kiểm tra món đã xác nhận trong HoaDonService.capNhatHoaDon(...)
+for (CTHoaDon chiTiet : ctHoaDonRepository.findById_MaHd(hoaDon.getMaHd())) {
+    BigDecimal confirmed = chiTiet.getSoLuongDaXacNhan();
+    if (confirmed.signum() > 0) {
+        daXacNhan.put(chiTiet.getMaMon(), confirmed);
+        if (laThuNgan() && danhSachMon.getOrDefault(chiTiet.getMaMon(), BigDecimal.ZERO).compareTo(confirmed) < 0) {
+            throw new IllegalStateException("Khong the giam hoac xoa mon da xac nhan");
+        }
+    }
+}
 ```
 
-Ở tinhLaiTongTien, dữ liệu tổng hợp của chi tiết được trừ giảm giá và chặn kết quả âm về 0. Trình duyệt không được quyết định giá trị phải thu cuối cùng. Phương thức thanh toán có giao dịch và các điều kiện từ chối quan trọng:
+Đoạn trích phương thức thanhToan(Long maHd) trong service/HoaDonService.java minh họa đúng luồng kiểm tra trạng thái, đếm chi tiết, tính lại tổng tiền, chốt trạng thái thanh toán và giải phóng bàn ăn trong cùng @Transactional:
 
 ```java
 @Transactional
 public HoaDon thanhToan(Long maHd) {
     HoaDon hoaDon = timTheoMa(maHd);
     if (DA_THANH_TOAN.equals(hoaDon.getTrangThai())) {
-        throw new IllegalStateException(
-            "Hoa don da duoc thanh toan");
+        throw new IllegalStateException("Hoa don da duoc thanh toan");
     }
     if (ctHoaDonRepository.countById_MaHd(maHd) == 0) {
-        throw new IllegalStateException(
-            "Hoa don chua co mon an");
+        throw new IllegalStateException("Hoa don chua co mon an");
     }
+    Long maBan = hoaDon.getMaBan();
     tinhLaiTongTien(maHd);
     hoaDon.setTrangThai(DA_THANH_TOAN);
-    return hoaDonRepository.save(hoaDon);
+    HoaDon hoaDonDaThanhToan = hoaDonRepository.save(hoaDon);
+    capNhatTrangThaiBanNeuKhongConHoaDonChuaThanhToan(maBan);
+    return hoaDonDaThanhToan;
 }
 ```
 
-> Nguồn: service/HoaDonService.java. Lập trình thực tế có các bước tải dữ liệu lặp lại; Sequence lược bước kỹ thuật này nhưng giữ điều kiện và tác động chính.
+## 4.3. Minh chứng UC06 và phân quyền ứng dụng
 
-# 4.3. Minh chứng UC06 và xác thực tài khoản
-<!-- Trang dự kiến 40 -->
+### 4.3.1. Giao dịch phiếu nhập và điều chỉnh tồn kho
 
-## Phiếu nhập và tồn kho
-
-PhieuNhapService.save nhận PhieuNhapForm đã kiểm tra @Valid. Với phiếu cũ, phương thức khóa phiếu, so phiên bản và tăng phiên bản khi cần. Service tạo tập nguyên liệu của cả chi tiết cũ và mới, khóa chúng theo thứ tự mã rồi áp dụng chênh lệch.
+Khi thêm mới hoặc cập nhật phiếu nhập tại PhieuNhapService.save(id, form), service khóa phiếu (nếu sửa), kiểm tra phiên bản, khóa toàn bộ danh sách nguyên liệu thuộc chi tiết cũ và mới theo thứ tự mã tăng dần rồi mới áp dụng mức chênh lệch tồn kho:
 
 ```java
-BigDecimal before = previousDetail == null
-    ? BigDecimal.ZERO : previousDetail.getSoLuong();
-BigDecimal after = line == null
-    ? BigDecimal.ZERO : line.getSoLuong();
+BigDecimal before = previousDetail == null ? BigDecimal.ZERO : previousDetail.getSoLuong();
+BigDecimal after = line == null ? BigDecimal.ZERO : line.getSoLuong();
 adjustStock(ingredient, after.subtract(before));
 ```
 
-Cách làm này xử lý được dòng thêm mới, dòng đổi lượng và dòng bị bỏ. Không xóa rồi chèn lại mọi chi tiết cũ trong tất cả trường hợp; giữ khóa của dòng còn tồn tại và cập nhật giá trị. Khi xóa phiếu, service trừ lại lượng đã nhập trước khi xóa.
+Cách tiếp cận này xử lý thống nhất cả ba trường hợp: dòng mới thêm (before = 0), dòng thay đổi lượng (after − before) và dòng bị loại khỏi phiếu (after = 0), đồng thời giữ nguyên thực thể khóa ghép của các dòng vẫn còn tồn tại.
 
-## Quyền ứng dụng và quyền Oracle
+### 4.3.2. Phân quyền ứng dụng 4 vai trò và lớp quyền Oracle
 
-| Tầng | Cài đặt / cách hiểu |
+*Bảng 4.2. Cấu hình phân quyền 4 vai trò trong SecurityConfig và tầng Oracle*
+
+| Vai trò / Tầng | Phạm vi quyền được thực thi |
 | --- | --- |
-| Ứng dụng web | SecurityConfig cho phép /login và tài nguyên tĩnh; yêu cầu xác thực các URL còn lại. BCrypt kiểm tra mật khẩu; logout hủy phiên. |
-| Tài khoản | TaiKhoanService chuẩn hóa tên và trả UserDetails. Mọi tài khoản nhận ROLE_USER. Không có tự đăng ký ở AuthController. |
-| Oracle | oracle_setup_user.sql có cấu hình user/role minh họa. Role/privilege Oracle kiểm soát tài khoản database; không tự trở thành vai trò từng người dùng website. |
-| Routine kho | SP_CAP_NHAT_TON_KHO và SP_TINH_TONG_PHIEU_NHAP dùng cho quản trị SQL. Trigger TRG_CTPN_THANH_TIEN kiểm tra/tính tiền dòng, không tăng tồn. |
+| ADMIN | Toàn quyền trên hệ thống: quản lý tài khoản (/tai-khoan/**), nhân viên (/nhan-vien/**), thực đơn (/mon-an/**, /loai-mon/**), cấu hình bàn ăn, xóa hóa đơn/đặt bàn và toàn bộ nghiệp vụ khác. |
+| THU_NGAN | Truy cập trang chủ, quản lý khách hàng (/khach-hang/**), đặt bàn trừ xóa (/dat-ban/**), xem danh sách bàn (GET /ban-an), lập/sửa/xác nhận món và thanh toán hóa đơn trừ xóa (/hoa-don/**); bị chặn giảm/xóa món đã xác nhận. |
+| QUAN_LY_KHO | Quản lý kho tổng quan (/kho), danh mục nguyên liệu (/nguyen-lieu/**), nhà cung cấp (/nha-cung-cap/**) và lập/sửa/xóa phiếu nhập (/phieu-nhap/**). |
+| KE_TOAN | Chỉ đọc báo cáo doanh thu (/bao-cao/**), xem hóa đơn (GET /hoa-don, /hoa-don/chi-tiet/**) và xem phiếu nhập (GET /phieu-nhap, /phieu-nhap/*); bị từ chối khi sửa hoặc xóa chứng từ. |
+| Tương thích ngược & Oracle | TaiKhoanService.NguoiDung tự động ánh xạ tài khoản cũ QUAN_LY -> ADMIN và NHAN_VIEN -> THU_NGAN khi đăng nhập; riêng script role/privilege trong oracle_setup_user.sql và 05_phan_quyen.sql quản lý quyền ở tầng database, độc lập với phân quyền URL website. |
 
-> Sự có mặt của script chưa chứng minh script đã chạy trên database hiện dùng. Chưa có căn cứ để ghi “đã hoàn thiện phân quyền quản lý, thu ngân, thủ kho”.
+## 4.4. Giao diện và điểm kiểm tra khi chạy demo
 
-# 4.4. Giao diện và điểm kiểm tra khi chạy demo
-<!-- Trang dự kiến 41 -->
+*Bảng 4.3. Bản đồ giao diện Thymeleaf và điểm cần kiểm tra khi demo*
 
-| UC / trang | Đường dẫn | Điểm cần quan sát |
+| Ca sử dụng / Trang | Đường dẫn URL | Điểm kiểm tra nghiệp vụ khi chạy demo |
 | --- | --- | --- |
-| UC01 – đăng nhập | /login | Tên trường tenDangNhap, matKhau; sai thông tin báo lỗi; không có đăng ký tự do. |
-| UC02 – thực đơn | /loai-mon; /mon-an | Danh sách đọc dữ liệu; form thêm/sửa; lọc món theo loại/từ khóa; kiểm tra giá sai. |
-| UC03 – đặt bàn | /dat-ban | Chọn khách/bàn, ngày, số người, cọc; trạng thái giữ bàn, xác nhận/hủy/hoàn thành. |
-| UC04/05 – hóa đơn | /hoa-don; /hoa-don/chi-tiet/{maHd} | Món, lượng, giá và tổng; nút thanh toán; thử từ chối sửa chứng từ đã thanh toán. |
-| UC06 – phiếu nhập | /phieu-nhap | Form nhiều dòng; thêm/sửa/xóa; đối chiếu tồn và lỗi form cũ bằng hai phiên. |
-| UC07 – báo cáo | /bao-cao | Khoảng ngày hợp lệ; doanh thu đã thanh toán; phạm vi toàn kỳ của bảng món bán chạy. |
-| UC08 – nhân viên | /nhan-vien | Hồ sơ, chức vụ, ca, lương; bảo vệ xóa người đã có chứng từ. |
-| UC09 – kho | /nha-cung-cap; /nguyen-lieu | Thông tin nhà cung cấp, đơn vị, tồn và trạng thái. |
-| UC10 – khách/bàn | /khach-hang; /ban-an | Tìm kiếm khách, sức chứa/khu vực bàn, lịch sử đặt. |
+| UC01 – Đăng nhập | /login | Đăng nhập tenDangNhap/matKhau với 4 vai trò; nhập sai báo /login?error; không có trang đăng ký tự do. |
+| UC02 – Thực đơn | /loai-mon; /mon-an | Chỉ ADMIN truy cập; thêm/sửa kiểm tra giá và URL; tìm kiếm/lọc và chuyển dạng thẻ/bảng bằng JavaScript. |
+| UC03 – Đặt bàn | /dat-ban | Chỉ hiển thị bàn Trống khi thêm; chuyển CHO_XAC_NHAN -> DA_XAC_NHAN -> HOAN_THANH/DA_HUY đồng bộ trạng thái bàn. |
+| UC04/05 – Hóa đơn | /hoa-don; /hoa-don/chi-tiet/{maHd} | Lập hóa đơn gộp món trùng và giữ bàn Đang dùng; xác nhận món; THU_NGAN không giảm món đã xác nhận; thanh toán trả bàn Trống. |
+| UC06 – Phiếu nhập | /phieu-nhap | Biểu mẫu đa dòng; sửa đổi số lượng làm tồn tăng/giảm đúng chênh lệch; thử mở 2 tab sửa cùng lúc để kích hoạt lỗi phienBan cũ. |
+| UC07 – Báo cáo | /bao-cao | ADMIN và KE_TOAN truy cập; chọn khoảng ngày hợp lệ và khoảng ngày ngược để kiểm tra doanh thu chỉ tính hóa đơn đã thanh toán. |
+| UC08 – Nhân viên | /nhan-vien | Chỉ ADMIN truy cập; bảo vệ xóa nhân viên đã lập hóa đơn hoặc phiếu nhập. |
+| UC09 – Kho | /nha-cung-cap; /nguyen-lieu | QUAN_LY_KHO và ADMIN truy cập; đối chiếu tồn kho và bảo vệ tham chiếu khi xóa. |
+| UC10 – Khách & Bàn | /khach-hang; /ban-an | Tra cứu khách hàng, xem trạng thái bàn trực quan sau khi đặt bàn và thanh toán. |
+| UC11 – Tài khoản | /tai-khoan | Chỉ ADMIN truy cập; tạo tài khoản mới với 4 vai trò chuẩn, kiểm tra mật khẩu lưu dưới dạng chuỗi băm BCrypt. |
 
-Các trang thực tế dùng template Thymeleaf và layout chung tại templates/layout. Bảng trên là bản đồ giao diện đối chiếu mã, không phải ảnh chụp ứng dụng đang chạy. Không sử dụng ảnh dựng để làm bằng chứng rằng nghiệp vụ đã được kiểm thử.
+## 4.5. Phạm vi và kết quả kiểm chứng thực tế
 
-Nếu cần bổ sung ảnh demo theo yêu cầu giảng viên, nên chụp sau khi chạy Oracle: một hóa đơn có chi tiết, lỗi sửa chứng từ đã thanh toán, tồn trước/sau khi sửa phiếu và kết quả từ chối form cũ. Ảnh phải đi kèm dữ liệu vào và giá trị đối chiếu; chỉ ảnh danh sách chưa chứng minh quy tắc nghiệp vụ.
+### 4.5.1. Kiểm thử tự động JavaScript (Node test)
 
-# 4.5. Phạm vi và kết quả kiểm chứng thực tế
-<!-- Trang dự kiến 42 -->
+Bộ kiểm thử giao diện src/test/js/menu-filters.test.cjs được chạy bằng lệnh node --test src/test/js/menu-filters.test.cjs, mô phỏng DOM để xác minh các hàm lọc tìm và chuyển chế độ hiển thị trong main.js.
 
-## Đã thực hiện trong lần biên soạn ngày 13/11/2026
+*Bảng 4.4. Kết quả kiểm thử tự động JavaScript (4/4 đạt)*
 
-Đã đọc tài liệu PDF, bảng phân công Excel, các entity, Service/Controller chính, cấu hình bảo mật, script kho và mã kiểm thử. Đã chạy bộ kiểm thử JavaScript bằng lệnh dưới tại thư mục gốc dự án:
-
-```java
-node --test QuanLyNHHS/src/test/js/menu-filters.test.cjs
-```
-
-| Kiểm thử JavaScript | Kết quả thực tế |
+| Kịch bản kiểm thử JavaScript | Kết quả thực tế |
 | --- | --- |
-| Tìm món kết hợp bộ lọc loại khi thay đổi từng điều kiện | Đạt. |
-| Tìm nhân viên kết hợp chức vụ đã chọn | Đạt. |
-| Tìm loại món theo tên/mã và xóa từ khóa | Đạt. |
-| Chuyển giao diện món dạng lưới/bảng và nút đang chọn | Đạt. |
+| Tìm kiếm món ăn kết hợp bộ lọc loại món khi thay đổi từng điều kiện | Đạt |
+| Tìm kiếm nhân viên kết hợp lọc theo chức vụ đang chọn | Đạt |
+| Tìm kiếm loại món theo tên/mã và khôi phục danh sách khi xóa từ khóa | Đạt |
+| Chuyển đổi chế độ hiển thị món ăn dạng thẻ (grid) và dạng bảng kèm trạng thái nút | Đạt |
 
-Kết quả: 4 tests, 4 pass, 0 fail. Bộ test dùng mô phỏng DOM và JavaScript main.js; chỉ xác nhận tương tác lọc/hiển thị trong phạm vi đó. Log được lưu kèm thư mục nguồn báo cáo.
+### 4.5.2. Kiểm thử tích hợp Java Spring Boot trên H2 (MODE=Oracle)
 
-## Các bằng chứng hiện có nhưng chưa chạy lại
+Toàn bộ bộ kiểm thử Maven được biên dịch và thực thi bằng lệnh ./mvnw.cmd test trên JDK 27 (profile test sử dụng MockMvc và cơ sở dữ liệu H2 cấu hình MODE=Oracle). Tổng cộng 36/36 bài kiểm thử tự động đều đạt, không có lỗi hoặc bài bị bỏ qua.
 
-MenuCrudIntegrationTests có 16 phương thức @Test; DatabasePagesTests có 4. Chúng bao gồm CRUD, validation, bảo vệ xóa, CSRF, tài khoản được cấp và từ chối đăng ký. Đây là bằng chứng về kịch bản test có trong repo, chưa phải kết quả chạy trong lần này.
+*Bảng 4.5. Tổng hợp kết quả thực thi bộ kiểm thử Java Spring Boot (36/36 đạt)*
 
-Thư mục target/surefire-reports ở gốc có báo cáo cũ cho QuanLyNhhsApplicationTests: 1 test, 0 lỗi. Không dùng kết quả cũ đó để kết luận mọi module hiện tại hoặc Oracle đã đạt. Bộ Java chưa được chạy lại: pom yêu cầu Java 27, trong khi Java tìm thấy từ Android Studio là bản 25.0.2. Không đổi cấu hình dự án để tạo kết quả kiểm thử khác môi trường.
-
-> Chưa khởi động ứng dụng hoặc chạy test giao dịch trên Oracle. Những trường hợp ở hai trang tiếp theo là kế hoạch kiểm chứng, chưa có kết quả thực tế.
-
-# 4.6. Test case đặt bàn, hóa đơn và thanh toán
-<!-- Trang dự kiến 43 -->
-
-| Mã / điều kiện và dữ liệu | Kết quả mong đợi | Thực tế lần này |
+| Lớp kiểm thử | Số lượng / Kết quả | Phạm vi kịch bản đã xác minh |
 | --- | --- | --- |
-| TC01 – UC03: bàn Trống; khách hợp lệ; 4 người, bàn 6 chỗ. | Tạo CHO_XAC_NHAN và giữ bàn; dữ liệu bàn/lượt đặt nhất quán. | Chưa chạy. |
-| TC02 – UC03: chọn bàn đã được giữ. | Từ chối; không có lượt đặt mới. | Chưa chạy. |
-| TC03 – UC03: hai phiên cùng đặt bàn Trống. | Chỉ một lượt được giữ; phiên còn lại báo xung đột. Đây là tiêu chí cần bổ sung khóa. | Chưa chạy; code có khoảng trống. |
-| TC04 – UC04: tôm 1,5 × 320.000; nghêu 2 × 120.000; giảm 20.000. | Hai dòng, tổng 700.000; trạng thái chưa thanh toán. | Chưa chạy. |
-| TC05 – UC04: cùng món có hai lượng 0,5 và 1. | Một dòng khóa ghép; lượng 1,5; tính tiền đúng. | Chưa chạy. |
-| TC06 – UC04: lượng 0/âm; giảm âm; danh sách rỗng. | Từ chối; không lưu phần đầu/chi tiết. | Chưa chạy. |
-| TC07 – UC04: dòng đầu hợp lệ, món ở dòng sau không tồn tại. | Rollback mọi thay đổi của lần tạo. Đối chiếu cả HOA_DON và CT_HOA_DON. | Chưa chạy. |
-| TC08 – UC05: hóa đơn chưa thanh toán, có dòng. | Tính lại tổng, chuyển Da thanh toan; thử sửa/xóa sau đó bị từ chối. | Chưa chạy. |
-| TC09 – UC05: thanh toán lần hai hoặc hóa đơn không có dòng. | Báo lỗi; không thay đổi chứng từ. | Chưa chạy. |
-| TC10 – UC05: hai phiên thanh toán cùng hóa đơn. | Một lần kết thúc hợp lệ; yêu cầu sau bị từ chối hoặc trả kết quả nhất quán. Cần cơ chế đồng thời. | Chưa chạy; code có khoảng trống. |
+| DatabasePagesTests | 4 / 4 Đạt | Kiểm tra khởi tạo ngữ cảnh Web MVC và truy cập trang danh mục trên dữ liệu thử. |
+| MenuCrudIntegrationTests | 18 / 18 Đạt | Phân quyền tách biệt 4 vai trò và chặn ROLE_NHAN_VIEN trực tiếp; cấp tài khoản ADMIN với BCrypt; CRUD/validation/escape HTML loại món, món ăn, nhân viên; bảo vệ xóa danh mục có chứng từ; bắt buộc đăng nhập, CSRF và vô hiệu hóa /register. |
+| QuanLyNhhsApplicationTests | 1 / 1 Đạt | Kiểm tra nạp hoàn chỉnh ngữ cảnh Spring Boot chính của ứng dụng. |
+| BusinessRulesIntegrationTests | 13 / 13 Đạt | Kiểm chứng toàn bộ các ca nghiệp vụ cốt lõi TC01, TC02, TC04–TC09 và TC11–TC18 (đặt bàn, giữ/giải phóng bàn, gộp món, chốt xác nhận món, rollback hóa đơn, thanh toán, khóa sửa/xóa, điều chỉnh tồn kho, xung đột phiên bản phiếu nhập, rollback kho và báo cáo doanh thu). |
 
-Sau mỗi test ghi, phải truy vấn đối chiếu phần đầu và chi tiết bằng mã chứng từ. Với test rollback, lưu số lượng bản ghi và giá trị trước khi gửi yêu cầu. Kiểm tra thông báo giao diện đơn thuần chưa đủ để kết luận không còn dữ liệu dở dang.
+### 4.5.3. Phạm vi kiểm chứng trên Oracle Database thực tế
 
-# 4.7. Test case kho, báo cáo và bảo mật
-<!-- Trang dự kiến 44 -->
+Trên môi trường Oracle FREEPDB1 (cổng 1521), ứng dụng đã khởi động thành công, Hibernate sinh đủ 13 bảng, đã kiểm tra đăng nhập, truy vấn trang chủ, hóa đơn, báo cáo, đặt bàn (HTTP 200/403 theo vai trò) và thử tạo tài khoản lưu chuỗi băm BCrypt. Toàn bộ bộ test tự động 36 ca nêu trên được chạy trên H2 chế độ tương thích Oracle; các kịch bản giao dịch đầy đủ trực tiếp trên Oracle thật và kịch bản tranh chấp đồng thời (TC03, TC10) được tách riêng trạng thái trong hai bảng test case kế tiếp.
 
-| Mã / điều kiện và dữ liệu | Kết quả mong đợi | Thực tế lần này |
+## 4.6. Kịch bản và kết quả kiểm thử đặt bàn, hóa đơn, thanh toán
+
+*Bảng 4.6. Kết quả kiểm thử TC01–TC10 (đặt bàn, hóa đơn và thanh toán)*
+
+| Mã / Điều kiện và dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế |
 | --- | --- | --- |
-| TC11 – UC06: tồn đầu 10 kg, lập phiếu 5 kg. | Tồn 15; tổng phiếu đúng; phiếu/dòng lưu cùng nhau. | Chưa chạy. |
-| TC12 – UC06: sửa phiếu 5 thành 3 kg. | Tồn từ 15 thành 13; không cộng thêm toàn bộ 3 kg. | Chưa chạy. |
-| TC13 – UC06: xóa phiếu đang ghi 3 kg, tồn 13. | Tồn còn 10; phiếu và dòng bị xóa. | Chưa chạy. |
-| TC14 – UC06: hai form cùng phiên bản; lưu form thứ nhất rồi form thứ hai. | Form thứ hai bị từ chối; không ghi đè phiếu/tồn mới. | Chưa chạy. |
-| TC15 – UC06: lặp nguyên liệu; lượng 0; giá âm; vượt độ chính xác. | Báo lỗi; không lưu và không đổi tồn. | Chưa chạy. |
-| TC16 – UC06: có một dòng gây tồn âm/vượt ngưỡng sau khi đã xử lý dòng khác. | Rollback toàn bộ, gồm tồn các dòng xử lý trước đó. | Chưa chạy. |
-| TC17 – UC07: hóa đơn đã/chưa thanh toán trong và ngoài khoảng ngày. | Chỉ cộng TONG_TIEN của hóa đơn đã thanh toán đúng khoảng. | Chưa chạy. |
-| TC18 – UC07: khoảng ngày ngược; dữ liệu rỗng; đổi bộ lọc ngày. | Ngày ngược báo lỗi; rỗng = 0. Món bán chạy hiện vẫn toàn kỳ, cần giải thích rõ. | Chưa chạy. |
-| TC19 – UC01: tài khoản cấp với BCrypt; đúng/sai mật khẩu. | Đúng: vào trang chủ; sai: không tạo phiên, báo lỗi chung. | Chưa chạy. |
-| TC20 – UC01: chưa đăng nhập; POST thiếu CSRF; thử URL đăng ký. | Nghiệp vụ yêu cầu đăng nhập; POST thiếu token bị từ chối; không tạo tài khoản qua đăng ký. | Chưa chạy. |
+| TC01 – UC03: Chọn bàn Trống, khách hợp lệ, 4 người trên bàn 6 chỗ. | Tạo CHO_XAC_NHAN, bàn sang Đã đặt; xác nhận -> DA_XAC_NHAN; hoàn thành -> HOAN_THANH và bàn về Trống. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC02 – UC03: Gửi đặt bàn vào bàn đang ở trạng thái Đã đặt. | Từ chối tiếp nhận, hiển thị lỗi và không tạo bản ghi mới. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC03 – UC03: Hai phiên đồng thời cùng đặt một bàn Trống. | Chỉ một phiên giữ bàn thành công; phiên còn lại báo xung đột. | Chưa đạt (cần bổ sung khóa bi quan vào DatBanService). |
+| TC04 – UC04: Lập hóa đơn 1,5 kg Tôm (320.000) + 2 đĩa Nghêu (120.000), giảm 20.000. | Tạo 2 dòng CT_HOA_DON, tổng tiền 700.000 đ, trạng thái Chua thanh toan, bàn sang Đang dùng. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC05 – UC04: Truyền trùng một món với lượng 0,5 và 1,0 trong cùng đơn. | Gộp thành 1 dòng khóa ghép có số lượng 1,50 kg và tổng 480.000 đ. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC06 – UC04: Lượng ≤ 0, giảm giá âm, danh sách rỗng; THU_NGAN giảm món đã xác nhận. | Từ chối đầu vào sai; chặn ROLE_THU_NGAN giảm món dưới mức đã xác nhận (ADMIN sửa được). | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC07 – UC04: Dòng món 1 hợp lệ, dòng món 2 có mã không tồn tại. | Ngoại lệ làm rollback toàn bộ HOA_DON, CT_HOA_DON và bàn giữ nguyên Trống. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC08 – UC05: Thanh toán hóa đơn chưa thanh toán đã có chi tiết. | Chuyển Da thanh toan, trả bàn về Trống; các thao tác sửa/xóa sau đó đều bị từ chối. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC09 – UC05: Thanh toán hóa đơn đã thanh toán hoặc hóa đơn rỗng (0 dòng). | Ném IllegalStateException, không làm sai lệch trạng thái hoặc dữ liệu. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC10 – UC05: Hai yêu cầu thanh toán gửi song song cho cùng hóa đơn. | Một yêu cầu thành công, yêu cầu còn lại bị từ chối nhất quán. | Chưa đạt (cần bổ sung khóa/version chống song song). |
 
-Dữ liệu script 04_du_lieu_kiem_thu.sql có đủ 13 bảng, gồm một hóa đơn đã thanh toán và một hóa đơn chưa thanh toán. Chỉ dùng trên môi trường demo phù hợp; ứng dụng không tự chạy script. Không coi việc có script là kết quả thực thi các test trên.
+## 4.7. Kịch bản và kết quả kiểm thử kho, báo cáo và bảo mật
 
-# 4.8. Giới hạn sản phẩm và hướng hoàn thiện
-<!-- Trang dự kiến 45 -->
+*Bảng 4.7. Kết quả kiểm thử TC11–TC20 (kho, báo cáo và bảo mật)*
 
-| Ưu tiên | Vấn đề đã nhận diện | Hướng xử lý / tiêu chí hoàn thành |
+| Mã / Điều kiện và dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế |
 | --- | --- | --- |
-| Cao | Vai trò nghiệp vụ chưa thành quyền website. | Liên kết tài khoản–nhân viên/vai trò; cấu hình quyền theo chức năng; test từng vai trò được phép và bị từ chối. |
-| Cao | Giữ bàn chưa có giao dịch chung/khóa; chuyển trạng thái còn tự do. | Đưa tiếp nhận vào Service; khóa tài nguyên; kiểm tra guard theo Hình 3.8, sức chứa và dữ liệu khách. |
-| Cao | Thanh toán chưa bảo vệ xung đột và chưa xử lý liên kết bàn. | Bổ sung khóa/phiên bản; xác định quy tắc giải phóng bàn theo các lượt phục vụ còn mở. |
-| Cao | Hóa đơn bind entity và kiểm tra danh mục tham chiếu chưa đồng đều. | Dùng DTO; tải/kiểm tra mọi mã cha; giữ lỗi form; có FK phù hợp trên schema. |
-| Trung bình | Chính sách giá khi sửa hóa đơn chưa rõ. | Chọn giữ giá từng dòng hoặc lấy giá mới có xác nhận; cập nhật UC, Service và test cùng lúc. |
-| Trung bình | Doanh thu theo ngày lập; món bán chạy không theo bộ lọc ngày. | Thêm thời điểm thanh toán nếu cần; thống nhất tên nhãn và phạm vi từng bảng thống kê. |
-| Trung bình | Tiền cọc chưa liên kết hóa đơn; lịch bàn chỉ có ngày. | Bổ sung quan hệ/quy tắc bù cọc nếu mở rộng; thiết kế khoảng giờ thay cho chỉ trạng thái toàn cục. |
-| Sau phạm vi | Tồn chưa phản ánh tiêu hao khi bán. | Mở rộng định lượng món–nguyên liệu, xuất kho/kiểm kê; không suy ra tồn vận hành chỉ từ nhập. |
+| TC11 – UC06: Tồn đầu 10,00 kg; lập phiếu nhập mới 5,00 kg. | Tồn kho tăng lên 15,00 kg; tổng phiếu và chi tiết khớp hoàn toàn. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC12 – UC06: Sửa phiếu nhập đang ghi 5,00 kg thành 3,00 kg. | Tồn kho điều chỉnh theo chênh lệch (15 + 3 − 5 = 13,00 kg), không cộng dồn thêm 3 kg. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC13 – UC06: Xóa phiếu nhập đang ghi 3,00 kg khi tồn đang là 13,00 kg. | Tồn kho hoàn về 10,00 kg; xóa sạch cả phiếu và chi tiết phiếu. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC14 – UC06: Hai form mang cùng phienBan; lưu form 1 trước rồi gửi form 2. | Form thứ hai bị từ chối xung đột phiên bản; không ghi đè tồn kho từ form 1. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC15 – UC06: Trùng mã nguyên liệu trong phiếu; số lượng 0; đơn giá âm. | Từ chối lưu tại DTO/Service, giữ nguyên số lượng phiếu và tồn kho. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC16 – UC06: Phiếu 2 dòng, dòng 1 hợp lệ (+5 kg), dòng 2 vượt giới hạn tồn MAX_STOCK. | Ném ngoại lệ và rollback toàn bộ, tồn kho của cả dòng 1 vẫn giữ nguyên 10,00 kg. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC17 – UC07: Dữ liệu có hóa đơn Da thanh toan trong/ngoài khoảng và Chua thanh toan. | Doanh thu chỉ cộng TONG_TIEN của hóa đơn Da thanh toan nằm trong khoảng ngày. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC18 – UC07: Khoảng ngày rỗng dữ liệu; khoảng ngày có denNgay < tuNgay. | Khoảng rỗng trả doanh thu 0; khoảng ngày ngược ném IllegalArgumentException. | Đạt trên H2 (BusinessRulesIntegrationTests). |
+| TC19 – UC01, UC11: Tạo tài khoản 4 vai trò với BCrypt; kiểm tra đăng nhập đúng/sai mật khẩu. | Mật khẩu lưu dạng băm BCrypt; đăng nhập đúng vào /, sai về /login?error; chặn role cũ trực tiếp. | Đạt trên H2 (MenuCrudIntegrationTests). |
+| TC20 – UC01, NFR01: Chưa đăng nhập gọi URL nghiệp vụ; POST thiếu CSRF; truy cập /register; truy cập chéo vai trò. | Chuyển về /login; POST thiếu CSRF trả 403; /register trả 404/302; truy cập chéo vai trò trả 403. | Đạt trên H2 (MenuCrudIntegrationTests). |
 
-Ưu tiên sửa các vấn đề ảnh hưởng tính đúng đắn trước khi thêm chức năng. Với mỗi cải thiện, cần cập nhật ít nhất một quy tắc nghiệp vụ, một kịch bản tương tác và một test ngoại lệ để giữ tính nhất quán của bộ mô hình.
+Tập lệnh khởi tạo dữ liệu mẫu database/oracle/04_du_lieu_kiem_thu.sql cung cấp bộ dữ liệu đồng bộ cho 13 bảng phục vụ chạy thực nghiệm và đối chiếu kết quả trên Oracle Database.
 
-# KẾT LUẬN VÀ TÀI LIỆU THAM KHẢO
-<!-- Trang dự kiến 46 -->
+## 4.8. Giới hạn sản phẩm và hướng hoàn thiện
 
-Đề tài đã xác định phạm vi hệ thống nhà hàng hải sản nội bộ, các vai trò sử dụng và các quy tắc trọng tâm về chứng từ, trạng thái và tồn kho. Từ đó xây dựng Use Case, mô hình khái niệm, CRC, SSD, ba Sequence Diagram, DCD và State Machine; mô hình dữ liệu được đối chiếu với 12 bảng nghiệp vụ và bảng tài khoản bổ sung trong mã nguồn.
+*Bảng 4.8. Các giới hạn còn tồn tại và hướng hoàn thiện đề xuất*
 
-Thiết kế chọn phân tầng Controller–Service–Repository, đặt nghiệp vụ tiền và tồn ở Service, giữ dữ liệu chứng từ trong chi tiết và dùng khóa/phiên bản cho cập nhật nhập kho. Các quyết định được giải thích theo trách nhiệm, dữ liệu sẵn có và vòng đời đối tượng. Báo cáo cũng chỉ rõ những khác biệt giữa yêu cầu đầy đủ và cài đặt hiện tại, đặc biệt ở phân quyền, đặt bàn và xử lý thanh toán đồng thời.
-
-Trong lần lập báo cáo, bốn kiểm thử JavaScript đã chạy đều đạt. Các kịch bản Java/Oracle quan trọng được liệt kê để nhóm chạy và ghi kết quả trước khi bảo vệ. Mức đáp ứng chức năng trong mã nguồn và kết quả kiểm thử thực tế được phân biệt để tránh kết luận vượt bằng chứng.
-
-## Tài liệu tham khảo và nguồn đối chiếu
-
-[1] Hướng dẫn thực hiện BTL – gửi SV.pdf, học phần Phân tích và thiết kế hướng đối tượng; tài liệu do người học cung cấp. Trọng tâm: mục 3–7, cấu trúc báo cáo ở mục 5 và gợi ý đề tài nhà hàng ở mục 8.10.
-
-[2] PhanCong_Nhom4_QuanLyNhaHangHaiSan.xlsx; các sheet “Tổng quan”, “Phân công”, “Checklist”; dùng làm căn cứ phân công module và danh sách thành viên.
-
-[3] Mã nguồn dự án QuanLyNHHS trong thư mục làm việc, đối chiếu ngày 13/11/2026: model, service, repository, controller, dto, config và templates.
-
-[4] QuanLyNHHS/database/oracle: 01_inventory.sql, 02_routines.sql, 04_du_lieu_kiem_thu.sql; cùng src/main/resources/oracle_setup_user.sql và pom.xml.
-
-[5] Bộ test src/test/java/com/QuanLyNHHS/controller và src/test/js/menu-filters.test.cjs; log chạy JavaScript kèm thư mục nguồn báo cáo.
-
-> Nguồn cục bộ được dùng trực tiếp; không gán tên tác giả, số liệu khảo sát hoặc kết quả chạy cho tài liệu chưa xác minh.
-
-# PHỤ LỤC A. PHÂN CÔNG VÀ CHUẨN BỊ BẢO VỆ
-<!-- Trang dự kiến 47 -->
-
-| Thành viên | Phân công theo bảng Excel | Mô hình cần nắm để bảo vệ |
+| Ưu tiên | Giới hạn đã nhận diện trong sản phẩm | Hướng xử lý và tiêu chí hoàn thành |
 | --- | --- | --- |
-| Hoàng Việt Đức | Khách hàng, bàn ăn, đặt bàn; KHACH_HANG, BAN_AN, DAT_BAN. | UC03/10; mô hình khái niệm bán hàng; trạng thái đặt bàn; hạn chế ngày/giờ và giữ bàn đồng thời. |
-| Nguyễn Cao Hoàng | Loại món, món, nhân viên, đăng nhập/bảo mật; LOAI_MON, MON_AN, NHAN_VIEN. | UC01/02/08; quan hệ loại–món; validation; phân biệt ROLE_USER với vai trò nghiệp vụ và role Oracle. |
-| Đỗ Minh Chiến | Bán hàng, hóa đơn, báo cáo; HOA_DON, CT_HOA_DON. | UC04/05/07; SSD; Sequence hóa đơn; DCD; công thức và phạm vi thống kê. |
-| Lý Tiến Đạt | Nhà cung cấp, nguyên liệu, nhập hàng; NHA_CUNG_CAP, NGUYEN_LIEU, PHIEU_NHAP, CT_PHIEU_NHAP. | UC06/09; Sequence/DCD kho; chênh lệch tồn; khóa, phiên bản và trách nhiệm procedure/trigger. |
+| Cao | Chưa có khóa đồng thời khi đặt bàn (TC03) và khi thanh toán (TC10); DatBanService thiếu kiểm tra trạng thái nguồn và sức chứa. | Đưa luồng tiếp nhận đặt bàn vào @Transactional tại DatBanService; bổ sung kiểm tra sức chứa, guard trạng thái theo Hình 3.8 và khóa bi quan/@Version trên BanAn và HoaDon. |
+| Cao | HoaDonController hiện bind trực tiếp Entity HoaDon và chưa liên kết TAI_KHOAN với NHAN_VIEN. | Tách riêng HoaDonForm DTO kèm @Valid và setAllowedFields(); xem xét bổ sung khóa ngoại MA_NV tùy chọn trên TAI_KHOAN để tự gắn người lập chứng từ từ phiên đăng nhập. |
+| Trung bình | Chính sách giữ giá cũ khi sửa hóa đơn chưa thanh toán chưa tường minh; hóa đơn chưa có cột ngày thanh toán riêng. | Thống nhất giữ đơn giá đã lưu cho phần số lượng cũ hay áp dụng giá mới khi sửa đơn; bổ sung NGAY_THANH_TOAN và áp dụng bộ lọc ngày cho bảng món bán chạy. |
+| Trung bình | Tiền cọc đặt bàn chưa liên kết bù trừ sang hóa đơn; lịch đặt bàn chưa quản lý khung giờ; danh sách lớn chưa phân trang phía server. | Thêm khóa liên kết lượt đặt – hóa đơn nếu khấu trừ cọc; nâng cấp NGAY_DAT sang khung giờ bắt đầu/kết thúc; bổ sung Pageable ở Repository. |
+| Mở rộng | Tồn kho chưa tự động khấu trừ khi bán món ăn; chưa có xuất bếp, kiểm kê và bộ integration test chạy trực tiếp trên Oracle. | Xây dựng bảng định lượng MON_AN – NGUYEN_LIEU và bổ sung profile kiểm thử tích hợp chạy trên Oracle testcontainer/schema riêng. |
 
-Bảng thể hiện trách nhiệm phân công, không tự xác nhận tỷ lệ đóng góp hoặc quyền tác giả từng dòng code sau tích hợp. Các ô tiến độ trong file Excel vẫn là trạng thái kế hoạch; nhóm cần cập nhật đóng góp thực tế nếu giảng viên yêu cầu.
+# KẾT LUẬN
 
-## Câu hỏi tự kiểm tra trước buổi bảo vệ
+Đề tài “Hệ thống quản lý nhà hàng hải sản” đã hoàn thành đầy đủ quy trình Phân tích và thiết kế hướng đối tượng từ khảo sát bài toán thực tế đến mô hình phân tích, mô hình thiết kế, cài đặt chương trình và kiểm thử các quy tắc nghiệp vụ. Ở giai đoạn phân tích, nhóm đã làm rõ phạm vi hệ thống nội bộ, 6 giả định xuyên suốt, 12 quy tắc nghiệp vụ, 11 ca sử dụng cùng mô hình khái niệm 12 đối tượng miền và bảng trách nhiệm CRC.
 
-1. Vì sao dòng hóa đơn là lớp riêng? Vì quan hệ món–hóa đơn có lượng và giá tại lúc ghi nhận. 2. Vì sao sửa phiếu dùng lượng mới trừ cũ? Để loại tác động cũ trước khi ghi tác động mới. 3. Vì sao có giao dịch vẫn cần khóa/phiên bản? Giao dịch không tự phát hiện mọi trường hợp người dùng ghi dựa trên dữ liệu cũ.
+Ở giai đoạn thiết kế và cài đặt, hệ thống áp dụng kiến trúc phân tầng BCE trên Spring Boot MVC – Thymeleaf – Oracle Database, đồng bộ hóa 14 sơ đồ UML với mã nguồn thực tế: phân quyền 4 vai trò (ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN) với BCrypt và CSRF; luồng hóa đơn gộp món, chốt xác nhận món, khóa chứng từ đã thanh toán và tự động giữ/giải phóng bàn ăn; luồng nhập kho tính chênh lệch tồn với khóa bi quan theo thứ tự tăng dần và kiểm soát phiên bản.
 
-4. Actor và quyền trong code khác nhau thế nào? Actor mô tả vai trò sử dụng; quyền là quy tắc được thực thi ở ứng dụng/database. 5. Vì sao không tự trừ tồn khi bán? Chưa có định lượng món–nguyên liệu. 6. Khi thay đổi chính sách giá, những mô hình nào phải sửa? UC04, trách nhiệm liên quan, Sequence, Service và test tương ứng.
+Kết quả kiểm chứng tự động đạt 36/36 bài kiểm thử tích hợp Java (bao gồm 18 test phân quyền/CRUD danh mục, 4 test trang cơ sở dữ liệu, 1 test ngữ cảnh ứng dụng và 13 test quy tắc nghiệp vụ TC01–TC18) trên H2 chế độ Oracle cùng 4/4 bài kiểm thử JavaScript giao diện. Những hạn chế kỹ thuật như khóa đồng thời khi đặt bàn/thanh toán và định lượng xuất kho đã được nhận diện minh bạch làm cơ sở nâng cấp ở giai đoạn tiếp theo.
 
-# PHỤ LỤC B. TỆP NGUỒN VÀ THÔNG TIN CẦN BỔ SUNG
-<!-- Trang dự kiến 48 -->
+# TÀI LIỆU THAM KHẢO
 
-## Các tệp bàn giao
+[1] Bộ môn Công nghệ phần mềm, Khoa CNTT, Trường ĐH GTVT – Tài liệu hướng dẫn thực hiện Bài tập lớn học phần Phân tích và thiết kế hướng đối tượng (OOAD).
 
-| Tệp / thư mục | Nội dung và cách dùng |
-| --- | --- |
-| BaoCao_BTL_PTTKHDoiTuong_Nhom4.docx | Bản Word có thể chỉnh sửa, A4, Times New Roman, tiêu đề phân cấp và số trang. |
-| BaoCao_BTL_PTTKHDoiTuong_Nhom4.pdf | Bản PDF trình bày cố định để xem/in; nếu sửa Word cần xuất lại PDF tương ứng. |
-| so_do/*.puml | 14 mô hình nguồn PlantUML; có thể chỉnh sửa bằng công cụ hỗ trợ PlantUML. |
-| so_do/*.svg; *.png | Hình vector để phóng to và ảnh đã chèn vào báo cáo. |
-| nguon/noi_dung.py; tao_bao_cao.py; tao_so_do.py | Nguồn nội dung và công cụ tái tạo tài liệu/sơ đồ. |
-| nguon/ket_qua_kiem_tra.json; kiem_thu_js.txt | Kết quả kiểm tra cấu trúc tài liệu và log test JavaScript đã chạy. |
+[2] Craig Larman (2004), Applying UML and Patterns: An Introduction to Object-Oriented Analysis and Design and Iterative Development (3rd Edition), Prentice Hall.
 
-## Thông tin cần hoàn thiện trước khi nộp
+[3] Robert C. Martin (2017), Clean Architecture: A Craftsman’s Guide to Software Structure and Design, Prentice Hall.
 
-Điền tên giảng viên, lớp, mã sinh viên; xác nhận tên nhóm và các giả định nghiệp vụ. Đọc lại mô hình, thống nhất chính sách giá khi sửa đơn và các giới hạn đã ghi. Chạy các test Java/Oracle, ghi điều kiện môi trường, dữ liệu vào, kết quả thực tế; chỉ đổi trạng thái test sau khi có bằng chứng.
+[4] Tài liệu đặc tả kỹ thuật Spring Boot 4, Spring Security, Spring Data JPA và Oracle Database 23ai Free / JDBC ojdbc17.
 
-Mục lục bản Word dùng liên kết và trường tham chiếu trang. Sau khi chỉnh sửa nội dung, chọn toàn bộ rồi cập nhật trường để số trang mục lục phản ánh bản mới; trên macOS có thể cần dùng tổ hợp phím Fn + F9 hoặc lệnh Update Field của Word.
+[5] Oracle Corporation, Oracle Database SQL Language Reference & PL/SQL Language Reference (23ai).
 
-## Ghi nhận hỗ trợ công cụ
+# PHỤ LỤC. PHÂN CÔNG THỰC HIỆN VÀ CÂU HỎI BẢO VỆ
 
-Tài liệu được biên soạn có sử dụng ChatGPT/Codex để hỗ trợ đọc nguồn, xây dựng nội dung và mô hình; PlantUML để dựng sơ đồ; Python để tạo Word/PDF và kiểm tra cấu trúc. Nhóm cần tự rà soát, chạy thử, điều chỉnh và có khả năng giải thích sản phẩm theo quy định học phần. Không ghi nhận rằng các thành viên đã xác nhận hoặc chạy test khi chưa có dữ liệu thực tế.
+*Bảng A.1. Bảng phân công thành viên và nội dung phụ trách trong nhóm 4*
 
-> Báo cáo được tạo thành bộ tệp mới; các tài liệu BTL.docx và BTL.pdf cũ được giữ nguyên.
+| Thành viên | Phạm vi phụ trách chính | Mô hình thiết kế và cài đặt phụ trách |
+| --- | --- | --- |
+| Hoàng Việt Đức | Khách hàng, bàn ăn, đặt bàn (KHACH_HANG, BAN_AN, DAT_BAN). | UC03, UC10; mô hình khái niệm đặt bàn; máy trạng thái đặt bàn (Hình 3.8); giải pháp bổ sung khóa đồng thời (TC03). |
+| Nguyễn Cao Hoàng | Loại món, món ăn, nhân viên, đăng nhập và phân quyền (LOAI_MON, MON_AN, NHAN_VIEN, TAI_KHOAN). | UC01, UC02, UC08, UC11; truy vấn GROUP BY đếm món; validation DTO; phân quyền 4 vai trò Spring Security, BCrypt, CSRF và phân biệt với role Oracle. |
+| Đỗ Minh Chiến | Bán hàng, hóa đơn và báo cáo (HOA_DON, CT_HOA_DON). | UC04, UC05, UC07; SSD Hình 2.3; Sequence 3.2–3.3; DCD Hình 3.5; gộp món, xacNhanMon, giải phóng bàn và công thức doanh thu. |
+| Lý Tiến Đạt | Nhà cung cấp, nguyên liệu, nhập kho (NHA_CUNG_CAP, PHIEU_NHAP, CT_PHIEU_NHAP, NGUYEN_LIEU). | UC06, UC09; Sequence 3.4; DCD Hình 3.6; cập nhật tồn theo chênh lệch, khóa bi quan tăng dần chống deadlock và @Version. |
+
+### Câu hỏi trọng tâm phục vụ bảo vệ đồ án
+
+1. Vì sao Dòng hóa đơn phải tách thành lớp riêng thay vì nối trực tiếp Hóa đơn với Món ăn? Trả lời: Vì liên kết nhiều–nhiều giữa hai lớp này cần lưu giữ số lượng, số lượng đã xác nhận, đơn giá tại thời điểm bán (tách biệt với giá danh mục hiện tại) và thành tiền.
+
+2. Vì sao khi sửa phiếu nhập phải điều chỉnh tồn theo lượng mới trừ lượng cũ? Trả lời: Vì lần lưu trước đó đã cộng lượng cũ vào tồn kho; nếu cộng thẳng lượng mới sẽ gây nhân đôi tồn, nên cần lấy delta = lượng mới − lượng cũ để hoàn tác phần chênh lệch chính xác.
+
+3. Vì sao đã có @Transactional vẫn cần @Version và khóa bi quan trên phiếu nhập? Trả lời: @Transactional chỉ bảo đảm tính nguyên tử trong một lần thực thi ở server, không tự phát hiện trường hợp người dùng giữ biểu mẫu web đã mở từ trước khi bản ghi bị phiên khác sửa đổi (lost update).
+
+4. Phân biệt giữa tác nhân nghiệp vụ (Actor) trên Use Case và vai trò phân quyền (Role) trong Spring Security? Trả lời: Actor mô tả vai trò sử dụng ở mức phân tích nghiệp vụ (5 vai trò gồm Phục vụ tách riêng với Thu ngân), còn SecurityConfig ánh xạ xuống 4 quyền thực thi trong ứng dụng web (ADMIN, THU_NGAN, QUAN_LY_KHO, KE_TOAN).
+
+5. Vì sao hệ thống chưa tự động trừ tồn nguyên liệu khi bán món? Trả lời: Do phạm vi phiên bản hiện tại chưa xây dựng bảng định lượng thành phần nguyên liệu cho từng món ăn, nên tồn kho chỉ phản ánh nghiệp vụ nhập/điều chỉnh phiếu nhập.
