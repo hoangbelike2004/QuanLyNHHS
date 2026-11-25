@@ -1,0 +1,86 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@11.19.0
+2 info using node@v24.21.0
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:C:\Users\hoang\OneDrive\Documents\GitHub\QuanLyNHHS\target\report-build\pdf-tools\.npmrc
+5 silly config load:file:C:\Users\hoang\.npmrc
+6 silly config load:file:C:\Users\hoang\OneDrive\Documents\GitHub\QuanLyNHHS\target\report-build\pdf-tools\etc\npmrc
+7 verbose title npm install pdf-lib @pdf-lib/fontkit
+8 verbose argv "install" "--prefix" "target/report-build/pdf-tools" "--cache" "target/report-build/npm-cache" "--no-audit" "--no-fund" "--fetch-retries" "0" "--fetch-timeout" "20000" "pdf-lib" "@pdf-lib/fontkit"
+9 verbose logfile logs-max:10 dir:C:\Users\hoang\OneDrive\Documents\GitHub\QuanLyNHHS\target\report-build\npm-cache\_logs\2026-11-25T15_41_28_103Z-
+10 verbose logfile C:\Users\hoang\OneDrive\Documents\GitHub\QuanLyNHHS\target\report-build\npm-cache\_logs\2026-11-25T15_41_28_103Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly install-scripts no package.json at prefix Could not read package.json: Error: ENOENT: no such file or directory, open 'C:\Users\hoang\OneDrive\Documents\GitHub\QuanLyNHHS\target\report-build\pdf-tools\package.json'
+13 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+14 silly idealTree buildDeps
+15 silly fetch manifest pdf-lib@*
+16 silly packumentCache full:https://registry.npmjs.org/pdf-lib cache-miss
+17 http fetch GET 200 https://registry.npmjs.org/npm 476ms
+18 http fetch GET 200 https://registry.npmjs.org/pdf-lib 557ms (cache miss)
+19 silly packumentCache full:https://registry.npmjs.org/pdf-lib set size:undefined disposed:false
+20 silly fetch manifest @pdf-lib/fontkit@*
+21 silly packumentCache full:https://registry.npmjs.org/@pdf-lib%2ffontkit cache-miss
+22 http fetch GET 200 https://registry.npmjs.org/@pdf-lib%2ffontkit 336ms (cache miss)
+23 silly packumentCache full:https://registry.npmjs.org/@pdf-lib%2ffontkit set size:undefined disposed:false
+24 silly placeDep ROOT @pdf-lib/fontkit@1.1.1 OK for:  want: *
+25 silly placeDep ROOT pdf-lib@1.17.1 OK for:  want: *
+26 silly fetch manifest pako@^1.0.6
+27 silly packumentCache full:https://registry.npmjs.org/pako cache-miss
+28 silly fetch manifest @pdf-lib/standard-fonts@^1.0.0
+29 silly packumentCache full:https://registry.npmjs.org/@pdf-lib%2fstandard-fonts cache-miss
+30 silly fetch manifest @pdf-lib/upng@^1.0.1
+31 silly packumentCache full:https://registry.npmjs.org/@pdf-lib%2fupng cache-miss
+32 silly fetch manifest pako@^1.0.11
+33 silly packumentCache full:https://registry.npmjs.org/pako cache-miss
+34 silly fetch manifest tslib@^1.11.1
+35 silly packumentCache full:https://registry.npmjs.org/tslib cache-miss
+36 http fetch GET 200 https://registry.npmjs.org/@pdf-lib%2fstandard-fonts 98ms (cache miss)
+37 silly packumentCache full:https://registry.npmjs.org/@pdf-lib%2fstandard-fonts set size:undefined disposed:false
+38 http fetch GET 200 https://registry.npmjs.org/pako 197ms (cache miss)
+39 silly packumentCache full:https://registry.npmjs.org/pako set size:undefined disposed:false
+40 http fetch GET 200 https://registry.npmjs.org/tslib 246ms (cache miss)
+41 silly packumentCache full:https://registry.npmjs.org/tslib set size:undefined disposed:false
+42 http fetch GET 200 https://registry.npmjs.org/pako 306ms (cache miss)
+43 silly packumentCache full:https://registry.npmjs.org/pako set size:undefined disposed:false
+44 http fetch GET 200 https://registry.npmjs.org/@pdf-lib%2fupng 641ms (cache miss)
+45 silly packumentCache full:https://registry.npmjs.org/@pdf-lib%2fupng set size:undefined disposed:false
+46 silly placeDep ROOT pako@1.0.11 OK for: @pdf-lib/fontkit@1.1.1 want: ^1.0.6
+47 silly placeDep ROOT @pdf-lib/standard-fonts@1.0.0 OK for: pdf-lib@1.17.1 want: ^1.0.0
+48 silly placeDep ROOT @pdf-lib/upng@1.0.1 OK for: pdf-lib@1.17.1 want: ^1.0.1
+49 silly placeDep ROOT tslib@1.14.1 OK for: pdf-lib@1.17.1 want: ^1.11.1
+50 silly reify moves {}
+51 http cache tslib@https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz 0ms (cache hit)
+52 http cache pako@https://registry.npmjs.org/pako/-/pako-1.0.11.tgz 0ms (cache hit)
+53 http cache pdf-lib@https://registry.npmjs.org/pdf-lib/-/pdf-lib-1.17.1.tgz 0ms (cache hit)
+54 silly tarball no local data for tslib@https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz. Extracting by manifest.
+55 silly tarball no local data for pako@https://registry.npmjs.org/pako/-/pako-1.0.11.tgz. Extracting by manifest.
+56 silly tarball no local data for pdf-lib@https://registry.npmjs.org/pdf-lib/-/pdf-lib-1.17.1.tgz. Extracting by manifest.
+57 http cache @pdf-lib/standard-fonts@https://registry.npmjs.org/@pdf-lib/standard-fonts/-/standard-fonts-1.0.0.tgz 0ms (cache hit)
+58 http cache @pdf-lib/upng@https://registry.npmjs.org/@pdf-lib/upng/-/upng-1.0.1.tgz 0ms (cache hit)
+59 http cache @pdf-lib/fontkit@https://registry.npmjs.org/@pdf-lib/fontkit/-/fontkit-1.1.1.tgz 0ms (cache hit)
+60 silly tarball no local data for @pdf-lib/standard-fonts@https://registry.npmjs.org/@pdf-lib/standard-fonts/-/standard-fonts-1.0.0.tgz. Extracting by manifest.
+61 silly tarball no local data for @pdf-lib/upng@https://registry.npmjs.org/@pdf-lib/upng/-/upng-1.0.1.tgz. Extracting by manifest.
+62 silly tarball no local data for @pdf-lib/fontkit@https://registry.npmjs.org/@pdf-lib/fontkit/-/fontkit-1.1.1.tgz. Extracting by manifest.
+63 http fetch GET 200 https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz 103ms (cache miss)
+64 http fetch GET 200 https://registry.npmjs.org/@pdf-lib/standard-fonts/-/standard-fonts-1.0.0.tgz 630ms (cache miss)
+65 http fetch GET 200 https://registry.npmjs.org/pako/-/pako-1.0.11.tgz 652ms (cache miss)
+66 http fetch GET 200 https://registry.npmjs.org/@pdf-lib/upng/-/upng-1.0.1.tgz 1029ms (cache miss)
+67 http fetch GET 200 https://registry.npmjs.org/@pdf-lib/fontkit/-/fontkit-1.1.1.tgz 1458ms (cache miss)
+68 http fetch GET 200 https://registry.npmjs.org/pdf-lib/-/pdf-lib-1.17.1.tgz 6717ms (cache miss)
+69 silly ADD node_modules/tslib
+70 silly ADD node_modules/@pdf-lib/upng
+71 silly ADD node_modules/@pdf-lib/standard-fonts
+72 silly ADD node_modules/pako
+73 silly ADD node_modules/pdf-lib
+74 silly ADD node_modules/@pdf-lib/fontkit
+75 verbose cwd C:\Users\hoang\OneDrive\Documents\GitHub\QuanLyNHHS
+76 verbose os Windows_NT 10.0.26200
+77 verbose node v24.21.0
+78 verbose npm  v11.19.0
+79 notice
+79 notice New major version of npm available! 11.19.0 -> 12.2.3
+79 notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+79 notice To update run: npm install -g npm@12.2.3
+79 notice  { force: true, Symbol(proc-log.meta): true }
+80 verbose exit 0
+81 info ok
